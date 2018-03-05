@@ -162,6 +162,13 @@ namespace {
   // KingProtector[PieceType-2] contains a penalty according to distance from king
   const Score KingProtector[] = { S(3, 5), S(4, 3), S(3, 0), S(1, -1) };
 
+  // RookOpenFiles[number of files-1] contains a bonus for open files when only
+  // one side has rooks.
+  const Score RookOpenFiles[8] = {
+    S(12,12), S(21,21), S(28,28), S(33,33),
+    S(36,36), S(38,38), S(39,39), S(40,40)
+  };
+
   // Assorted bonuses and penalties
   const Score BishopPawns       = S(  8, 12);
   const Score CloseEnemies      = S(  7,  0);
@@ -171,7 +178,6 @@ namespace {
   const Score MinorBehindPawn   = S( 16,  0);
   const Score PawnlessFlank     = S( 20, 80);
   const Score RookOnPawn        = S(  8, 24);
-  const Score RookOpenFiles     = S(  5,  5);
   const Score ThreatByPawnPush  = S( 47, 26);
   const Score ThreatByRank      = S( 16,  3);
   const Score ThreatBySafePawn  = S(175,168);
@@ -377,9 +383,9 @@ namespace {
             if (relative_rank(Us, s) >= RANK_5)
                 score += RookOnPawn * popcount(pos.pieces(Them, PAWN) & PseudoAttacks[ROOK][s]);
 
-            // Bonus for each open file, up to 4, if opponent has no rooks
-            if (!pos.pieces(Them, ROOK))
-                score += RookOpenFiles * (pe->open_files() <= 4 ? pe->open_files() : 4);
+            // Bonus for open files when only we have rooks
+            if (!pos.pieces(Them, ROOK) && (pe->open_files() > 0))
+                score += RookOpenFiles[pe->open_files()-1];
 
             // Bonus for rook on an open or semi-open file
             if (pe->semiopen_file(Us, file_of(s)))
