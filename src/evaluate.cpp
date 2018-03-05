@@ -171,6 +171,7 @@ namespace {
   const Score MinorBehindPawn   = S( 16,  0);
   const Score PawnlessFlank     = S( 20, 80);
   const Score RookOnPawn        = S(  8, 24);
+  const Score RookOpenFiles     = S(  5,  5);
   const Score ThreatByPawnPush  = S( 47, 26);
   const Score ThreatByRank      = S( 16,  3);
   const Score ThreatBySafePawn  = S(175,168);
@@ -379,6 +380,10 @@ namespace {
             // Bonus for rook on an open or semi-open file
             if (pe->semiopen_file(Us, file_of(s)))
                 score += RookOnFile[bool(pe->semiopen_file(Them, file_of(s)))];
+
+            // Bonus for each open file, up to 4, if opponent has no rooks
+            if (!pos.pieces(Them, ROOK))
+                score += RookOpenFiles * (pe->open_files() <= 4 ? pe->open_files() : 4);
 
             // Penalty when trapped by the king, even more if the king cannot castle
             else if (mob <= 3)
