@@ -384,8 +384,8 @@ namespace {
                 score += RookOnPawn * popcount(pos.pieces(Them, PAWN) & PseudoAttacks[ROOK][s]);
 
             // Bonus for open files when we have more rooks
-            if ((pos.pieces(Us, ROOK) > pos.pieces(Them, ROOK)) && (pe->open_files() > 0))
-                score += RookOpenFiles[pe->open_files() - 1] / (3*((bool) pos.pieces(Them, ROOK)) + 1);
+            if ((pos.count<ROOK>(Us) > pos.count<ROOK>(Them)) && (pe->open_files() > 0))
+                score += RookOpenFiles[pe->open_files() - 1];
 
             // Bonus for rook on an open or semi-open file
             if (pe->semiopen_file(Us, file_of(s)))
