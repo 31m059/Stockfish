@@ -385,7 +385,7 @@ namespace {
 
             // Bonus for open files when we have more rooks
             if ((pos.count<ROOK>(Us) > pos.count<ROOK>(Them)) && (pe->open_files() > 0))
-                score += RookOpenFiles[pe->open_files() - 1];
+                score += RookOpenFiles[pe->open_files() - 1] / (pos.count<ROOK>(Them) + 1);
 
             // Bonus for rook on an open or semi-open file
             if (pe->semiopen_file(Us, file_of(s)))
