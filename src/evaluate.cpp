@@ -156,6 +156,14 @@ namespace {
     S(-20,-12), S(1, -8), S(2, 10), S(  9, 10)
   };
 
+  // RookOpenFiles[number of files-1] contains a bonus for open files when only
+  // one side has rooks.
+  Score RookOpenFiles[8] = {
+    S(12,12), S(21,21), S(28,28), S(33,33),
+    S(36,36), S(38,38), S(39,39), S(40,40)
+  };
+  TUNE(RookOpenFiles);
+
   // PassedDanger[Rank] contains a term to weight the passed score
   const int PassedDanger[RANK_NB] = { 0, 0, 0, 2, 7, 12, 19 };
 
@@ -375,6 +383,10 @@ namespace {
             // Bonus for aligning rook with with enemy pawns on the same rank/file
             if (relative_rank(Us, s) >= RANK_5)
                 score += RookOnPawn * popcount(pos.pieces(Them, PAWN) & PseudoAttacks[ROOK][s]);
+
+            // Bonus for open files when only we have rooks
+            if (!pos.pieces(Them, ROOK) && (pe->open_files() > 0))
+                score += RookOpenFiles[pe->open_files() - 1];
 
             // Bonus for rook on an open or semi-open file
             if (pe->semiopen_file(Us, file_of(s)))
