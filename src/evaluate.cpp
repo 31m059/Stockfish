@@ -158,11 +158,16 @@ namespace {
 
   // RookOpenFiles[number of files-1] contains a bonus for open files when only
   // one side has rooks.
+  int mROF5 = 35;
+  int eROF7 = 37;
+  int mROF6 = 38;
+  int eROF4 = 39;
+  int eROF6 = 41;
+  TUNE(mROF5, eROF7, mROF6, eROF4, eROF6);
   Score RookOpenFiles[8] = {
-    S(12,12), S(21,21), S(28,28), S(33,33),
-    S(36,36), S(38,38), S(39,39), S(40,40)
+    S(12,13), S(21,21), S(28,28), S(32,33),
+    S(37,eROF4), S(mROF5,37), S(mROF6,eROF6), S(41,eROF7)
   };
-  TUNE(RookOpenFiles);
 
   // PassedDanger[Rank] contains a term to weight the passed score
   const int PassedDanger[RANK_NB] = { 0, 0, 0, 2, 7, 12, 19 };
