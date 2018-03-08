@@ -171,6 +171,7 @@ namespace {
   const Score LongRangedBishop  = S( 22,  0);
   const Score MinorBehindPawn   = S( 16,  0);
   const Score PawnlessFlank     = S( 20, 80);
+  const Score PawnPushPin       = S( 10, 10);
   const Score RookOnPawn        = S(  8, 24);
   const Score ThreatByPawnPush  = S( 47, 26);
   const Score ThreatByRank      = S( 16,  3);
@@ -597,7 +598,7 @@ namespace {
         pinned |= pos.slider_blockers(pos.pieces(Them) & ~pos.pieces(Them, PAWN), pos.square<QUEEN>(Them), pinners);
     b &= pinned;
 
-    score += ThreatByPawnPush * popcount(b);
+    score += PawnPushPin * popcount(b);
 
     // Bonus for safe slider threats on the next move toward enemy queen
     safeThreats = ~pos.pieces(Us) & ~attackedBy2[Them] & attackedBy2[Us];
