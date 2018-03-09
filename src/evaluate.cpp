@@ -590,12 +590,15 @@ namespace {
 
     score += ThreatByPawnPush * popcount(b);
 
-    // Extra bonus if the safe pawn threat is against a non-pawn enemy piece,
+    // Bonus if the safe pawn threat is against a non-pawn enemy piece,
     // pinned to the opponent's king or weak queen
     Bitboard pinners, pinned;
-    pinned = pos.slider_blockers(pos.pieces(Them) & ~pos.pieces(Them, PAWN), pos.square<KING>(Them), pinners);
-    if (pos.count<QUEEN>(Them) == 1)
-        pinned |= pos.slider_blockers(pos.pieces(Them) & ~pos.pieces(Them, PAWN), pos.square<QUEEN>(Them), pinners);
+    pinned =  pos.slider_blockers(pos.pieces(Us), pos.square<KING>(Them), pinners)
+            & pos.pieces(Them) & ~pos.pieces(Them, PAWN);
+    if (pos.count<QUEEN>(Them) == 1) {
+        pinned |= pos.slider_blockers(pos.pieces(Us, ROOK, BISHOP), pos.square<QUEEN>(Them), pinners)
+                & pos.pieces(Them) & ~pos.pieces(Them, PAWN);
+    }
     b &= pinned;
 
     score += PawnPushPin * popcount(b);
