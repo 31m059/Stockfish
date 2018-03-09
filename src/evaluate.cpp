@@ -225,10 +225,10 @@ namespace {
     // and h6. It is set to 0 when king safety evaluation is skipped.
     Bitboard kingRing[COLOR_NB];
 
-    // queenBlockers is a bitboard representing all pieces of either color
-    // that block an attack on our queen, that is, our pinned pieces and
-    // the enemy's discovered checks.
-    Bitboard queenBlockers;
+    // queenBlockers[color] is a bitboard representing all pieces of either color
+    // that block an attack on the queen of the given color, that is, the pinned
+    // pieces of the given color and the discovered attack pieces of the opposite color.
+    Bitboard queenBlockers[COLOR_NB];
 
     // kingAttackersCount[color] is the number of pieces of the given color
     // which attack a square in the kingRing of the enemy king.
@@ -287,9 +287,9 @@ namespace {
 
     // Initialise the queenBlockers bitboard
     Bitboard queenPinners;
-    queenBlockers = 0;
+    queenBlockers[Us] = 0;
     if (pos.count<QUEEN>(Us) == 1)
-        queenBlockers = pos.slider_blockers(pos.pieces(Them, ROOK, BISHOP), pos.square<QUEEN>(Us), queenPinners);
+        queenBlockers[Us] = pos.slider_blockers(pos.pieces(Them, ROOK, BISHOP), pos.square<QUEEN>(Us), queenPinners);
 
   }
 
@@ -324,7 +324,7 @@ namespace {
 
         // If our piece is pinned to our weak queen, restrict attacked squares to moves that
         // maintain the pin/capture the pinner, check the enemy king, or attack the enemy queen.
-        if (queenBlockers & s)
+        if (queenBlockers[Us] & s)
         {
             bb = LineBB[pos.square<QUEEN>(Us)][s]
                | (pos.attacks_from<Pt>(s) & pos.attacks_from<Pt>(pos.square<KING>(Them)));
@@ -416,7 +416,7 @@ namespace {
         if (Pt == QUEEN)
         {
             // Penalty if any relative pin or discovered attack against the queen
-            if (queenBlockers)
+            if (queenBlockers[Us])
                 score -= WeakQueen;
         }
     }
