@@ -310,6 +310,18 @@ namespace {
         if (pos.blockers_for_king(Us) & s)
             b &= LineBB[pos.square<KING>(Us)][s];
 
+        // If our piece is pinned to our weak queen, restrict attacked squares to moves that
+        // maintain the pin/capture the pinner, check the enemy king, or attack the enemy queen.
+        if (pos.count<QUEEN>(Us) == 1 &&
+           (pos.slider_blockers(pos.pieces(Them, ROOK, BISHOP), pos.square<QUEEN>(Us), bb) & s))
+        {
+            bb = LineBB[pos.square<QUEEN>(Us)][s]
+               | (pos.attacks_from<Pt>(s) & pos.attacks_from<Pt>(pos.square<KING>(Them)));
+            if (pos.count<QUEEN>(Them) == 1)
+                bb |= pos.attacks_from<Pt>(s) & pos.attacks_from<Pt>(pos.square<QUEEN>(Them));
+            b &= bb;
+        }
+
         attackedBy2[Us] |= attackedBy[Us][ALL_PIECES] & b;
         attackedBy[Us][Pt] |= b;
         attackedBy[Us][ALL_PIECES] |= b;
