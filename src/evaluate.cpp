@@ -385,7 +385,6 @@ namespace {
                 int files = 0;
                 for (File f = FILE_A; f <= FILE_H; ++f)
                     files += bool(pe->semiopen_file(Us, f));
-                files += pe->open_files();
 
                 if (files > 0)
                     score += RookFiles[files-1];
