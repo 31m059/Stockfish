@@ -513,12 +513,11 @@ namespace {
     Bitboard b, weak, defended, nonPawnEnemies, stronglyProtected, safeThreats;
     Score score = SCORE_ZERO;
 
-    // Queen overload: bonus for 2+ enemy pieces defended only by queen
+    // Queen overload: bonus for enemy pieces defended only by queen
     b =   pos.pieces(Them)
        &  attackedBy[Them][QUEEN]
        & ~attackedBy2[Them];
-    if (b)
-        score += QueenOverload * (popcount(b)-1);
+    score += QueenOverload * popcount(b);
     // Queen overload: bonus for enemy pieces defended only by queen that we attack.
     b &= attackedBy[Us][ALL_PIECES];
     score += QueenOverload * popcount(b);
