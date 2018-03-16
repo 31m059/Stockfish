@@ -519,8 +519,6 @@ namespace {
     b =  pos.pieces(Them)
       &  attackedBy[Us][ALL_PIECES]
       & ~attackedBy2[Them];
-    score += Overload[KNIGHT-2] * popcount(b & attackedBy[Them][KNIGHT]);
-    score += Overload[BISHOP-2] * popcount(b & attackedBy[Them][BISHOP]);
     score += Overload[ROOK-2]   * popcount(b & attackedBy[Them][ROOK]  );
     score += Overload[QUEEN-2]  * popcount(b & attackedBy[Them][QUEEN] );
 
