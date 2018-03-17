@@ -796,10 +796,31 @@ namespace {
         if (pos.opposite_bishops())
         {
             // Endgame with opposite-colored bishops and no other pieces (ignoring pawns)
-            // is almost a draw, in case of KBP vs KB, it is even more a draw.
             if (   pos.non_pawn_material(WHITE) == BishopValueMg
                 && pos.non_pawn_material(BLACK) == BishopValueMg)
-                sf = more_than_one(pos.pieces(PAWN)) ? 31 : 9;
+                {
+                // If the stronger side has 2 or more passed pawns, the position
+                // is less drawish the further apart they are.
+                if (more_than_one(pe->passedPawns[strongSide]))
+                {
+                    File left = FILE_A;
+                    while (!(file_bb(left) & pe->passedPawns[strongSide]))
+                        ++left;
+
+                    File right = FILE_H;
+                    while (!(file_bb(right) & pe->passedPawns[strongSide]))
+                        --right;
+
+                    // Set scale factor to 9 (KBP vs KB) if the two files are the same,
+                    // 64 (SCALE_FACTOR_NORMAL) if they are separated by 4 or more files,
+                    // and scale linearly in between.
+                    sf = 9 + 11*int(std::min(right-left, 5));
+                }
+
+                // Otherwise, it is almost a draw; in case of KBP vs KB, it is even more a draw.
+                else
+                    sf = more_than_one(pos.pieces(PAWN)) ? 31 : 9;
+                }
 
             // Endgame with opposite-colored bishops, but also other pieces. Still
             // a bit drawish, but not as drawish as with only the two bishops.
