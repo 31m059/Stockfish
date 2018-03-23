@@ -388,7 +388,7 @@ namespace {
                 else
                 {
                     // Pieces attacked by the rook; these are blocking it.
-                    b = attacks_bb<ROOK>(s, pos.pieces());
+                    b = attacks_bb<ROOK>(s, pos.pieces()) & pos.pieces();
 
                     // Filter out any pieces which can't easily be moved out of the way.
                     // Exclude our blocked pawns.
@@ -415,7 +415,7 @@ namespace {
                             Square blocker = pop_lsb(&b);
 
                             // Find attacked squares (no x-rays), not occupied by our own pieces or attacked by their pawns
-                            switch (type_of(pos.piece_on(s)))
+                            switch (type_of(pos.piece_on(blocker)))
                             {
                                 case BISHOP: bb = attacks_bb<BISHOP>(blocker, pos.pieces());
                                 case ROOK  : bb = attacks_bb<  ROOK>(blocker, pos.pieces());
