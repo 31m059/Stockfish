@@ -376,12 +376,67 @@ namespace {
             if (pe->semiopen_file(Us, file_of(s)))
                 score += RookOnFile[bool(pe->semiopen_file(Them, file_of(s)))];
 
-            // Penalty when trapped by the king, even more if the king cannot castle
+            // Penalty when trapped
             else if (mob <= 3)
             {
+                // Penalty when trapped by the king, even more if the king cannot castle
                 File kf = file_of(pos.square<KING>(Us));
                 if ((kf < FILE_E) == (file_of(s) < kf))
                     score -= (TrappedRook - make_score(mob * 22, 0)) * (1 + !pos.can_castle(Us));
+
+                // Penalty when trapped by other pieces
+                else
+                {
+                    // Pieces attacked by the rook; these are blocking it.
+                    b = attacks_bb<ROOK>(s, pos.pieces());
+
+                    // Filter out any pieces which can't easily be moved out of the way.
+                    // Exclude our blocked pawns.
+                    b &= ~(pos.pieces(Us, PAWN) & shift<(Us == WHITE ? SOUTH : NORTH)>(pos.pieces()));
+                    // Exclude enemies defended by their pawns.
+                    b &= ~(pos.pieces(Them) & pe->pawn_attacks(Them));
+                    // Exclude our king.
+                    b &= ~pos.square<KING>(Us);
+
+                    // The rook is trapped if none of its blockers are left.
+                    bool blocked = b == 0;
+
+                    // If an enemy piece is a blocker, perhaps it can be taken.
+                    // If only our pieces remain to block the rook, check their ability to move.
+                    // Unless one of them can move, the rook is trapped.
+                    if (!blocked && !bool(b & pos.pieces(Them)))
+                    {
+                        // Consider our remaining non-pawn pieces.
+                        // Remaining pawns cannot trap the rook, since blocked pawns were already excluded.
+                        b &= pos.pieces(Us) ^ pos.pieces(Us, PAWN);
+                        blocked = true;
+                        while (b)
+                        {
+                            Square blocker = pop_lsb(&b);
+
+                            // Find attacked squares (no x-rays), not occupied by our own pieces or attacked by their pawns
+                            switch (type_of(pos.piece_on(s)))
+                            {
+                                case BISHOP: bb = attacks_bb<BISHOP>(blocker, pos.pieces());
+                                case ROOK  : bb = attacks_bb<  ROOK>(blocker, pos.pieces());
+                                case QUEEN : bb = attacks_bb< QUEEN>(blocker, pos.pieces());
+                                case KNIGHT: bb = attacks_bb<KNIGHT>(blocker, pos.pieces());
+                                // The default case should never occur.
+                                default:     bb = 0;
+                            }
+                            bb &= ~pos.pieces(Us) & ~pe->pawn_attacks(Them);
+
+                            // The rook's blocker can move, so the rook is not trapped.
+                            if (bb)
+                                blocked = false;
+                        }
+                    }
+
+                    if (blocked)
+                        score -= (TrappedRook - make_score(mob * 22, 0));
+
+                }
+
             }
         }
 
