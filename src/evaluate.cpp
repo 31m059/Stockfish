@@ -393,8 +393,8 @@ namespace {
                     // Filter out any pieces which can't easily be moved out of the way.
                     // Exclude our blocked pawns.
                     b &= ~(pos.pieces(Us, PAWN) & shift<(Us == WHITE ? SOUTH : NORTH)>(pos.pieces()));
-                    // Exclude enemies defended by their pawns.
-                    b &= ~(pos.pieces(Them) & pe->pawn_attacks(Them));
+                    // Exclude enemies of lesser value defended by their pawns.
+                    b &= ~((pos.pieces(Them) ^ pos.pieces(Them, ROOK, QUEEN)) & pe->pawn_attacks(Them));
                     // Exclude our king.
                     b &= ~pos.square<KING>(Us);
 
@@ -414,17 +414,22 @@ namespace {
                         {
                             Square blocker = pop_lsb(&b);
 
-                            // Find attacked squares (no x-rays), not occupied by our own pieces or attacked by their pawns
+                            // Rooks and queens do not trap the rook; the rook has an x-ray attack.
+                            if (type_of(pos.piece_on(blocker)) == ROOK || type_of(pos.piece_on(blocker)) == QUEEN)
+                                continue;
+
+                            // Find attacked squares (no x-rays).
                             switch (type_of(pos.piece_on(blocker)))
                             {
                                 case BISHOP: bb = attacks_bb<BISHOP>(blocker, pos.pieces());
-                                case ROOK  : bb = attacks_bb<  ROOK>(blocker, pos.pieces());
-                                case QUEEN : bb = attacks_bb< QUEEN>(blocker, pos.pieces());
                                 case KNIGHT: bb = attacks_bb<KNIGHT>(blocker, pos.pieces());
                                 // The default case should never occur.
                                 default:     bb = 0;
                             }
-                            bb &= ~pos.pieces(Us) & ~pe->pawn_attacks(Them);
+                            // Exclude squares occupied by our own pieces.
+                            bb &= ~pos.pieces(Us);
+                            // Exclude empty squares or enemy pawns defended by enemy pawns.
+                            bb &= ~(pe->pawn_attacks(Them) & (~pos.pieces() | pos.pieces(Them, PAWN)));
 
                             // The rook's blocker can move, so the rook is not trapped.
                             if (bb)
@@ -433,7 +438,7 @@ namespace {
                     }
 
                     if (blocked)
-                        score -= (TrappedRook - make_score(mob * 22, 0));
+                        score -= (TrappedRook - make_score(mob * 22, 0)) / 3;
 
                 }
 
