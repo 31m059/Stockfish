@@ -518,8 +518,7 @@ namespace {
     b =  (pos.pieces(Them) ^ pos.pieces(Them, KING))
        &  attackedBy[Them][QUEEN]
        & ~attackedBy2[Them];
-    if (b)
-        score += QueenOverload * (popcount(b)-1);
+    score += QueenOverload * popcount(b);
     // Queen overload: bonus for enemy pieces defended only by queen that we attack.
     b &= attackedBy[Us][ALL_PIECES];
     score += QueenOverload * popcount(b);
