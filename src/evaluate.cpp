@@ -322,6 +322,8 @@ namespace {
         int mob = popcount(b & mobilityArea[Us]);
 
         mobility[Us] += MobilityBonus[Pt - 2][mob];
+        if (Pt == BISHOP && pos.count<BISHOP>(Us) == 2)
+            mobility[Us] += 0.2*MobilityBonus[Pt - 2][mob];
 
         // Penalty if the piece is far from the king
         score -= KingProtector[Pt - 2] * distance(s, pos.square<KING>(Us));
