@@ -164,7 +164,8 @@ namespace {
 
   // Overload[PieceType-2] contains a bonus for opponent pieces under our attack
   // defended by only one enemy piece, of the given type.
-  const Score Overload[4] = { S(7, 5), S(7, 5), S(15, 10), S(30, 20) };
+  Score Overload[4] = { S(0, 0), S(0, 0), S(0, 0), S(30, 20) };
+  TUNE(SetRange(0,40), Overload);
 
   // Assorted bonuses and penalties
   constexpr Score BishopPawns        = S(  8, 12);
@@ -520,8 +521,10 @@ namespace {
     b =  pos.pieces(Them)
       &  attackedBy[Us][ALL_PIECES]
       & ~attackedBy2[Them];
-    score += Overload[ROOK-2]   * popcount(b & attackedBy[Them][ROOK]  );
-    score += Overload[QUEEN-2]  * popcount(b & attackedBy[Them][QUEEN] );
+    score += Overload[KNIGHT-2]  * popcount(b & attackedBy[Them][KNIGHT]);
+    score += Overload[BISHOP-2]  * popcount(b & attackedBy[Them][BISHOP]);
+    score += Overload[ROOK  -2]  * popcount(b & attackedBy[Them][ROOK  ]);
+    score += Overload[QUEEN -2]  * popcount(b & attackedBy[Them][QUEEN ]);
 
     // Non-pawn enemies attacked by a pawn
     nonPawnEnemies = pos.pieces(Them) ^ pos.pieces(Them, PAWN);
