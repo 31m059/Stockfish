@@ -162,6 +162,10 @@ namespace {
   // KingProtector[PieceType-2] contains a penalty according to distance from king
   constexpr Score KingProtector[] = { S(3, 5), S(4, 3), S(3, 0), S(1, -1) };
 
+  // Overload[PieceType-2] contains a bonus for opponent pieces under our attack
+  // defended by only one enemy piece, of the given type.
+  const Score Overload[4] = { S(7, 5), S(7, 5), S(15, 10), S(30, 20) };
+
   // Assorted bonuses and penalties
   constexpr Score BishopPawns        = S(  8, 12);
   constexpr Score CloseEnemies       = S(  7,  0);
@@ -512,6 +516,12 @@ namespace {
 
     Bitboard b, weak, defended, nonPawnEnemies, stronglyProtected, safeThreats;
     Score score = SCORE_ZERO;
+
+    b =  pos.pieces(Them)
+      &  attackedBy[Us][ALL_PIECES]
+      & ~attackedBy2[Them];
+    score += Overload[ROOK-2]   * popcount(b & attackedBy[Them][ROOK]  );
+    score += Overload[QUEEN-2]  * popcount(b & attackedBy[Them][QUEEN] );
 
     // Non-pawn enemies attacked by a pawn
     nonPawnEnemies = pos.pieces(Them) ^ pos.pieces(Them, PAWN);
