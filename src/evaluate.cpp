@@ -162,6 +162,11 @@ namespace {
   // KingProtector[PieceType-2] contains a penalty according to distance from king
   constexpr Score KingProtector[] = { S(3, 5), S(4, 3), S(3, 0), S(1, -1) };
 
+  // BishopPairMobility[2] contains coefficients for a linear bonus/malus
+  // based on bishop mobility when we have the bishop pair.
+  Score BishopPairMobility[2] = { S(-5, -6), S(2, 3) };
+  TUNE(SetRange(-12, 12), BishopPairMobility);
+
   // Assorted bonuses and penalties
   constexpr Score BishopPawns        = S(  8, 12);
   constexpr Score CloseEnemies       = S(  7,  0);
@@ -320,6 +325,8 @@ namespace {
         }
 
         int mob = popcount(b & mobilityArea[Us]);
+        if (Pt == BISHOP && pos.count<BISHOP>(Us) == 2)
+            score += BishopPairMobility[0] + BishopPairMobility[1]*mob;
 
         mobility[Us] += MobilityBonus[Pt - 2][mob];
 
