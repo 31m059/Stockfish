@@ -162,6 +162,10 @@ namespace {
   // KingProtector[PieceType-2] contains a penalty according to distance from king
   constexpr Score KingProtector[] = { S(3, 5), S(4, 3), S(3, 0), S(1, -1) };
 
+  // BishopPairMobility[2] contains coefficients for a linear bonus/penalty
+  // based on bishop mobility when we have the bishop pair.
+  Score BishopPairMobility[2] = { S(-51, -58), S(15, 26) };
+
   // Assorted bonuses and penalties
   constexpr Score BishopPawns        = S(  8, 12);
   constexpr Score CloseEnemies       = S(  7,  0);
@@ -349,6 +353,10 @@ namespace {
                 // Bonus for bishop on a long diagonal which can "see" both center squares
                 if (more_than_one(Center & (attacks_bb<BISHOP>(s, pos.pieces(PAWN)) | s)))
                     score += LongDiagonalBishop;
+
+                // Bonus/penalty based on mobility when we have the bishop pair
+                if (pos.count<BISHOP>(Us) == 2)
+                    score += (BishopPairMobility[0] + BishopPairMobility[1]*mob) / 10;
             }
 
             // An important Chess960 pattern: A cornered bishop blocked by a friendly
