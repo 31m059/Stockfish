@@ -164,7 +164,7 @@ namespace {
 
   // BishopPairMobility[2] contains coefficients for a linear bonus/malus
   // based on bishop mobility when we have the bishop pair.
-  Score BishopPairMobility[2] = { S(-5, -6), S(32, 48) };
+  Score BishopPairMobility[2] = { S(-7, -5), S(32, 10) };
   TUNE(SetRange(-20, 20), BishopPairMobility[0]);
   TUNE(SetRange(-320, 320), BishopPairMobility[1]);
 
