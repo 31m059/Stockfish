@@ -164,7 +164,7 @@ namespace {
 
   // BishopPairMobility[2] contains coefficients for a linear bonus/penalty
   // based on bishop mobility when we have the bishop pair.
-  constexpr Score BishopPairMobility[2] = { S(-51, -58), S(15, 26) };
+  constexpr Score BishopPairMobility[2] = { S(-6, -4), S(7, 25) };
 
   // Assorted bonuses and penalties
   constexpr Score BishopPawns        = S(  8, 12);
@@ -362,7 +362,7 @@ namespace {
 
                 // Bonus/penalty based on mobility when we have the bishop pair
                 if (pos.count<BISHOP>(Us) == 2)
-                    score += (BishopPairMobility[0] + BishopPairMobility[1]*mob) / 10;
+                    score += BishopPairMobility[0] + (BishopPairMobility[1] * mob) / 16;
             }
 
             // An important Chess960 pattern: A cornered bishop blocked by a friendly
