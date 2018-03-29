@@ -164,6 +164,7 @@ namespace {
 
   // Assorted bonuses and penalties
   constexpr Score BishopPawns        = S(  8, 12);
+  constexpr Score BishopPair         = S(  4,  0);
   constexpr Score CloseEnemies       = S(  7,  0);
   constexpr Score Connectivity       = S(  3,  1);
   constexpr Score CorneredBishop     = S( 50, 50);
@@ -355,6 +356,10 @@ namespace {
                 // Bonus for bishop on a long diagonal which can "see" both center squares
                 if (more_than_one(Center & (attacks_bb<BISHOP>(s, pos.pieces(PAWN)) | s)))
                     score += LongDiagonalBishop;
+
+                // Middlegame penalty for an otherwise overvalued bishop pair
+                if (pos.count<BISHOP>(Us) == 2)
+                    score -= BishopPair;
             }
 
             // An important Chess960 pattern: A cornered bishop blocked by a friendly
