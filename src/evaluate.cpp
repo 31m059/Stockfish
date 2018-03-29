@@ -164,7 +164,7 @@ namespace {
 
   // BishopPairMobility[2] contains coefficients for a linear bonus/penalty
   // based on bishop mobility when we have the bishop pair.
-  constexpr Score BishopPairMobility[2] = { S(-6, -4), S(7, 25) };
+  constexpr Score BishopPairMobility[2] = { S(0, -4), S(0, 25) };
 
   // Assorted bonuses and penalties
   constexpr Score BishopPawns        = S(  8, 12);
