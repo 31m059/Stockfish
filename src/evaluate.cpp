@@ -334,17 +334,6 @@ namespace {
         if (pos.blockers_for_king(Us) & s)
             b &= LineBB[pos.square<KING>(Us)][s];
 
-        attackedBy2[Us] |= attackedBy[Us][ALL_PIECES] & b;
-        attackedBy[Us][Pt] |= b;
-        attackedBy[Us][ALL_PIECES] |= b;
-
-        if (b & kingRing[Them])
-        {
-            kingAttackersCount[Us]++;
-            kingAttackersWeight[Us] += KingAttackWeights[Pt];
-            kingAttacksCount[Us] += popcount(b & attackedBy[Them][KING]);
-        }
-
         // If our piece is pinned to our weak queen by a bishop, restrict attacked squares to moves
         // that maintain the pin/capture the pinner, check the enemy king, or attack the enemy queen.
         if (queenBlockersBishop[Us] & s)
@@ -354,6 +343,17 @@ namespace {
             if (pos.count<QUEEN>(Them) == 1)
                 bb |= pos.attacks_from<Pt>(s) & pos.attacks_from<Pt>(pos.square<QUEEN>(Them));
             b &= bb;
+        }
+
+        attackedBy2[Us] |= attackedBy[Us][ALL_PIECES] & b;
+        attackedBy[Us][Pt] |= b;
+        attackedBy[Us][ALL_PIECES] |= b;
+
+        if (b & kingRing[Them])
+        {
+            kingAttackersCount[Us]++;
+            kingAttackersWeight[Us] += KingAttackWeights[Pt];
+            kingAttacksCount[Us] += popcount(b & attackedBy[Them][KING]);
         }
 
         int mob = popcount(b & mobilityArea[Us]);
