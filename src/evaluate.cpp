@@ -172,7 +172,7 @@ namespace {
   constexpr Score LongDiagonalBishop = S( 22,  0);
   constexpr Score MinorBehindPawn    = S( 16,  0);
   constexpr Score Overload           = S( 10,  5);
-  constexpr Score OverloadedQueen    = S(  5,  0);
+  constexpr Score OverloadedQueen    = S( 10,  0);
   constexpr Score PawnlessFlank      = S( 20, 80);
   constexpr Score RookOnPawn         = S(  8, 24);
   constexpr Score SliderOnQueen      = S( 42, 21);
@@ -591,7 +591,6 @@ namespace {
     score += ThreatByPawnPush * popcount(b);
 
     // Bonus for threats on the next moves against enemy queen
-    bool threatOnQueen = false;
     if (pos.count<QUEEN>(Them) == 1)
     {
         Square s = pos.square<QUEEN>(Them);
@@ -600,15 +599,11 @@ namespace {
         b = attackedBy[Us][KNIGHT] & pos.attacks_from<KNIGHT>(s);
 
         score += KnightOnQueen * popcount(b & safeThreats);
-        if (b & safeThreats)
-            threatOnQueen = true;
 
         b =  (attackedBy[Us][BISHOP] & pos.attacks_from<BISHOP>(s))
            | (attackedBy[Us][ROOK  ] & pos.attacks_from<ROOK  >(s));
 
         score += SliderOnQueen * popcount(b & safeThreats & attackedBy2[Us]);
-        if (b & safeThreats & attackedBy2[Us])
-            threatOnQueen = true;
     }
 
     // Connectivity: ensure that knights, bishops, rooks, and queens are protected
@@ -622,7 +617,7 @@ namespace {
     score += Overload * popcount(b);
 
     // Further bonus for an overloaded queen
-    if (threatOnQueen)
+    if (pos.count<QUEEN>(Them) > 0)
     {
         b &= attackedBy[Them][QUEEN];
         score += OverloadedQueen * popcount(b);
