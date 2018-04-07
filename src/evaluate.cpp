@@ -563,7 +563,10 @@ namespace {
                 score += ThreatByRank * (int)relative_rank(Them, s);
         }
 
-        score += Hanging * popcount(weak & ~attackedBy[Them][ALL_PIECES]);
+        b  = weak & ~attackedBy[Them][ALL_PIECES];
+        b |= pos.pieces(Them, QUEEN)
+           & attackedBy[Us][ALL_PIECES] & ~attackedBy[Us][QUEEN];
+        score += Hanging * popcount(b);
 
         b = weak & attackedBy[Us][KING];
         if (b)
