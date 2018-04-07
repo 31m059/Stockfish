@@ -617,11 +617,15 @@ namespace {
     score += Overload * popcount(b);
 
     // Further bonus for an overloaded queen
-    if (pos.count<QUEEN>(Them) > 0)
+    if (pos.count<QUEEN>(Them) == 1)
     {
-        b =  defended
-           & attackedBy[Us][ALL_PIECES] & ~attackedBy2[Us]
-           & attackedBy[Them][QUEEN];
+        Square s = pos.square<QUEEN>(Them);
+        b &= attackedBy[Them][QUEEN];
+
+        // Exclude bishops and rooks participating in the queen's x-ray attacks
+        b &= ~(pos.pieces(Them, BISHOP) & attacks_bb<BISHOP>(s, pos.pieces()));
+        b &= ~(pos.pieces(Them,   ROOK) & attacks_bb<ROOK  >(s, pos.pieces()));
+
         score += OverloadedQueen * popcount(b);
     }
 
