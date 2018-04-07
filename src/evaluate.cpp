@@ -615,7 +615,7 @@ namespace {
        & attackedBy[Us][ALL_PIECES]   & ~attackedBy2[Us]
        & attackedBy[Them][ALL_PIECES] & ~attackedBy2[Them];
     score +=     Overload * popcount(b & ~pos.pieces(Them, PAWN));
-    score += PawnOverload * popcount(b &  pos.pieces(Them, PAWN));
+    score += PawnOverload * popcount(b &  pos.pieces(Them, PAWN) & ~(attackedBy[Them][PAWN] & ~attackedBy[Us][PAWN]));
 
     if (T)
         Trace::add(THREAT, Us, score);
