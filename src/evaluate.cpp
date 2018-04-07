@@ -173,6 +173,7 @@ namespace {
   constexpr Score MinorBehindPawn    = S( 16,  0);
   constexpr Score Overload           = S( 10,  5);
   constexpr Score PawnlessFlank      = S( 20, 80);
+  constexpr Score PawnOverload       = S(  5,  2);
   constexpr Score RookOnPawn         = S(  8, 24);
   constexpr Score SliderOnQueen      = S( 42, 21);
   constexpr Score ThreatByPawnPush   = S( 47, 26);
@@ -610,10 +611,11 @@ namespace {
     score += Connectivity * popcount(b);
 
     // Bonus for overload (non-pawn enemies attacked and defended exactly once)
-    b =  nonPawnEnemies
+    b =  pos.pieces(Them)
        & attackedBy[Us][ALL_PIECES]   & ~attackedBy2[Us]
        & attackedBy[Them][ALL_PIECES] & ~attackedBy2[Them];
-    score += Overload * popcount(b);
+    score +=     Overload * popcount(b & ~pos.pieces(Them, PAWN));
+    score += PawnOverload * popcount(b &  pos.pieces(Them, PAWN));
 
     if (T)
         Trace::add(THREAT, Us, score);
