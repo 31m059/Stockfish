@@ -617,11 +617,7 @@ namespace {
     score += Overload * popcount(b);
 
     // Further bonus for an overloaded queen
-    if (pos.count<QUEEN>(Them) > 0 && pos.count<QUEEN>(Us) > 0)
-    {
-        b &= attackedBy[Them][QUEEN] & ~attackedBy[Us][QUEEN];
-        score += OverloadedQueen * popcount(b);
-    }
+    score += OverloadedQueen * bool(b & attackedBy[Them][QUEEN]);
 
     if (T)
         Trace::add(THREAT, Us, score);
