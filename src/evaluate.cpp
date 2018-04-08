@@ -172,7 +172,7 @@ namespace {
   constexpr Score LongDiagonalBishop = S( 22,  0);
   constexpr Score MinorBehindPawn    = S( 16,  0);
   constexpr Score Overload           = S( 10,  5);
-  constexpr Score OverloadedQueen    = S( 30,  0);
+  constexpr Score OverloadedQueen    = S( 25,  0);
   constexpr Score PawnlessFlank      = S( 20, 80);
   constexpr Score RookOnPawn         = S(  8, 24);
   constexpr Score SliderOnQueen      = S( 42, 21);
@@ -620,7 +620,8 @@ namespace {
     if (pos.count<QUEEN>(Them) > 0)
     {
         b &= attackedBy[Them][QUEEN];
-        score += OverloadedQueen * popcount(b);
+        if (more_than_one(b))
+            score += OverloadedQueen * popcount(b);
     }
 
     if (T)
