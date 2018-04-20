@@ -807,13 +807,6 @@ namespace {
             // Endgame with opposite-colored bishops and no other pieces is almost a draw
             if (   pos.non_pawn_material(WHITE) == BishopValueMg
                 && pos.non_pawn_material(BLACK) == BishopValueMg)
-                sf = 31;
-
-            // Endgame with opposite-colored bishops, but also other pieces. Still
-            // a bit drawish, but not as drawish as with only the two bishops.
-            // The endgame is also less drawish if the strong side has at least one
-            // passer which promotes on a square the weak side's bishop cannot defend.
-            else
             {
                 Bitboard passedPawns = pe->passedPawns[strongSide];
                 Bitboard promotionRank = strongSide == WHITE ? Rank8BB : Rank1BB;
@@ -826,9 +819,16 @@ namespace {
                         break;
                     }
                 }
-                sf = strongPassedPawn ? 56 : 46;
+                sf = strongPassedPawn ? 36 : 31;
             }
 
+
+            // Endgame with opposite-colored bishops, but also other pieces. Still
+            // a bit drawish, but not as drawish as with only the two bishops.
+            // The endgame is also less drawish if the strong side has at least one
+            // passer which promotes on a square the weak side's bishop cannot defend.
+            else
+                sf = 46;
         }
         // Endings where weaker side can place his king in front of the enemy's
         // pawns are drawish.
