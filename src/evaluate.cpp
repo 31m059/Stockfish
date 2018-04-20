@@ -814,20 +814,24 @@ namespace {
             else
                 sf = 46;
 
-            // If the strong side has no passed pawn whose promotion square the weak
-            // side's bishop cannot defend, decrease the scale factor by 10%.
-            Bitboard passedPawns = pe->passedPawns[strongSide];
-            Bitboard promotionRank = strongSide == WHITE ? Rank8BB : Rank1BB;
-            Bitboard weakBishopSquares = pos.pieces(strongSide, BISHOP) & DarkSquares ? ~DarkSquares : DarkSquares;
-            bool strongPassedPawn = false;
-            while (passedPawns) {
-                if (file_bb(pop_lsb(&passedPawns)) & promotionRank & ~weakBishopSquares)
-                {
-                    strongPassedPawn = true;
-                    break;
+            // If the strong side has a passed pawn whose promotion square the weak
+            // side's bishop cannot defend, increase the scale factor by 10%;
+            // otherwise, decrease by 10%.
+            if (pe->passedPawns[strongSide])
+            {
+                Bitboard passedPawns = pe->passedPawns[strongSide];
+                Bitboard promotionRank = strongSide == WHITE ? Rank8BB : Rank1BB;
+                Bitboard weakBishopSquares = pos.pieces(strongSide, BISHOP) & DarkSquares ? ~DarkSquares : DarkSquares;
+                bool strongPassedPawn = false;
+                while (passedPawns) {
+                    if (file_bb(pop_lsb(&passedPawns)) & promotionRank & ~weakBishopSquares)
+                    {
+                        strongPassedPawn = true;
+                        break;
+                    }
                 }
+                sf = strongPassedPawn ? 11 * sf / 10 : 9 * sf / 10;
             }
-            sf = strongPassedPawn ? sf : 9 * sf / 10;
         }
         // Endings where weaker side can place his king in front of the enemy's
         // pawns are drawish.
