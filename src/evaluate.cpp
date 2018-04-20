@@ -827,7 +827,7 @@ namespace {
                     break;
                 }
             }
-            sf = strongPassedPawn ? 11 * sf * 10 : sf;
+            sf = strongPassedPawn ? 11 * sf / 10 : sf;
         }
         // Endings where weaker side can place his king in front of the enemy's
         // pawns are drawish.
