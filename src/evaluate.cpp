@@ -819,7 +819,7 @@ namespace {
                         break;
                     }
                 }
-                sf = strongPassedPawn ? 36 : 31;
+                sf = strongPassedPawn ? 31 : 26;
             }
 
 
