@@ -826,7 +826,7 @@ namespace {
                         break;
                     }
                 }
-                sf = strongPassedPawn ? 51 : 46;
+                sf = strongPassedPawn ? 56 : 46;
             }
 
         }
