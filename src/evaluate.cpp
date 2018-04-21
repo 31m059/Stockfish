@@ -816,7 +816,7 @@ namespace {
 
             // If the strong side has a passed pawn whose promotion square the weak
             // side's bishop cannot defend, increase the scale factor by 10%.
-            if (!pe->passedPawns[weakSide])
+            if (!pe->passedPawns[~strongSide])
             {
                 Bitboard passedPawns = pe->passedPawns[strongSide];
                 Bitboard promotionRank = strongSide == WHITE ? Rank8BB : Rank1BB;
