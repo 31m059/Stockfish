@@ -821,7 +821,7 @@ namespace {
                 Bitboard weakBishopSquares = pos.pieces(strongSide, BISHOP) & DarkSquares ? ~DarkSquares : DarkSquares;
                 while (passedPawns) {
                     if (file_bb(pop_lsb(&passedPawns)) & promotionRank & ~weakBishopSquares)
-                        sf += 2;
+                        sf += 4;
                 }
                 sf = std::min(sf, 64);
             }
