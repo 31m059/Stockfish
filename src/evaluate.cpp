@@ -811,8 +811,9 @@ namespace {
 
             // Endgame with opposite-colored bishops, but also other pieces. Still
             // a bit drawish, but not as drawish as with only the two bishops.
+            // The game is even less drawish if both sides have rooks.
             else
-                sf = 46;
+                sf = pos.pieces(strongSide, ROOK) && pos.pieces(~strongSide, ROOK) ? 51 : 46;
         }
         // Endings where weaker side can place his king in front of the enemy's
         // pawns are drawish.
