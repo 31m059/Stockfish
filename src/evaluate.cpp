@@ -823,7 +823,7 @@ namespace {
                     if (file_bb(pop_lsb(&passedPawns)) & promotionRank & ~weakBishopSquares)
                         indefensiblePassers++;
                 }
-                sf += 46 + 18 * indefensiblePassers / (1 + indefensiblePassers);
+                sf += 46 + 18 * indefensiblePassers / (2 + indefensiblePassers);
             }
 
         }
