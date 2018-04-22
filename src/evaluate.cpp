@@ -815,15 +815,15 @@ namespace {
             // which promote on squares the weak side's bishop cannot defend.
             else
             {
-                sf = 46;
                 Bitboard passedPawns = pe->passedPawns[strongSide];
                 Bitboard promotionRank = strongSide == WHITE ? Rank8BB : Rank1BB;
                 Bitboard weakBishopSquares = pos.pieces(strongSide, BISHOP) & DarkSquares ? ~DarkSquares : DarkSquares;
+                int indefensiblePassers = 0;
                 while (passedPawns) {
                     if (file_bb(pop_lsb(&passedPawns)) & promotionRank & ~weakBishopSquares)
-                        sf += 8;
+                        indefensiblePassers++;
                 }
-                sf = std::min(sf, 64);
+                sf += 46 + 18 * indefensiblePassers / (1 + indefensiblePassers);
             }
 
         }
