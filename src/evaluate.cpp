@@ -173,6 +173,7 @@ namespace {
   constexpr Score MinorBehindPawn    = S( 16,  0);
   constexpr Score Overload           = S( 10,  5);
   constexpr Score PawnlessFlank      = S( 20, 80);
+  constexpr Score PawnOverload       = S(  0,  5);
   constexpr Score RookOnPawn         = S(  8, 24);
   constexpr Score SliderOnQueen      = S( 42, 21);
   constexpr Score ThreatByPawnPush   = S( 47, 26);
@@ -617,6 +618,12 @@ namespace {
     // Connectivity: ensure that knights, bishops, rooks, and queens are protected
     b = (pos.pieces(Us) ^ pos.pieces(Us, PAWN, KING)) & attackedBy[Us][ALL_PIECES];
     score += Connectivity * popcount(b);
+
+    // Bonus for pawn overload (pawn enemies attacked and defended exactly once)
+    b =  pos.pieces(Them, PAWN)
+       & attackedBy[Us][ALL_PIECES]   & ~attackedBy2[Us]
+       & attackedBy[Them][ALL_PIECES] & ~attackedBy2[Them];
+    score += PawnOverload * popcount(b);
 
     if (T)
         Trace::add(THREAT, Us, score);
