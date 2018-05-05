@@ -623,7 +623,7 @@ namespace {
     b =  pos.pieces(Them, PAWN)
        & attackedBy[Us][ALL_PIECES]   & ~attackedBy2[Us]
        & attackedBy[Them][ALL_PIECES] & ~attackedBy2[Them]
-       & (~attackedBy[Them][PAWN] || attackedBy[Us][PAWN]);
+       & (~attackedBy[Them][PAWN] | attackedBy[Us][PAWN]);
     score += PawnOverload * popcount(b);
 
     if (T)
