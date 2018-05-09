@@ -565,11 +565,6 @@ namespace {
 
         score += Hanging * popcount(weak & ~attackedBy[Them][ALL_PIECES]);
 
-        // Bonus for overload (non-pawn enemies attacked and defended exactly once)
-        b =  nonPawnEnemies
-           & attackedBy[Us][ALL_PIECES]   & ~attackedBy2[Us]
-           & attackedBy[Them][ALL_PIECES] & ~attackedBy2[Them];
-        score += Overload * popcount(b);
     }
 
     // Bonus for enemy unopposed weak pawns
@@ -617,6 +612,15 @@ namespace {
     // Connectivity: ensure that knights, bishops, rooks, and queens are protected
     b = (pos.pieces(Us) ^ pos.pieces(Us, PAWN, KING)) & attackedBy[Us][ALL_PIECES];
     score += Connectivity * popcount(b);
+
+    // Bonus for overload
+    // Non-pawn enemies attacked and defended exactly once)
+    b  =  nonPawnEnemies
+        & attackedBy[Us][ALL_PIECES] & ~attackedBy2[Us];
+    // Threats to promote, if left undefended
+    b |=  shift<Us == WHITE ? SOUTH : NORTH>(pos.pieces(Us, PAWN))
+        & (Us == WHITE ? RANK_8 : RANK_1);
+    score += Overload * popcount(b & attackedBy[Them][ALL_PIECES] & ~attackedBy2[Them]);
 
     if (T)
         Trace::add(THREAT, Us, score);
