@@ -172,6 +172,7 @@ namespace {
   constexpr Score LongDiagonalBishop = S( 22,  0);
   constexpr Score MinorBehindPawn    = S( 16,  0);
   constexpr Score Overload           = S( 10,  5);
+  constexpr Score OverloadPromotion  = S( 20, 10);
   constexpr Score PawnlessFlank      = S( 20, 80);
   constexpr Score RookOnPawn         = S(  8, 24);
   constexpr Score SliderOnQueen      = S( 42, 21);
@@ -617,6 +618,13 @@ namespace {
     // Connectivity: ensure that knights, bishops, rooks, and queens are protected
     b = (pos.pieces(Us) ^ pos.pieces(Us, PAWN, KING)) & attackedBy[Us][ALL_PIECES];
     score += Connectivity * popcount(b);
+
+    // Threats to promote, if left undefended
+    b =  shift<Us == WHITE ? SOUTH : NORTH>(pos.pieces(Us, PAWN))
+       & (Us == WHITE ? RANK_8 : RANK_1)
+       & pos.pieces(Them)
+       & ~attackedBy[ALL_PIECES][Them];
+    score += OverloadPromotion * popcount(b);
 
     if (T)
         Trace::add(THREAT, Us, score);
