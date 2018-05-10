@@ -616,14 +616,11 @@ namespace {
     // Bonus for overload
     // Non-pawn enemies attacked and defended exactly once
     b  =  nonPawnEnemies
-        & attackedBy[Us][ALL_PIECES]   & ~attackedBy2[Us]
-        & attackedBy[Them][ALL_PIECES] & ~attackedBy2[Them];
+        & attackedBy[Us][ALL_PIECES] & ~attackedBy2[Us];
     // Threats to promote, if left undefended
     b |=  shift<Us == WHITE ? NORTH : SOUTH>(pos.pieces(Us, PAWN))
-        & (Us == WHITE ? rank_bb(RANK_8) : rank_bb(RANK_1))
-        & pos.pieces(Them)
-        & ~attackedBy[ALL_PIECES][Them];
-    score += Overload * popcount(b);
+        & (Us == WHITE ? rank_bb(RANK_8) : rank_bb(RANK_1));
+    score += Overload * popcount(b & attackedBy[Them][ALL_PIECES] & ~attackedBy2[Them]);
 
     if (T)
         Trace::add(THREAT, Us, score);
