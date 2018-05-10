@@ -173,7 +173,7 @@ namespace {
   constexpr Score MinorBehindPawn    = S( 16,  0);
   constexpr Score Overload           = S( 10,  5);
   constexpr Score PawnlessFlank      = S( 20, 80);
-  constexpr Score PinPressure        = S( 10,  0);
+  constexpr Score PinPressure        = S( 15,  5);
   constexpr Score RookOnPawn         = S(  8, 24);
   constexpr Score SliderOnQueen      = S( 42, 21);
   constexpr Score ThreatByPawnPush   = S( 47, 26);
@@ -575,7 +575,7 @@ namespace {
         // Bonus for pressure on enemy pins
         b =  nonPawnEnemies
            & attackedBy2[Us] & attackedBy2[Them]
-           & pos.blockers_for_king(Them) & attackedBy[Them][KING];
+           & pos.blockers_for_king(Them);
         if (b)
             score += PinPressure;
     }
