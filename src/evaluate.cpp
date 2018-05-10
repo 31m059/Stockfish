@@ -565,10 +565,15 @@ namespace {
 
         score += Hanging * popcount(weak & ~attackedBy[Them][ALL_PIECES]);
 
-        // Bonus for overload (non-pawn enemies attacked and defended exactly once)
+        // Bonus for overload
+        // Non-pawn enemies attacked and defended exactly once
         b =  nonPawnEnemies
            & attackedBy[Us][ALL_PIECES]   & ~attackedBy2[Us]
            & attackedBy[Them][ALL_PIECES] & ~attackedBy2[Them];
+        // Non-pawn enemies attacked multiple times by each side, but pinned to enemy king
+        b |= nonPawnEnemies
+           & attackedBy2[Us] & attackedBy2[Them]
+           & pos.blockers_for_king(Them);
         score += Overload * popcount(b);
     }
 
