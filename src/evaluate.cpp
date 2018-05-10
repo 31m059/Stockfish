@@ -573,7 +573,7 @@ namespace {
         // Non-pawn enemies attacked multiple times by each side, but pinned to enemy king
         b |= nonPawnEnemies
            & attackedBy2[Us] & attackedBy2[Them]
-           & pos.blockers_for_king(Them);
+           & pos.blockers_for_king(Them) & attackedBy[Them][KING];
         score += Overload * popcount(b);
     }
 
