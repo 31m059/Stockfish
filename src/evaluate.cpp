@@ -619,8 +619,8 @@ namespace {
         & attackedBy[Us][ALL_PIECES]   & ~attackedBy2[Us]
         & attackedBy[Them][ALL_PIECES] & ~attackedBy2[Them];
     // Threats to promote, if left undefended
-    b |=  shift<Us == WHITE ? SOUTH : NORTH>(pos.pieces(Us, PAWN))
-        & (Us == WHITE ? RankBB[RANK_8] : RankBB[RANK_1])
+    b |=  shift<Us == WHITE ? NORTH : SOUTH>(pos.pieces(Us, PAWN))
+        & (Us == WHITE ? rank_bb(RANK_8) : rank_bb(RANK_1))
         & pos.pieces(Them)
         & ~attackedBy[ALL_PIECES][Them];
     score += Overload * popcount(b);
