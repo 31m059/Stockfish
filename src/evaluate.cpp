@@ -572,10 +572,10 @@ namespace {
         score += Overload * popcount(b);
 
         // Bonus for pressure on enemy pins
-        b =  nonPawnEnemies
+        b =  pos.pieces(Them)
            & attackedBy2[Us] & attackedBy2[Them]
            & pos.blockers_for_king(Them);
-        if (b && !(pos.pinners(Us) & attackedBy[Them][ALL_PIECES]))
+        if (b)
             score += PinPressure;
     }
 
