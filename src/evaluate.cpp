@@ -571,12 +571,6 @@ namespace {
            & attackedBy[Them][ALL_PIECES] & ~attackedBy2[Them];
         score += Overload * popcount(b);
 
-        // Bonus for pressure on enemy pins
-        b =  pos.pieces(Them)
-           & attackedBy2[Us] & attackedBy2[Them]
-           & pos.blockers_for_king(Them);
-        if (b)
-            score += PinPressure;
     }
 
     // Bonus for enemy unopposed weak pawns
@@ -624,6 +618,13 @@ namespace {
     // Connectivity: ensure that knights, bishops, rooks, and queens are protected
     b = (pos.pieces(Us) ^ pos.pieces(Us, PAWN, KING)) & attackedBy[Us][ALL_PIECES];
     score += Connectivity * popcount(b);
+
+    // Bonus for pressure on enemy pins
+    b =  pos.pieces(Them)
+        & attackedBy2[Us] & attackedBy2[Them]
+        & pos.blockers_for_king(Them);
+    if (b)
+        score += PinPressure;
 
     if (T)
         Trace::add(THREAT, Us, score);
