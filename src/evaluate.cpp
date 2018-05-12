@@ -173,8 +173,7 @@ namespace {
   constexpr Score MinorBehindPawn    = S( 16,  0);
   constexpr Score Overload           = S( 10,  5);
   constexpr Score PawnlessFlank      = S( 20, 80);
-  constexpr Score PinPressure        = S( 13,  5);
-  constexpr Score PinPressureQ       = S(  5,  0);
+  constexpr Score PinPressure        = S( 15,  5);
   constexpr Score RookOnPawn         = S(  8, 24);
   constexpr Score SliderOnQueen      = S( 42, 21);
   constexpr Score ThreatByPawnPush   = S( 47, 26);
@@ -183,6 +182,8 @@ namespace {
   constexpr Score TrappedRook        = S( 92,  0);
   constexpr Score WeakQueen          = S( 50, 10);
   constexpr Score WeakUnopposedPawn  = S(  5, 25);
+
+  TUNE(PinPressure, SetRange(-10, 40));
 
 #undef S
 
@@ -578,8 +579,6 @@ namespace {
            & pos.blockers_for_king(Them);
         if (b)
             score += PinPressure;
-        if (b & attackedBy[Them][QUEEN])
-            score += PinPressureQ;
     }
 
     // Bonus for enemy unopposed weak pawns
