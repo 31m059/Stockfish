@@ -173,7 +173,7 @@ namespace {
   constexpr Score MinorBehindPawn    = S( 16,  0);
   constexpr Score Overload           = S( 10,  5);
   constexpr Score PawnlessFlank      = S( 20, 80);
-  constexpr Score PinPressure        = S( 15,  5);
+            Score PinPressure        = S( 15,  5);
   constexpr Score RookOnPawn         = S(  8, 24);
   constexpr Score SliderOnQueen      = S( 42, 21);
   constexpr Score ThreatByPawnPush   = S( 47, 26);
@@ -183,7 +183,7 @@ namespace {
   constexpr Score WeakQueen          = S( 50, 10);
   constexpr Score WeakUnopposedPawn  = S(  5, 25);
 
-  TUNE(PinPressure, SetRange(-10, 40));
+  TUNE(SetRange(-10, 40), PinPressure);
 
 #undef S
 
