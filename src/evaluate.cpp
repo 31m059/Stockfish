@@ -563,7 +563,7 @@ namespace {
             score += ThreatByKing[more_than_one(b)];
 
         int h = popcount(weak & ~attackedBy[Them][ALL_PIECES]);
-        score += Hanging * h * h;
+        score += Hanging * (h * h + 1) / 2;
 
         // Bonus for overload (non-pawn enemies attacked and defended exactly once)
         b =  nonPawnEnemies
