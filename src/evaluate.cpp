@@ -168,6 +168,7 @@ namespace {
   constexpr Score CorneredBishop     = S( 50, 50);
   constexpr Score Hanging            = S( 52, 30);
   constexpr Score HinderPassedPawn   = S(  8,  1);
+  constexpr Score KingRingOpenFile   = S(  5,  0);
   constexpr Score KnightOnQueen      = S( 21, 11);
   constexpr Score LongDiagonalBishop = S( 22,  0);
   constexpr Score MinorBehindPawn    = S( 16,  0);
@@ -503,6 +504,11 @@ namespace {
 
     // King tropism, to anticipate slow motion attacks on our king
     score -= CloseEnemies * (popcount(b1) + popcount(b2));
+
+    // Penalty for open files in our king ring when the enemy has a rook
+    if (pos.pieces(Them, ROOK)
+        && pe->semiopenFiles[Us] & pe->semiopenFiles[Them] & kingRing[Us])
+        score -= KingRingOpenFile;
 
     if (T)
         Trace::add(KING, Us, score);
