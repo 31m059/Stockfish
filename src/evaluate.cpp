@@ -168,7 +168,7 @@ namespace {
   constexpr Score CorneredBishop     = S( 50, 50);
   constexpr Score Hanging            = S( 52, 30);
   constexpr Score HinderPassedPawn   = S(  8,  1);
-  constexpr Score KingOpenFile       = S( 10,  0);
+  constexpr Score KingOpenFile       = S(  5,  0);
   constexpr Score KnightOnQueen      = S( 21, 11);
   constexpr Score LongDiagonalBishop = S( 22,  0);
   constexpr Score MinorBehindPawn    = S( 16,  0);
@@ -505,12 +505,12 @@ namespace {
     // King tropism, to anticipate slow motion attacks on our king
     score -= CloseEnemies * (popcount(b1) + popcount(b2));
 
-    // Penalty for one open file against our king's surroundings, if the enemy has a rook
+    // Penalty for one open file against our king's surroundings, if the enemy has a rook or queen
     Square our_ksq = (rank_of(ksq) == RANK_1 ? ksq + NORTH : ksq);
     b = passed_pawn_mask(BLACK, our_ksq) & pe->semiopenFiles[Us] & pe->semiopenFiles[Them];
     if (    b
         && !more_than_one(b)
-        &&  pos.pieces(Them, ROOK))
+        &&  pos.pieces(Them, ROOK, QUEEN))
         score -= KingOpenFile;
 
     if (T)
