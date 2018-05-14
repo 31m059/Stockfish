@@ -506,8 +506,9 @@ namespace {
     score -= CloseEnemies * (popcount(b1) + popcount(b2));
 
     // Penalty for open files against our king's surroundings, if the enemy has a rook
+    Square our_ksq = (rank_of(ksq) == RANK_1 ? ksq + NORTH : ksq);
     if (    pos.pieces(Them, ROOK)
-        && (passed_pawn_mask(Us, ksq) & pe->semiopenFiles[Us] & pe->semiopenFiles[Them]))
+        && (passed_pawn_mask(BLACK, our_ksq) & pe->semiopenFiles[Us] & pe->semiopenFiles[Them]))
         score -= KingOpenFile;
 
     if (T)
