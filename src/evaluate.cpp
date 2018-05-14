@@ -507,8 +507,7 @@ namespace {
 
     // Penalty for one open file adjacent to our king, if the enemy has a rook
     Square our_ksq = (rank_of(ksq) == RANK_1 ? ksq + NORTH : ksq);
-    b =  passed_pawn_mask(BLACK, our_ksq) & ~file_bb(ksq)
-       & pe->semiopenFiles[Us] & pe->semiopenFiles[Them];
+    b = passed_pawn_mask(BLACK, our_ksq) & pe->semiopenFiles[Us] & pe->semiopenFiles[Them];
     if (    b
         && !more_than_one(b)
         &&  pos.pieces(Them, ROOK))
