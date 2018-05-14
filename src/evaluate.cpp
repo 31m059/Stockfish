@@ -505,10 +505,9 @@ namespace {
     // King tropism, to anticipate slow motion attacks on our king
     score -= CloseEnemies * (popcount(b1) + popcount(b2));
 
-    // Penalty for open files against our king's surroundings, if the enemy has a rook and we do not
+    // Penalty for open files against our king's surroundings, if the enemy has more rooks
     Square our_ksq = (rank_of(ksq) == RANK_1 ? ksq + NORTH : ksq);
-    if (    pos.pieces(Them, ROOK)
-        && !pos.pieces(Us,   ROOK)
+    if (    pos.count<ROOK>(Them) > pos.count<ROOK>(Us)
         && (passed_pawn_mask(BLACK, our_ksq) & pe->semiopenFiles[Us] & pe->semiopenFiles[Them]))
         score -= KingOpenFile;
 
