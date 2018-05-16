@@ -696,6 +696,14 @@ namespace {
                     k += 4;
 
                 bonus += make_score(k * w, k * w);
+
+                // If the passed pawn can safely move forward, and the enemy was given
+                // a RookOnPawn bonus for attacking it along the rank, cancel it out.
+                if (  ~unsafeSquares & blockSq
+                    && PseudoAttacks[ROOK][s] & rank_bb(s) & pos.pieces(Them, ROOK)
+                    && relative_rank(Them, s) >= RANK_5)
+                    score += RookOnPawn;
+
             }
             else if (pos.pieces(Us) & blockSq)
                 bonus += make_score(w + r * 2, w + r * 2);
