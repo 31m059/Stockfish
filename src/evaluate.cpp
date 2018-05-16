@@ -702,7 +702,7 @@ namespace {
                 if (  ~unsafeSquares & blockSq
                     && PseudoAttacks[ROOK][s] & rank_bb(s) & pos.pieces(Them, ROOK)
                     && relative_rank(Them, s) >= RANK_5)
-                    score += RookOnPawn;
+                    score += RookOnPawn / 2;
 
             }
             else if (pos.pieces(Us) & blockSq)
