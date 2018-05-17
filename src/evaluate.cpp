@@ -172,7 +172,7 @@ namespace {
   constexpr Score LongDiagonalBishop = S( 22,  0);
   constexpr Score MinorBehindPawn    = S( 16,  0);
   constexpr Score Overload           = S( 10,  5);
-  constexpr Score OverloadedPin      = S( 20,  0);
+  constexpr Score OverloadedPin      = S( 10, 10);
   constexpr Score PawnlessFlank      = S( 20, 80);
   constexpr Score RookOnPawn         = S(  8, 24);
   constexpr Score SliderOnQueen      = S( 42, 21);
@@ -570,7 +570,8 @@ namespace {
            & attackedBy[Us][ALL_PIECES]   & ~attackedBy2[Us]
            & attackedBy[Them][ALL_PIECES] & ~attackedBy2[Them];
         score += Overload * popcount(b);
-        score += OverloadedPin * bool(b & pos.blockers_for_king(Them));
+        if (b & pos.blockers_for_king(Them))
+            score += OverloadedPin;
     }
 
     // Bonus for enemy unopposed weak pawns
