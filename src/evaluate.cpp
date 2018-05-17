@@ -570,7 +570,7 @@ namespace {
            & attackedBy[Us][ALL_PIECES]   & ~attackedBy2[Us]
            & attackedBy[Them][ALL_PIECES] & ~attackedBy2[Them];
         score += Overload * popcount(b);
-        score += OverloadedPin * popcount(b & pos.blockers_for_king(Them));
+        score += OverloadedPin * bool(b & pos.blockers_for_king(Them));
     }
 
     // Bonus for enemy unopposed weak pawns
