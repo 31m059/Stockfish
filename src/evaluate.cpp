@@ -179,6 +179,7 @@ namespace {
   constexpr Score ThreatByRank       = S( 16,  3);
   constexpr Score ThreatBySafePawn   = S(175,168);
   constexpr Score TrappedRook        = S( 92,  0);
+  constexpr Score WeakPin            = S( 10, 10);
   constexpr Score WeakQueen          = S( 50, 10);
   constexpr Score WeakUnopposedPawn  = S(  5, 25);
 
@@ -563,6 +564,9 @@ namespace {
             score += ThreatByKing[more_than_one(b)];
 
         score += Hanging * popcount(weak & ~attackedBy[Them][ALL_PIECES]);
+
+        if (weak & pos.blockers_for_king(Them))
+            score += WeakPin;
 
         // Bonus for overload (non-pawn enemies attacked and defended exactly once)
         b =  nonPawnEnemies
