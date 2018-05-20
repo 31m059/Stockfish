@@ -619,7 +619,7 @@ namespace {
     // Double bonus for our pieces pinned to our king
     b &=  pos.blockers_for_king(Us)
         & ~(attackedBy2[Them] & ~attackedBy2[Us]) & ~attackedBy[Them][PAWN];
-    score += Connectivity * 2 * bool(b);
+    score += Connectivity * 3 * bool(b);
 
     if (T)
         Trace::add(THREAT, Us, score);
