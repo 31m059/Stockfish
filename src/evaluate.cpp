@@ -617,7 +617,7 @@ namespace {
     b = (pos.pieces(Us) ^ pos.pieces(Us, PAWN, KING)) & attackedBy[Us][ALL_PIECES];
     score += Connectivity * popcount(b);
     // Double bonus for our pieces pinned to our king
-    score += Connectivity * bool(b & pos.blockers_for_king(Us));
+    score += Connectivity * 2 * bool(b & pos.blockers_for_king(Us));
 
     if (T)
         Trace::add(THREAT, Us, score);
