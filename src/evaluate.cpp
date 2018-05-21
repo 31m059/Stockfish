@@ -165,6 +165,7 @@ namespace {
   constexpr Score BishopPawns        = S(  3,  5);
   constexpr Score CloseEnemies       = S(  7,  0);
   constexpr Score Connectivity       = S(  3,  1);
+  constexpr Score ConnectivityPinned = S(  5,  5);
   constexpr Score CorneredBishop     = S( 50, 50);
   constexpr Score Hanging            = S( 52, 30);
   constexpr Score HinderPassedPawn   = S(  8,  1);
@@ -619,7 +620,7 @@ namespace {
     // Double bonus for our pieces pinned to our king
     b &=  pos.blockers_for_king(Us)
         & ~(attackedBy2[Them] & ~attackedBy2[Us]);
-    score += Connectivity * 3 * bool(b);
+    score += ConnectivityPinned * bool(b);
 
     if (T)
         Trace::add(THREAT, Us, score);
