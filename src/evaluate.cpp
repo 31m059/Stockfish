@@ -137,7 +137,7 @@ namespace {
   };
 
   constexpr Score ThreatByRook[PIECE_TYPE_NB] = {
-    S(0, 0), S(0, 24), S(38, 71), S(38, 61), S(0, 38), S(36, 68)
+    S(0, 0), S(0, 24), S(38, 71), S(38, 61), S(0, 38), S(36, 46)
   };
 
   // ThreatByKing[on one/on many] contains bonuses for king attacks on
