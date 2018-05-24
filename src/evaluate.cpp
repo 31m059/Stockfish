@@ -345,6 +345,7 @@ namespace {
             else if (bb &= b & ~pos.pieces(Us))
             {
                 Bitboard attacks = pos.attacks_from<Pt>(lsb(bb)) & (pos.pieces() ^ pos.pieces(KING, PAWN));
+                attacks ^= s;
                 bool notAttacking = Pt == KNIGHT && !attacks;
                 score += Outpost[Pt == BISHOP][bool(attackedBy[Us][PAWN] & bb)] / (1 + notAttacking);
             }
