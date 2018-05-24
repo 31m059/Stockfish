@@ -339,14 +339,14 @@ namespace {
             bb = OutpostRanks & ~pe->pawn_attacks_span(Them);
             if (bb & s)
             {
-                Bitboard attacks = b & (pos.pieces() ^ pos.pieces(KING, PAWN));
-                bool notAttacking = Pt == KNIGHT && !attacks;
-                score += Outpost[Pt == BISHOP][bool(attackedBy[Us][PAWN] & s)] * 2 / (1 + notAttacking);
+                score += Outpost[Pt == BISHOP][bool(attackedBy[Us][PAWN] & s)] * 2;
             }
 
             else if (bb &= b & ~pos.pieces(Us))
             {
-                score += Outpost[Pt == BISHOP][bool(attackedBy[Us][PAWN] & bb)];
+                Bitboard attacks = pos.attacks_from<Pt>(lsb(bb)) & (pos.pieces() ^ pos.pieces(KING, PAWN));
+                bool notAttacking = Pt == KNIGHT && !attacks;
+                score += Outpost[Pt == BISHOP][bool(attackedBy[Us][PAWN] & bb)] / (1 + notAttacking);
             }
 
             // Bonus when behind a pawn
