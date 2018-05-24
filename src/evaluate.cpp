@@ -341,7 +341,7 @@ namespace {
             {
                 Bitboard attacks =  pos.attacks_from<Pt>(s)
                                   & ~pawn_attacks_bb<Them>(pos.pieces(Them, PAWN))
-                                  & (pos.pieces() ^ pos.pieces(KING, PAWN));
+                                  & (pos.pieces() | kingRing[Them]);
                 bool notAttacking = Pt == KNIGHT && !attacks;
                 score += Outpost[Pt == BISHOP][bool(attackedBy[Us][PAWN] & s)] * 6 / (3 + notAttacking);
             }
@@ -350,7 +350,7 @@ namespace {
             {
                 Bitboard attacks =  pos.attacks_from<Pt>(lsb(bb))
                                   & ~pawn_attacks_bb<Them>(pos.pieces(Them, PAWN))
-                                  & (pos.pieces() ^ pos.pieces(KING, PAWN));
+                                  & (pos.pieces() | kingRing[Them]);
                 attacks ^= s;
                 bool notAttacking = Pt == KNIGHT && !attacks;
                 score += Outpost[Pt == BISHOP][bool(attackedBy[Us][PAWN] & bb)] * 3 / (3 + notAttacking);
