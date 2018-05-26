@@ -172,6 +172,7 @@ namespace {
   constexpr Score LongDiagonalBishop = S( 22,  0);
   constexpr Score MinorBehindPawn    = S( 16,  0);
   constexpr Score Overload           = S( 10,  5);
+  constexpr Score OverloadGoodTrade  = S(  5,  0);
   constexpr Score PawnlessFlank      = S( 20, 80);
   constexpr Score RookOnPawn         = S(  8, 24);
   constexpr Score SliderOnQueen      = S( 42, 21);
@@ -568,10 +569,14 @@ namespace {
         b =  nonPawnEnemies
            & attackedBy[Us][ALL_PIECES]   & ~attackedBy2[Us]
            & attackedBy[Them][ALL_PIECES] & ~attackedBy2[Them];
+        score += Overload * popcount(b);
+
+        // Extra bonus for good trades available in Overload
         b &= attackedBy[Us][PAWN]
            | ((attackedBy[Us][KNIGHT] | attackedBy[Us][BISHOP]) & pos.pieces(Them, QUEEN, ROOK))
            | (attackedBy[Us][ROOK] & pos.pieces(Them, QUEEN));
-        score += Overload * popcount(b);
+        if (b)
+            score += OverloadGoodTrade;
     }
 
     // Bonus for enemy unopposed weak pawns
