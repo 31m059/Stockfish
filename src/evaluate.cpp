@@ -567,11 +567,10 @@ namespace {
         // Bonus for overload (non-pawn enemies attacked and defended exactly once)
         b =  nonPawnEnemies
            & attackedBy[Us][ALL_PIECES]   & ~attackedBy2[Us]
-           & attackedBy[Them][ALL_PIECES] & ~attackedBy2[Them]
-           & ~(pos.pieces(Them, KNIGHT) & attackedBy[Us][KNIGHT])
-           & ~(pos.pieces(Them, BISHOP) & attackedBy[Us][BISHOP])
-           & ~(pos.pieces(Them, ROOK  ) & attackedBy[Us][ROOK  ])
-           & ~(pos.pieces(Them, QUEEN ) & attackedBy[Us][QUEEN ]);
+           & attackedBy[Them][ALL_PIECES] & ~attackedBy2[Them];
+        b &= attackedBy[Us][PAWN]
+           | ((attackedBy[Us][KNIGHT] | attackedBy[Us][BISHOP]) & pos.pieces(Them, QUEEN, ROOK))
+           | (attackedBy[Us][ROOK] & pos.pieces(Them, QUEEN));
         score += Overload * popcount(b);
     }
 
