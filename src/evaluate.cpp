@@ -329,8 +329,8 @@ namespace {
         int mob;
         if (   relative_rank(Us, s) == RANK_1
             && shift<Down>(pos.pieces(Them, PAWN)) & s
-            && more_than_one(pos.pieces(Them, ROOK, QUEEN) & file_bb(s)))
-            mob = 0;
+            && pos.pieces(Them, ROOK, QUEEN) & file_bb(s))
+            mob = 1;
         else
             mob = popcount(b & mobilityArea[Us]);
 
