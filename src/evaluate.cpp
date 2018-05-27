@@ -326,15 +326,14 @@ namespace {
             kingAttacksCount[Us] += popcount(b & attackedBy[Them][KING]);
         }
 
-        int mob;
+        int mob = popcount(b & mobilityArea[Us]);
+
         if (   relative_rank(Us, s) == RANK_1
             && shift<Down>(pos.pieces(Them, PAWN)) & s
             && pos.pieces(Them, ROOK, QUEEN) & file_bb(s))
-            mob = popcount(b & mobilityArea[Us]) / 2;
+            mobility[Us] += std::min(MobilityBonus[Pt - 2][mob], MobilityBonus[Pt - 2][mob] / 2);
         else
-            mob = popcount(b & mobilityArea[Us]);
-
-        mobility[Us] += MobilityBonus[Pt - 2][mob];
+            mobility[Us] += MobilityBonus[Pt - 2][mob];
 
         // Penalty if the piece is far from the king
         score -= KingProtector[Pt - 2] * distance(s, pos.square<KING>(Us));
