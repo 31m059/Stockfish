@@ -331,7 +331,7 @@ namespace {
         if (   relative_rank(Us, s) == RANK_1
             && shift<Down>(pos.pieces(Them, PAWN)) & s
             && pos.pieces(Them, ROOK, QUEEN) & file_bb(s))
-            mobility[Us] += std::min(MobilityBonus[Pt - 2][mob], MobilityBonus[Pt - 2][mob] / 2);
+            mobility[Us] += MobilityBonus[Pt - 2][mob / 2];
         else
             mobility[Us] += MobilityBonus[Pt - 2][mob];
 
