@@ -173,7 +173,7 @@ namespace {
   constexpr Score MinorBehindPawn    = S( 16,  0);
   constexpr Score Overload           = S( 10,  5);
   constexpr Score PawnlessFlank      = S( 20, 80);
-  constexpr Score PromotionBlocker   = S( 10, 10);
+  constexpr Score PromotionBlocker   = S(  5,  5);
   constexpr Score RookOnPawn         = S(  8, 24);
   constexpr Score SliderOnQueen      = S( 42, 21);
   constexpr Score ThreatByPawnPush   = S( 47, 26);
@@ -333,11 +333,11 @@ namespace {
         // Penalty if the piece is far from the king
         score -= KingProtector[Pt - 2] * distance(s, pos.square<KING>(Us));
 
-        // Penalty if the piece is trapped stopping an immediate, rook- or queen-defended promotion
+        // Bonus if the piece is stopping an immediate, rook- or queen-defended promotion
         if (   relative_rank(Us, s) == RANK_1
             && shift<Down>(pos.pieces(Them, PAWN)) & s
             && pos.pieces(Them, ROOK, QUEEN) & file_bb(s))
-            score -= PromotionBlocker;
+            score += PromotionBlocker;
 
         if (Pt == BISHOP || Pt == KNIGHT)
         {
