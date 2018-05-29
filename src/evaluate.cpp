@@ -698,7 +698,7 @@ namespace {
                 // If protected from behind by more than one rook or queen, assign extra bonus.
                 if (   k > 0
                     && more_than_one(forward_file_bb(Them, s) & pos.pieces(Us, ROOK, QUEEN)))
-                    k += 3;
+                    k += 4;
 
                 bonus += make_score(k * w, k * w);
             }
