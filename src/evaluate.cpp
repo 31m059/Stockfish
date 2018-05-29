@@ -173,6 +173,7 @@ namespace {
   constexpr Score MinorBehindPawn    = S( 16,  0);
   constexpr Score Overload           = S( 10,  5);
   constexpr Score PawnlessFlank      = S( 20, 80);
+  constexpr Score PassedSupport      = S(  5,  5);
   constexpr Score RookOnPawn         = S(  8, 24);
   constexpr Score SliderOnQueen      = S( 42, 21);
   constexpr Score ThreatByPawnPush   = S( 47, 26);
@@ -700,6 +701,10 @@ namespace {
             else if (pos.pieces(Us) & blockSq)
                 bonus += make_score(w + r * 2, w + r * 2);
         } // w != 0
+
+        // Bonus if our passed pawn is supported by more than one rook or queen from behind
+        if (more_than_one(forward_file_bb(Them, s) & pos.pieces(Us, ROOK, QUEEN)))
+            bonus += PassedSupport;
 
         // Scale down bonus for candidate passers which need more than one
         // pawn push to become passed, or have a pawn in front of them.
