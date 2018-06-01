@@ -695,11 +695,9 @@ namespace {
                 else if (defendedSquares & blockSq)
                     k += 4;
 
-                // If protected from behind by more rooks or queens than attack from the front, assign extra bonus
-                Bitboard defenders = forward_file_bb(Them, s) & pos.pieces(Us,   ROOK, QUEEN);
-                Bitboard attackers = forward_file_bb(Us,   s) & pos.pieces(Them, ROOK, QUEEN);
+                // If protected by more than one rook or queen, assign extra bonus.
                 if (   k > 0
-                    && ((defenders && !attackers) || (more_than_one(defenders) && !more_than_one(attackers))))
+                    && more_than_one(file_bb(s) & pos.pieces(Us, ROOK, QUEEN)))
                     k += 2;
 
                 bonus += make_score(k * w, k * w);
