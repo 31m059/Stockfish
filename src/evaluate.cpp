@@ -173,7 +173,7 @@ namespace {
   constexpr Score MinorBehindPawn    = S( 16,  0);
   constexpr Score Overload           = S( 10,  5);
   constexpr Score PawnlessFlank      = S( 20, 80);
-  constexpr Score PassedSupport      = S( 20, 20);
+  constexpr Score PassedSupport      = S( 15, 15);
   constexpr Score RookOnPawn         = S(  8, 24);
   constexpr Score SliderOnQueen      = S( 42, 21);
   constexpr Score ThreatByPawnPush   = S( 47, 26);
@@ -698,9 +698,9 @@ namespace {
 
                 bonus += make_score(k * w, k * w);
 
-                // Bonus if our passed pawn is supported by more than one rook or queen from behind
+                // Bonus if our passed pawn is supported by more than one rook or queen on the file
                 if (    k > 0
-                    &&  more_than_one(forward_file_bb(Them, s) & pos.pieces(Us, ROOK, QUEEN)))
+                    &&  more_than_one(file_bb(s) & pos.pieces(Us, ROOK, QUEEN)))
                     bonus += PassedSupport;
 
             }
