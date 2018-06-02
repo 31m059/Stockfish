@@ -697,9 +697,10 @@ namespace {
 
                 // If protected by more than one rook or queen, assign extra bonus.
                 bb = file_bb(s) & (pos.pieces(Us, ROOK, QUEEN) | pos.pieces(Us, PAWN));
+                Bitboard stronglyProtected = attackedBy[Them][PAWN] | (attackedBy2[Them] & ~attackedBy2[Us]);
                 if (   k > 0
                     && more_than_one(bb & ~pos.pieces(Us, PAWN))
-                    && !(LineBB[lsb(bb)][msb(bb)] & pos.pieces(Them)))
+                    && !(LineBB[lsb(bb)][msb(bb)] & pos.pieces(Them) & stronglyProtected))
                     k += 2;
 
                 bonus += make_score(k * w, k * w);
