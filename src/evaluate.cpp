@@ -695,10 +695,12 @@ namespace {
                 else if (defendedSquares & blockSq)
                     k += 4;
 
-                // If protected by more than one rook or queen, assign extra bonus.
+                // If the promotion square is defended twice, give more bonus.
+                // This is the case if we have two rooks or queens on the file,
+                // or if we have two attacks on the empty blocking square.
                 if (   k > 0
-                    &&  more_than_one(file_bb(s) & pos.pieces(Us,   ROOK, QUEEN))
-                    && !more_than_one(file_bb(s) & pos.pieces(Them, ROOK, QUEEN)))
+                    && (more_than_one(file_bb(s) & pos.pieces(Us, ROOK, QUEEN))
+                    || attackedBy2[Us] & blockSq))
                     k += 2;
 
                 bonus += make_score(k * w, k * w);
