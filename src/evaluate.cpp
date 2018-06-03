@@ -697,7 +697,7 @@ namespace {
                 
                 // If supported by a rook while the opponent has none, extra bonus.
                 if (   k > 0
-                    && bb & pos.pieces(Us, ROOK)
+                    && file_bb(s) & pos.pieces(Us, ROOK) & pos.attacks_from<ROOK>(s)
                     && !pos.pieces(Them, ROOK))
                     k += 2;
 
