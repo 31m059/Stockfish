@@ -695,7 +695,7 @@ namespace {
                 else if (defendedSquares & blockSq)
                     k += 4;
 
-                // If the promotion square is defended twice, give more bonus.
+                // If we attack the blocking square twice, give more bonus.
                 // This is the case if we have two rooks or queens on the file,
                 // or if we have two attacks on the empty blocking square.
                 if (   k > 0
