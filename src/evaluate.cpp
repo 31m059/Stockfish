@@ -695,10 +695,10 @@ namespace {
                 else if (defendedSquares & blockSq)
                     k += 4;
                 
-                // If supported by a rook while the opponent has none, extra bonus.
+                // If supported by a rook or queen while the opponent has none, extra bonus.
                 if (   k > 0
-                    && file_bb(s) & pos.pieces(Us, ROOK) & pos.attacks_from<ROOK>(s)
-                    && !pos.pieces(Them, ROOK))
+                    && file_bb(s) & pos.pieces(Us, ROOK, QUEEN) & pos.attacks_from<ROOK>(s)
+                    && !pos.pieces(Them, ROOK, QUEEN))
                     k += 2;
 
                 bonus += make_score(k * w, k * w);
