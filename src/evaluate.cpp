@@ -642,9 +642,9 @@ namespace {
 
     b = pe->passed_pawns(Us);
 
-    // If we have rooks, small bonus for each passed pawn of either color
-    if (pos.pieces(Us, ROOK))
-        score += RookPassedPawn * popcount(pe->passed_pawns(Us) | pe->passed_pawns(Them));
+    // If we have rooks and the opponent does not, small bonus for each "extra" passed pawn we have
+    if (pos.pieces(Us, ROOK) && !pos.pieces(Them, ROOK))
+        score += RookPassedPawn * std::max(0, popcount(b) - popcount(pe->passed_pawns(Them)));
 
     while (b)
     {
