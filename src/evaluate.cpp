@@ -174,6 +174,7 @@ namespace {
   constexpr Score Overload           = S( 10,  5);
   constexpr Score PawnlessFlank      = S( 20, 80);
   constexpr Score RookOnPawn         = S(  8, 24);
+  constexpr Score RookPassedPawn     = S(  2,  2);
   constexpr Score SliderOnQueen      = S( 42, 21);
   constexpr Score ThreatByPawnPush   = S( 47, 26);
   constexpr Score ThreatByRank       = S( 16,  3);
@@ -640,6 +641,9 @@ namespace {
     Score score = SCORE_ZERO;
 
     b = pe->passed_pawns(Us);
+    // If only we have rooks, give a small additional bonus for every friendly passed pawn
+    if (pos.pieces(Us, ROOK) && !pos.pieces(Them, ROOK))
+        score += RookPassedPawn * popcount(b);
 
     while (b)
     {
