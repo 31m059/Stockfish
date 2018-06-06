@@ -400,7 +400,7 @@ namespace {
             if (!pos.pieces(Them, ROOK))
             {
                 int x = popcount(pe->passed_pawns(Us)) + pe->open_files();
-                score += make_score(0, 37 * x / (2 + x));
+                score += make_score(0, 50 * x / (2 + x));
             }
 
         }
