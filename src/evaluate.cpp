@@ -394,6 +394,15 @@ namespace {
                 if ((kf < FILE_E) == (file_of(s) < kf))
                     score -= (TrappedRook - make_score(mob * 22, 0)) * (1 + !pos.can_castle(Us));
             }
+
+            // If only we have rooks, give a bonus for all files that are open or contain our passed pawns,
+            // with diminishing returns for larger numbers of open files/passed pawns.
+            if (!pos.pieces(Them, ROOK))
+            {
+                int x = popcount(pe->passed_pawns(Us)) + pe->open_files();
+                score += make_score(25 * x / (2 + x), 25 * x / (2 + x));
+            }
+
         }
 
         if (Pt == QUEEN)
