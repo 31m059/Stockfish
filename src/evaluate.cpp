@@ -156,7 +156,8 @@ namespace {
   };
 
   // PassedDanger[Rank] contains a term to weight the passed score
-  constexpr int PassedDanger[RANK_NB] = { 0, 0, 0, 3, 6, 12, 21 };
+  int PassedDanger[RANK_NB] = { 0, 0, 0, 3, 6, 12, 21 };
+  TUNE(PassedDanger[3], PassedDanger[4], PassedDanger[5], PassedDanger[6]);
 
   // KingProtector[PieceType-2] contains a penalty according to distance from king
   constexpr Score KingProtector[] = { S(3, 5), S(4, 3), S(3, 0), S(1, -1) };
@@ -694,6 +695,11 @@ namespace {
 
                 else if (defendedSquares & blockSq)
                     k += 4;
+
+                // If protected by more than one rook or queen, assign extra bonus.
+                if (   k > 0
+                    && more_than_one(file_bb(s) & pos.pieces(Us, ROOK, QUEEN)))
+                    k += 2;
 
                 bonus += make_score(k * w, k * w);
             }
