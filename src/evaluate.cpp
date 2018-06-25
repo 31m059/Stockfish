@@ -695,6 +695,11 @@ namespace {
                 else if (defendedSquares & blockSq)
                     k += 4;
 
+                // If protected by more than one rook or queen, assign extra bonus.
+                if (   k > 0
+                    && more_than_one(file_bb(s) & pos.pieces(Us, ROOK, QUEEN)))
+                    k += 2;
+
                 bonus += make_score(k * w, k * w);
             }
             else if (pos.pieces(Us) & blockSq)
