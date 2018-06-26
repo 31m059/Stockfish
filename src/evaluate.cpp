@@ -174,7 +174,7 @@ namespace {
   constexpr Score Overload           = S( 10,  5);
   constexpr Score PawnlessFlank      = S( 20, 80);
   constexpr Score RookOnPawn         = S(  8, 24);
-  constexpr Score SkewerThreat       = S( 20, 20);
+  constexpr Score SkewerThreat       = S( 10, 10);
   constexpr Score SliderOnQueen      = S( 42, 21);
   constexpr Score ThreatByPawnPush   = S( 49, 30);
   constexpr Score ThreatByRank       = S( 16,  3);
@@ -401,7 +401,7 @@ namespace {
             if (bb & attackedBy[Them][BISHOP] && !(bb & pos.pieces(Them, BISHOP)))
             {
                 Square s2 = lsb(bb & attackedBy[Them][BISHOP]);
-                if ( bb & pos.pieces(Us, ROOK, QUEEN) & LineBB[s][s2])
+                if (bb & pos.pieces(Us, ROOK) & LineBB[s][s2])
                     score -= SkewerThreat;
             }
 
