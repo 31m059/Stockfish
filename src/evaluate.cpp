@@ -174,6 +174,7 @@ namespace {
   constexpr Score Overload           = S( 10,  5);
   constexpr Score PawnlessFlank      = S( 20, 80);
   constexpr Score RookOnPawn         = S(  8, 24);
+  constexpr Score SkewerThreat       = S( 10, 10);
   constexpr Score SliderOnQueen      = S( 42, 21);
   constexpr Score ThreatByPawnPush   = S( 49, 30);
   constexpr Score ThreatByRank       = S( 16,  3);
@@ -394,6 +395,16 @@ namespace {
                 if ((kf < FILE_E) == (file_of(s) < kf))
                     score -= (TrappedRook - make_score(mob * 22, 0)) * (1 + !pos.can_castle(Us));
             }
+
+            // Penalty if the opponent has a bishop skewer threat on the next turn
+            bb = attacks_bb<BISHOP>(s, pos.pieces());
+            if (bb & attackedBy[Them][BISHOP] && !(bb & pos.pieces(Them, BISHOP)))
+            {
+                Square s2 = lsb(bb & attackedBy[Them][BISHOP]);
+                if ( bb & pos.pieces(Us, ROOK, QUEEN) & LineBB[s][s2])
+                    score -= SkewerThreat;
+            }
+
         }
 
         if (Pt == QUEEN)
@@ -850,8 +861,8 @@ namespace {
     initialize<BLACK>();
 
     // Pieces should be evaluated first (populate attack tables)
+    score +=  pieces<WHITE, BISHOP>() - pieces<BLACK, BISHOP>();
     score +=  pieces<WHITE, KNIGHT>() - pieces<BLACK, KNIGHT>()
-            + pieces<WHITE, BISHOP>() - pieces<BLACK, BISHOP>()
             + pieces<WHITE, ROOK  >() - pieces<BLACK, ROOK  >()
             + pieces<WHITE, QUEEN >() - pieces<BLACK, QUEEN >();
 
