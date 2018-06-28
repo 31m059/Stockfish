@@ -400,9 +400,13 @@ namespace {
             bb = attacks_bb<BISHOP>(s, pos.pieces());
             if (bb & attackedBy[Them][BISHOP] && !(bb & pos.pieces(Them, BISHOP)))
             {
-                Square s2 = lsb(bb & attackedBy[Them][BISHOP]);
-                if (bb & pos.pieces(Us, ROOK) & LineBB[s][s2])
-                    score -= SkewerThreat;
+                Bitboard bbb = bb & attackedBy[Them][BISHOP];
+                while (bbb)
+                {
+                    Square s2 = pop_lsb(&bbb);
+                    if (bb & pos.pieces(Us, ROOK) & LineBB[s][s2])
+                        score -= SkewerThreat;
+                }
             }
 
         }
