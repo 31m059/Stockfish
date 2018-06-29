@@ -400,7 +400,9 @@ namespace {
         {
             // Penalty if any relative pin or discovered attack against the queen
             Bitboard queenPinners;
-            if (pos.slider_blockers(pos.pieces(Them, ROOK, BISHOP), s, queenPinners))
+            Bitboard queenBlockers = pos.slider_blockers(pos.pieces(Them, ROOK, BISHOP), s, queenPinners);
+            if (     queenBlockers
+                && !(queenBlockers & pos.pieces(Them) && queenPinners & ~attackedBy[Them][ALL_PIECES]))
                 score -= WeakQueen;
         }
     }
@@ -852,8 +854,8 @@ namespace {
     // Pieces should be evaluated first (populate attack tables)
     score +=  pieces<WHITE, KNIGHT>() - pieces<BLACK, KNIGHT>()
             + pieces<WHITE, BISHOP>() - pieces<BLACK, BISHOP>()
-            + pieces<WHITE, ROOK  >() - pieces<BLACK, ROOK  >()
-            + pieces<WHITE, QUEEN >() - pieces<BLACK, QUEEN >();
+            + pieces<WHITE, ROOK  >() - pieces<BLACK, ROOK  >();
+    score +=  pieces<WHITE, QUEEN >() - pieces<BLACK, QUEEN >();
 
     score += mobility[WHITE] - mobility[BLACK];
 
