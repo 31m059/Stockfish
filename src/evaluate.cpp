@@ -578,8 +578,7 @@ namespace {
 
     // Bonus for enemy pawns under heavy pressure
     b =   pos.pieces(Them, PAWN)
-       &  attackedBy2[Us] & attackedBy2[Them]
-       & ~attackedBy[Us][PAWN] & ~attackedBy[Them][PAWN];
+       &  attackedBy2[Us] & attackedBy2[Them];
     score += PawnPressure * popcount(b);
 
     // Our safe or protected pawns
