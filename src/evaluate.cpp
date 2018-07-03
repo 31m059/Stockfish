@@ -173,7 +173,7 @@ namespace {
   constexpr Score MinorBehindPawn    = S( 16,  0);
   constexpr Score Overload           = S( 10,  5);
   constexpr Score PawnlessFlank      = S( 20, 80);
-  constexpr Score PiecePressure      = S(  5,  0);
+  constexpr Score PiecePressure      = S( 15, 10);
   constexpr Score RookOnPawn         = S(  8, 24);
   constexpr Score SliderOnQueen      = S( 42, 21);
   constexpr Score ThreatByPawnPush   = S( 49, 30);
@@ -571,10 +571,25 @@ namespace {
            & attackedBy[Them][ALL_PIECES] & ~attackedBy2[Them];
         score += Overload * popcount(b);
 
-        // Bonus for non-pawn enemies under heavy pressure
-        b =  nonPawnEnemies
-           & attackedBy2[Us] & attackedBy2[Them];
-        score += PiecePressure * popcount(b);
+        // Bonus for non-pawn enemies under heavy pressure and low mobility
+        Bitboard bb =  nonPawnEnemies
+                     & attackedBy2[Us] & attackedBy2[Them];
+        while (bb)
+        {
+            Square s = pop_lsb(&bb);
+            PieceType Pt = type_of(pos.piece_on(s));
+
+            b = Pt == BISHOP ? attacks_bb<BISHOP>(s, pos.pieces() ^ pos.pieces(QUEEN))
+              : Pt ==   ROOK ? attacks_bb<  ROOK>(s, pos.pieces() ^ pos.pieces(QUEEN) ^ pos.pieces(Them, ROOK))
+              : Pt == KNIGHT ? pos.attacks_from<KNIGHT>(s)
+              : pos.attacks_from<QUEEN>(s);
+
+            if (pos.blockers_for_king(Them) & s)
+                b &= LineBB[pos.square<KING>(Them)][s];
+
+            if (popcount(b) <= 3)
+                score += PiecePressure;
+        }
     }
 
     // Bonus for enemy unopposed weak pawns
