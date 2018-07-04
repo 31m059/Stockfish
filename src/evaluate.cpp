@@ -569,6 +569,8 @@ namespace {
            & attackedBy[Us][ALL_PIECES]   & ~attackedBy2[Us]
            & attackedBy[Them][ALL_PIECES] & ~attackedBy2[Them];
         score += Overload * popcount(b);
+        if (b & (attackedBy[Them][KING] | attackedBy[Them][QUEEN]))
+            score += Overload;
     }
 
     // Bonus for enemy unopposed weak pawns
