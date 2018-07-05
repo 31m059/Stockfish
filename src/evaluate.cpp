@@ -563,7 +563,7 @@ namespace {
         if (b)
             score += ThreatByKing[more_than_one(b)];
 
-        b = weak & attackedBy[Them][KING];
+        b = weak & nonPawnEnemies & attackedBy[Them][KING];
         if (b)
             score += WeakKingDefense;
 
