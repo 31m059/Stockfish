@@ -478,7 +478,6 @@ namespace {
                      - 860 * !pos.count<QUEEN>(Them)
                      -   7 * mg_value(score) / 8
                      -  56 ;
-        dbg_mean_of(kingDanger);
 
         // Transform the kingDanger units into a Score, and subtract it from the evaluation
         if (kingDanger > 0)
