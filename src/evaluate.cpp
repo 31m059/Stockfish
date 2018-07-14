@@ -179,6 +179,10 @@ namespace {
   constexpr Score WeakQueen          = S( 50, 10);
   constexpr Score WeakUnopposedPawn  = S(  5, 26);
 
+  int WeakKingDefense = 30;
+  int offset = -33;
+  TUNE(SetRange(0,100), WeakKingDefense, SetRange(-100,100), offset);
+
 #undef S
 
   // Evaluation class computes and stores attacks tables and other working data
@@ -470,8 +474,6 @@ namespace {
         // the square is in the attacker's mobility area.
         unsafeChecks &= mobilityArea[Them];
 
-        int WeakKingDefense = 30;
-        int offset = -33;
         kingDanger +=        kingAttackersCount[Them] * kingAttackersWeight[Them]
                      + 64  * kingAttacksCount[Them]
                      + 183 * popcount(kingRing[Us] & weak)
@@ -480,7 +482,6 @@ namespace {
                      - 860 * !pos.count<QUEEN>(Them)
                      -   7 * mg_value(score) / 8
                      +  offset ;
-        TUNE(SetRange(0, 100), WeakKingDefense, SetRange(-100, 100), offset);
 
         // Transform the kingDanger units into a Score, and subtract it from the evaluation
         if (kingDanger > 0)
