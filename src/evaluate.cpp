@@ -470,13 +470,13 @@ namespace {
         unsafeChecks &= mobilityArea[Them];
 
         kingDanger +=        kingAttackersCount[Them] * kingAttackersWeight[Them]
-                     + 64  * kingAttacksCount[Them]
-                     + 183 * popcount(kingRing[Us] & weak)
+                     + 69  * kingAttacksCount[Them]
+                     + 185 * popcount(kingRing[Us] & weak)
                      + 24  * popcount(kingRing[Us] & weak & attackedBy[Us][KING] & pos.pieces(Us))
-                     + 122 * popcount(pos.blockers_for_king(Us) | unsafeChecks)
-                     - 860 * !pos.count<QUEEN>(Them)
-                     -   7 * mg_value(score) / 8
-                     -  19 ;
+                     + 129 * popcount(pos.blockers_for_king(Us) | unsafeChecks)
+                     - 873 * !pos.count<QUEEN>(Them)
+                     -   6 * mg_value(score) / 8
+                     -  38 ;
 
         // Transform the kingDanger units into a Score, and subtract it from the evaluation
         if (kingDanger > 0)
