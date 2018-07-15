@@ -178,6 +178,10 @@ namespace {
   constexpr Score TrappedRook        = S( 92,  0);
   constexpr Score WeakQueen          = S( 50, 10);
   constexpr Score WeakUnopposedPawn  = S(  5, 29);
+  
+  int KD_threshold = 1000;
+  int KD_multiplier = 26;
+  TUNE(SetRange(0, 5000), KD_threshold, SetRange(-256, 256), KD_multiplier);
 
 #undef S
 
@@ -476,6 +480,9 @@ namespace {
                      - 873 * !pos.count<QUEEN>(Them)
                      -   6 * mg_value(score) / 8
                      -   2 ;
+
+        if (kingDanger > KD_threshold && pos.pieces(Us, QUEEN) && !pos.pieces(Them, QUEEN))
+             kingDanger += KD_multiplier * kingDanger / 256;
 
         // Transform the kingDanger units into a Score, and subtract it from the evaluation
         if (kingDanger > 0)
