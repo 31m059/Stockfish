@@ -482,7 +482,7 @@ namespace {
         {
             int mobilityDanger = mg_value(mobility[Them] - mobility[Us]);
             if (mobilityDanger > 45 && pos.pieces(Us, QUEEN) && !pos.pieces(Them, QUEEN))
-                kingDanger += kingDanger / 10;
+                mobilityDanger += mobilityDanger / 4;
             kingDanger = std::max(0, kingDanger + mobilityDanger);
             score -= make_score(kingDanger * kingDanger / 4096, kingDanger / 16);
         }
