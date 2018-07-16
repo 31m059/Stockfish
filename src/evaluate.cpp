@@ -477,7 +477,7 @@ namespace {
                      -   6 * mg_value(score) / 8
                      -   2 ;
 
-        if (kingDanger > 1000 && pos.count<QUEEN>(Us) != pos.count<QUEEN>(Them))
+        if (kingDanger > 900 && pos.pieces(Us, QUEEN) && !pos.pieces(Them, QUEEN))
            kingDanger += kingDanger / 10;
 
         // Transform the kingDanger units into a Score, and subtract it from the evaluation
