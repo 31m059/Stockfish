@@ -477,15 +477,16 @@ namespace {
                      -   6 * mg_value(score) / 8
                      -   2 ;
 
-        if (kingDanger > 1000 && pos.pieces(Us, QUEEN) && !pos.pieces(Them, QUEEN))
-           kingDanger = 11 * kingDanger / 10;
-
         // Transform the kingDanger units into a Score, and subtract it from the evaluation
         if (kingDanger > 0)
         {
+            bool unsafeImbalance = kingDanger > 1000 && pos.pieces(Us, QUEEN) && !pos.pieces(Them, QUEEN);
+            int kingDanger2 = (10 + unsafeImbalance) * kingDanger / 10;
+
             int mobilityDanger = mg_value(mobility[Them] - mobility[Us]);
-            kingDanger = std::max(0, kingDanger + mobilityDanger);
-            score -= make_score(kingDanger * kingDanger / 4096, kingDanger / 16);
+            kingDanger  = std::max(0, kingDanger  + mobilityDanger);
+            kingDanger2 = std::max(0, kingDanger2 + mobilityDanger);
+            score -= make_score(kingDanger2 * kingDanger2 / 4096, kingDanger / 16);
         }
     }
 
