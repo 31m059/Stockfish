@@ -175,6 +175,7 @@ namespace {
   constexpr Score ThreatByPawnPush   = S( 45, 40);
   constexpr Score ThreatByRank       = S( 16,  3);
   constexpr Score ThreatBySafePawn   = S(173,102);
+  constexpr Score ThreatOnSoloQueen  = S( 10, 10);
   constexpr Score TrappedRook        = S( 92,  0);
   constexpr Score WeakQueen          = S( 50, 10);
   constexpr Score WeakUnopposedPawn  = S(  5, 29);
@@ -566,6 +567,10 @@ namespace {
            & attackedBy[Them][ALL_PIECES] & ~attackedBy2[Them];
         score += Overload * popcount(b);
     }
+
+    // Extra bonus for a threat against the queen when only the opponent has queens
+    if (!pos.pieces(Us, QUEEN) && pos.pieces(Them, QUEEN) & attackedBy[Us][ALL_PIECES])
+        score += ThreatOnSoloQueen;
 
     // Bonus for enemy unopposed weak pawns
     if (pos.pieces(Us, ROOK, QUEEN))
