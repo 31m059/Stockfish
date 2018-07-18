@@ -596,17 +596,21 @@ namespace {
     // Bonus for threats on the next moves against enemy queen
     if (pos.count<QUEEN>(Them) == 1)
     {
+        Score bonus = make_score(0, 0);
         Square s = pos.square<QUEEN>(Them);
         safeThreats = mobilityArea[Us] & ~stronglyProtected;
 
         b = attackedBy[Us][KNIGHT] & pos.attacks_from<KNIGHT>(s);
 
-        score += KnightOnQueen * popcount(b & safeThreats);
+        bonus += KnightOnQueen * popcount(b & safeThreats);
 
         b =  (attackedBy[Us][BISHOP] & pos.attacks_from<BISHOP>(s))
            | (attackedBy[Us][ROOK  ] & pos.attacks_from<ROOK  >(s));
 
-        score += SliderOnQueen * popcount(b & safeThreats & attackedBy2[Us]);
+        bonus += SliderOnQueen * popcount(b & safeThreats & attackedBy2[Us]);
+        if (!pos.pieces(Us, QUEEN))
+            bonus += bonus / 4;
+        score += bonus;
     }
 
     // Connectivity: ensure that knights, bishops, rooks, and queens are protected
