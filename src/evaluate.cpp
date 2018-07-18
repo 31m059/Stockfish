@@ -609,7 +609,7 @@ namespace {
 
         bonus += SliderOnQueen * popcount(b & safeThreats & attackedBy2[Us]);
         if (!pos.pieces(Us, QUEEN))
-            bonus += bonus / 4;
+            bonus -= bonus / 4;
         score += bonus;
     }
 
