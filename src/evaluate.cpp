@@ -322,8 +322,8 @@ namespace {
         }
 
         int mob = popcount(b & mobilityArea[Us]);
-        if (Pt == QUEEN && !pos.pieces(Them, QUEEN) && mob > 0)
-            mob--;
+        if (Pt == QUEEN && !pos.pieces(Them, QUEEN))
+            mob = std::max(0, mob - 2);
 
         mobility[Us] += MobilityBonus[Pt - 2][mob];
 
