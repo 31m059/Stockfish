@@ -322,8 +322,8 @@ namespace {
         }
 
         int mob;
-        bb = Us == WHITE ? Rank1BB : Rank8BB;
-        if (Pt == QUEEN && relative_rank(Us, s) == 0)
+        bb = Us == WHITE ? Rank1BB | Rank2BB : Rank7BB | Rank8BB;
+        if (Pt == QUEEN && !pos.pieces(Us, ROOK))
             mob = popcount(b & ~bb & mobilityArea[Us]) + std::min(5, popcount(b & bb & mobilityArea[Us]));
         else
             mob = popcount(b & mobilityArea[Us]);
