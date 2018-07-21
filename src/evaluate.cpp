@@ -320,12 +320,12 @@ namespace {
             kingAttackersWeight[Us] += KingAttackWeights[Pt];
             kingAttacksCount[Us] += popcount(b & attackedBy[Them][KING]);
         }
-        
+
         int mob;
-        bb = Us == WHITE ? Rank1BB | Rank2BB : Rank7BB | Rank8BB;
-        if (Pt == QUEEN)
-            mob = popcount(b & ~bb & mobilityArea[Us]) + std::min(3, popcount(b & bb & mobilityArea[Us]));
-        else    
+        bb = Us == WHITE ? Rank1BB : Rank8BB;
+        if (Pt == QUEEN && relative_rank(Us, s) == 0)
+            mob = popcount(b & ~bb & mobilityArea[Us]) + std::min(5, popcount(b & bb & mobilityArea[Us]));
+        else
             mob = popcount(b & mobilityArea[Us]);
 
         mobility[Us] += MobilityBonus[Pt - 2][mob];
