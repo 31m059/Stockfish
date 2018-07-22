@@ -562,7 +562,7 @@ namespace {
         score += Overload * popcount(b);
 
         if (pos.pieces(Them, QUEEN))
-            score += OverloadedQueen * popcount(b & attackedBy[Them][QUEEN]);
+            score += OverloadedQueen * popcount(b & nonPawnEnemies & attackedBy[Them][QUEEN]);
     }
 
     // Bonus for enemy unopposed weak pawns
