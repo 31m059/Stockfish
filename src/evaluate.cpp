@@ -561,7 +561,7 @@ namespace {
         b = weak & attackedBy[Them][ALL_PIECES];
         score += Overload * popcount(b);
 
-        if (b & pos.blockers_for_king(Them))
+        if (b & nonPawnEnemies & pos.blockers_for_king(Them))
             score += OverloadedPin;
     }
 
