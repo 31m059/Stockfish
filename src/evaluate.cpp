@@ -559,7 +559,7 @@ namespace {
         score += Hanging * popcount(weak & ~attackedBy[Them][ALL_PIECES]);
 
         b = weak & attackedBy[Them][ALL_PIECES];
-        score += Overload * popcount(b & nonPawnEnemies);
+        score += Overload * popcount(b);
 
         if (b & pos.blockers_for_king(Them))
             score += OverloadedPin;
