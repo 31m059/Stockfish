@@ -220,6 +220,11 @@ namespace {
     // and h6. It is set to 0 when king safety evaluation is skipped.
     Bitboard kingRing[COLOR_NB];
 
+    // queenBlockers[color] is a bitboard representing all pieces of either color
+    // that block an attack on the queen of the given color, that is, the pinned
+    // pieces of the given color and the discovered attack pieces of the opposite color.
+    Bitboard queenBlockers[COLOR_NB];
+
     // kingAttackersCount[color] is the number of pieces of the given color
     // which attack a square in the kingRing of the enemy king.
     int kingAttackersCount[COLOR_NB];
@@ -280,6 +285,12 @@ namespace {
     }
     else
         kingRing[Us] = kingAttackersCount[Them] = 0;
+
+    // Initialise the queenBlockers bitboard
+    Bitboard queenPinners;
+    queenBlockers[Us] = 0;
+    if (pos.count<QUEEN>(Us) == 1)
+        queenBlockers[Us] = pos.slider_blockers(pos.pieces(Them, ROOK, BISHOP), pos.square<QUEEN>(Us), queenPinners);
   }
 
 
@@ -393,7 +404,7 @@ namespace {
         {
             // Penalty if any relative pin or discovered attack against the queen
             Bitboard queenPinners;
-            if (pos.slider_blockers(pos.pieces(Them, ROOK, BISHOP), s, queenPinners))
+            if (queenBlockers[Us])
                 score -= WeakQueen;
         }
     }
@@ -540,7 +551,7 @@ namespace {
             score += ThreatByMinor[type_of(pos.piece_on(s))];
             if (type_of(pos.piece_on(s)) != PAWN)
                 score += ThreatByRank * (int)relative_rank(Them, s);
-            else if (pos.blockers_for_king(Them) & s)
+            else if ((pos.blockers_for_king(Them) | queenBlockers[Them]) & s)
                 score += ThreatByRank * (int)relative_rank(Them, s) / 2;
         }
 
@@ -551,7 +562,7 @@ namespace {
             score += ThreatByRook[type_of(pos.piece_on(s))];
             if (type_of(pos.piece_on(s)) != PAWN)
                 score += ThreatByRank * (int)relative_rank(Them, s);
-            else if (pos.blockers_for_king(Them) & s)
+            else if ((pos.blockers_for_king(Them) | queenBlockers[Them]) & s)
                 score += ThreatByRank * (int)relative_rank(Them, s) / 2;
         }
 
