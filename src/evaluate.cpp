@@ -552,7 +552,7 @@ namespace {
             else if (pos.blockers_for_king(Them) & s)
                 score += ThreatByRank * (int)relative_rank(Them, s) / 2;
             else if (queenBlockers[Them] & s)
-                score += ThreatByRank * (int)relative_rank(Them, s) / 4;
+                score += ThreatByRank * (int)relative_rank(Them, s);
         }
 
         b = weak & attackedBy[Us][ROOK];
@@ -565,7 +565,7 @@ namespace {
             else if (pos.blockers_for_king(Them) & s)
                 score += ThreatByRank * (int)relative_rank(Them, s) / 2;
             else if (queenBlockers[Them] & s)
-                score += ThreatByRank * (int)relative_rank(Them, s) / 4;
+                score += ThreatByRank * (int)relative_rank(Them, s);
         }
 
         if (weak & attackedBy[Us][KING])
