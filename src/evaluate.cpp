@@ -287,10 +287,7 @@ namespace {
         kingRing[Us] = kingAttackersCount[Them] = 0;
 
     // Initialise the queenBlockers bitboard
-    Bitboard queenPinners;
     queenBlockers[Us] = 0;
-    if (pos.count<QUEEN>(Us) == 1)
-        queenBlockers[Us] = pos.slider_blockers(pos.pieces(Them, ROOK, BISHOP), pos.square<QUEEN>(Us), queenPinners);
   }
 
 
@@ -404,7 +401,8 @@ namespace {
         {
             // Penalty if any relative pin or discovered attack against the queen
             Bitboard queenPinners;
-            if (queenBlockers[Us])
+            queenBlockers[Us] |= b = pos.slider_blockers(pos.pieces(Them, ROOK, BISHOP), s, queenPinners);
+            if (b)
                 score -= WeakQueen;
         }
     }
