@@ -541,7 +541,7 @@ namespace {
             if (type_of(pos.piece_on(s)) != PAWN)
                 score += ThreatByRank * (int)relative_rank(Them, s);
 
-            else if ((pos.blockers_for_king(Them) | shift<Up>(pos.pieces())) & s)
+            else if ((pos.blockers_for_king(Them) | shift<Up>(pos.pieces(Us))) & s)
                 score += ThreatByRank * (int)relative_rank(Them, s) / 2;
         }
 
@@ -553,7 +553,7 @@ namespace {
             if (type_of(pos.piece_on(s)) != PAWN)
                 score += ThreatByRank * (int)relative_rank(Them, s);
 
-            else if ((pos.blockers_for_king(Them) | shift<Up>(pos.pieces())) & s)
+            else if ((pos.blockers_for_king(Them) | shift<Up>(pos.pieces(Us))) & s)
                 score += ThreatByRank * (int)relative_rank(Them, s) / 2;
         }
 
