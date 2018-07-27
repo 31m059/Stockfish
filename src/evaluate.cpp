@@ -543,6 +543,9 @@ namespace {
 
             else if (pos.blockers_for_king(Them) & s)
                 score += ThreatByRank * (int)relative_rank(Them, s) / 2;
+
+            else if (shift<Up>(pos.pieces(Us)) & s)
+                score += ThreatByRank * (int)relative_rank(Them, s) / 4;
         }
 
         b = weak & attackedBy[Us][ROOK];
@@ -553,8 +556,11 @@ namespace {
             if (type_of(pos.piece_on(s)) != PAWN)
                 score += ThreatByRank * (int)relative_rank(Them, s);
 
-            else if ((pos.blockers_for_king(Them) | shift<Up>(pos.pieces(Us))) & s)
+            else if (pos.blockers_for_king(Them) & s)
                 score += ThreatByRank * (int)relative_rank(Them, s) / 2;
+
+            else if (shift<Up>(pos.pieces(Us)) & s)
+                score += ThreatByRank * (int)relative_rank(Them, s) / 4;
         }
 
         if (weak & attackedBy[Us][KING])
