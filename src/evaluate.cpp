@@ -545,7 +545,7 @@ namespace {
                 score += ThreatByRank * (int)relative_rank(Them, s) / 2;
 
             else if (shift<Up>(pos.pieces(Us)) & s)
-                score += ThreatByRank * (int)relative_rank(Them, s) / 3;
+                score += ThreatByRank * (int)relative_rank(Them, s) / 6;
         }
 
         b = weak & attackedBy[Us][ROOK];
@@ -560,7 +560,7 @@ namespace {
                 score += ThreatByRank * (int)relative_rank(Them, s) / 2;
 
             else if (shift<Up>(pos.pieces(Us)) & s)
-                score += ThreatByRank * (int)relative_rank(Them, s) / 3;
+                score += ThreatByRank * (int)relative_rank(Them, s) / 6;
         }
 
         if (weak & attackedBy[Us][KING])
