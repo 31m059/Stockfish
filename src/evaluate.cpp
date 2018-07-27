@@ -511,7 +511,6 @@ namespace {
 
     constexpr Color     Them     = (Us == WHITE ? BLACK   : WHITE);
     constexpr Direction Up       = (Us == WHITE ? NORTH   : SOUTH);
-    constexpr Direction Down     = -Up;
     constexpr Bitboard  TRank3BB = (Us == WHITE ? Rank3BB : Rank6BB);
 
     Bitboard b, weak, defended, nonPawnEnemies, stronglyProtected, safeThreats;
@@ -542,7 +541,7 @@ namespace {
             if (type_of(pos.piece_on(s)) != PAWN)
                 score += ThreatByRank * (int)relative_rank(Them, s);
 
-            else if ((pos.blockers_for_king(Them) | shift<Down>(pos.pieces(Us))) & s)
+            else if ((pos.blockers_for_king(Them) | shift<Up>(pos.pieces())) & s)
                 score += ThreatByRank * (int)relative_rank(Them, s) / 2;
         }
 
@@ -554,7 +553,7 @@ namespace {
             if (type_of(pos.piece_on(s)) != PAWN)
                 score += ThreatByRank * (int)relative_rank(Them, s);
 
-            else if ((pos.blockers_for_king(Them) | shift<Down>(pos.pieces(Us))) & s)
+            else if ((pos.blockers_for_king(Them) | shift<Up>(pos.pieces())) & s)
                 score += ThreatByRank * (int)relative_rank(Them, s) / 2;
         }
 
