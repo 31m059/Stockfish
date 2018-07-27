@@ -170,7 +170,7 @@ namespace {
   constexpr Score SliderOnQueen      = S( 42, 21);
   constexpr Score ThreatByKing       = S( 23, 76);
   constexpr Score ThreatByPawnPush   = S( 45, 40);
-  constexpr Score ThreatByRank       = S( 16,  3);
+  constexpr Score ThreatByRank       = S( 17,  2);
   constexpr Score ThreatBySafePawn   = S(173,102);
   constexpr Score TrappedRook        = S( 92,  0);
   constexpr Score WeakQueen          = S( 50, 10);
@@ -545,7 +545,7 @@ namespace {
                 score += ThreatByRank * (int)relative_rank(Them, s) / 2;
 
             else if (shift<Up>(pos.pieces(Us)) & s)
-                score += ThreatByRank * (int)relative_rank(Them, s) / 6;
+                score += ThreatByRank * (int)relative_rank(Them, s) / 4;
         }
 
         b = weak & attackedBy[Us][ROOK];
@@ -560,7 +560,7 @@ namespace {
                 score += ThreatByRank * (int)relative_rank(Them, s) / 2;
 
             else if (shift<Up>(pos.pieces(Us)) & s)
-                score += ThreatByRank * (int)relative_rank(Them, s) / 6;
+                score += ThreatByRank * (int)relative_rank(Them, s) / 4;
         }
 
         if (weak & attackedBy[Us][KING])
