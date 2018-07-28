@@ -556,7 +556,7 @@ namespace {
             if (type_of(pos.piece_on(s)) != PAWN)
                 score += ThreatByRank * (int)relative_rank(Them, s);
 
-            else if (pos.blockers_for_king(Them) & s)
+            else if (pos.blockers_for_king(Them) & s || file_bb(s) & pos.square<KING>(Them))
                 score += ThreatByRank * (int)relative_rank(Them, s) / 2;
         }
 
