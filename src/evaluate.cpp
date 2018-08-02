@@ -161,6 +161,7 @@ namespace {
   constexpr Score Hanging            = S( 52, 30);
   constexpr Score HinderPassedPawn   = S(  8,  0);
   constexpr Score KingProtector      = S(  6,  6);
+  constexpr Score KingOpenDiagonal   = S( 10,  0);
   constexpr Score KnightOnQueen      = S( 21, 11);
   constexpr Score LongDiagonalBishop = S( 22,  0);
   constexpr Score MinorBehindPawn    = S( 16,  0);
@@ -411,6 +412,7 @@ namespace {
     constexpr Color    Them = (Us == WHITE ? BLACK : WHITE);
     constexpr Bitboard Camp = (Us == WHITE ? AllSquares ^ Rank6BB ^ Rank7BB ^ Rank8BB
                                            : AllSquares ^ Rank1BB ^ Rank2BB ^ Rank3BB);
+    Bitboard LongDiagonals = LineBB[SQ_A1][SQ_H8] | LineBB[SQ_H1][SQ_A8];
 
     const Square ksq = pos.square<KING>(Us);
     Bitboard kingFlank, weak, b, b1, b2, safe, unsafeChecks;
@@ -498,6 +500,13 @@ namespace {
 
     // King tropism bonus, to anticipate slow motion attacks on our king
     score -= CloseEnemies * tropism;
+
+    // Penalty if the opponent has the correct bishop to attack an open long diagonal against our king
+    if (    (kingRing[Us] & LongDiagonals)
+        && !(kingRing[Us] & Center)
+        && !(kingRing[Us] & LongDiagonals & pos.pieces(Us, PAWN))
+        && pos.pieces(Them, BISHOP) & (DarkSquares & lsb(LongDiagonals & kingRing[Us]) ? DarkSquares : ~DarkSquares))
+        score -= KingOpenDiagonal;
 
     if (T)
         Trace::add(KING, Us, score);
