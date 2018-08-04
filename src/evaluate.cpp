@@ -377,7 +377,7 @@ namespace {
             if (relative_rank(Us, s) >= RANK_5)
             {
                 bb = pos.pieces(Them, PAWN) & b;
-                score += RookOnPawn * (popcount(bb) + popcount(bb & shift<Up>(pos.pieces())));
+                score += RookOnPawn * (popcount(bb) + popcount(bb & shift<Up>(pos.pieces(Us))));
             }
 
             // Bonus for rook on an open or semi-open file
