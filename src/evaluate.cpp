@@ -381,7 +381,8 @@ namespace {
                 score += RookOnFile[bool(pe->semiopen_file(Them, file_of(s)))];
             
             // Bonus for rook on a file that can be open or semi-open on the next move
-            else if (forward_file_bb(Us, s) & pos.pieces(Us, PAWN) & attackedBy[Them][PAWN] & b)
+            else if (    forward_file_bb(Us, s) & pos.pieces(Us, PAWN) & attackedBy[Them][PAWN]
+                     && !more_than_one(forward_file_bb(Us, s) & pos.pieces(Us, PAWN)))
                 score += RookOnFile[bool(pe->semiopen_file(Them, file_of(s)))] / 2;
 
 
