@@ -382,7 +382,7 @@ namespace {
 
             // Penalty when trapped by the king, even more if the king cannot castle
             else if (     mob <= 3
-                     && ( !(forward_file_bb(Us, s) & pos.pieces(Us, PAWN) & attackedBy[Them][PAWN])) || more_than_one(forward_file_bb(Us, s) & pos.pieces(Us, PAWN)))
+                     && ( !(forward_file_bb(Us, s) & pos.pieces(Us, PAWN) & attackedBy[Them][PAWN]) || more_than_one(forward_file_bb(Us, s) & pos.pieces(Us, PAWN))))
             {
                 File kf = file_of(pos.square<KING>(Us));
                 if ((kf < FILE_E) == (file_of(s) < kf))
