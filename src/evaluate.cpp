@@ -327,12 +327,6 @@ namespace {
 
         if (Pt == BISHOP || Pt == KNIGHT)
         {
-            // Small bonus for each accessible hole in enemy position
-            bb = (Us == WHITE ? Rank6BB : Rank3BB) & ~attackedBy[Them][PAWN];
-            if (Pt == BISHOP)
-                bb &= (DarkSquares & s ? DarkSquares : ~DarkSquares);
-            score += Holes * popcount(bb);
-            
             // Bonus if piece is on an outpost square or can reach one
             bb = OutpostRanks & ~pe->pawn_attacks_span(Them);
             if (bb & s)
@@ -350,6 +344,10 @@ namespace {
 
             if (Pt == BISHOP)
             {
+                // Small bonus for each accessible hole in enemy position
+                bb = (Us == WHITE ? Rank6BB : Rank3BB) & (DarkSquares & s ? DarkSquares : ~DarkSquares) & ~attackedBy[Them][PAWN];
+                score += Holes * popcount(bb);
+
                 // Penalty according to number of pawns on the same color square as the
                 // bishop, bigger when the center files are blocked with pawns.
                 Bitboard blocked = pos.pieces(Us, PAWN) & shift<Down>(pos.pieces());
