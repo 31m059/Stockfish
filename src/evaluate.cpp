@@ -159,6 +159,7 @@ namespace {
   constexpr Score CloseEnemies       = S(  6,  0);
   constexpr Score CorneredBishop     = S( 50, 50);
   constexpr Score Hanging            = S( 57, 32);
+  constexpr Score Holes              = S(  2,  0);
   constexpr Score HinderPassedPawn   = S(  8,  0);
   constexpr Score KingProtector      = S(  6,  6);
   constexpr Score KnightOnQueen      = S( 21, 11);
@@ -326,6 +327,12 @@ namespace {
 
         if (Pt == BISHOP || Pt == KNIGHT)
         {
+            // Small bonus for each accessible hole in enemy position
+            bb = (Us == WHITE ? Rank6BB : Rank3BB) & ~attackedBy[Them][PAWN];
+            if (Pt == BISHOP)
+                bb &= (DarkSquares & s ? DarkSquares : ~DarkSquares);
+            score += Holes * popcount(bb);
+            
             // Bonus if piece is on an outpost square or can reach one
             bb = OutpostRanks & ~pe->pawn_attacks_span(Them);
             if (bb & s)
