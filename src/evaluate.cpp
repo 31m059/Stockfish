@@ -300,10 +300,6 @@ namespace {
 
     attackedBy[Us][Pt] = 0;
 
-    // Small bonus for each hole in enemy position, if we have minors
-    if (pos.pieces(Us, BISHOP, KNIGHT))
-        score += Hole * popcount((Us == WHITE ? Rank6BB : Rank3BB) & ~attackedBy[Them][PAWN]);
-
     while ((s = *pl++) != SQ_NONE)
     {
         // Find attacked squares, including x-ray attacks for bishops and rooks
@@ -745,6 +741,10 @@ namespace {
     int weight = pos.count<ALL_PIECES>(Us) - 2 * pe->open_files();
 
     Score score = make_score(bonus * weight * weight / 16, 0);
+
+    // Small bonus for each hole in enemy position, if we have minors
+    if (pos.pieces(Us, BISHOP, KNIGHT))
+        score += Hole * popcount((Us == WHITE ? Rank6BB : Rank3BB) & ~attackedBy[Them][PAWN]);
 
     if (T)
         Trace::add(SPACE, Us, score);
