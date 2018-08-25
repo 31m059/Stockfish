@@ -160,6 +160,7 @@ namespace {
   constexpr Score CorneredBishop     = S( 50, 50);
   constexpr Score Hanging            = S( 57, 32);
   constexpr Score HinderPassedPawn   = S(  8,  0);
+  constexpr Score Hole               = S(  3,  0);
   constexpr Score KingProtector      = S(  6,  6);
   constexpr Score KnightOnQueen      = S( 21, 11);
   constexpr Score LongDiagonalBishop = S( 22,  0);
@@ -298,6 +299,10 @@ namespace {
     Score score = SCORE_ZERO;
 
     attackedBy[Us][Pt] = 0;
+
+    // Small bonus for each hole in enemy position, if we have minors
+    if (pos.pieces(Us, BISHOP, KNIGHT))
+        score += Hole * popcount((Us == WHITE ? Rank6BB : Rank3BB) & ~attackedBy[Them][PAWN]);
 
     while ((s = *pl++) != SQ_NONE)
     {
