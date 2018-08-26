@@ -299,6 +299,10 @@ namespace {
 
     attackedBy[Us][Pt] = 0;
 
+    int kingBlockedAttackersCount = 0;
+    int kingBlockedAttackersWeight = 0;
+    int kingBlockedAttacksCount = 0;
+
     while ((s = *pl++) != SQ_NONE)
     {
         // Find attacked squares, including x-ray attacks for bishops and rooks
@@ -306,8 +310,16 @@ namespace {
           : Pt ==   ROOK ? attacks_bb<  ROOK>(s, pos.pieces() ^ pos.pieces(QUEEN) ^ pos.pieces(Us, ROOK))
                          : pos.attacks_from<Pt>(s);
 
+        // Attacks blocked only by a movable pawn
+        bb = Pt == BISHOP ? attacks_bb<BISHOP>(s, pos.pieces() ^ pos.pieces(QUEEN) ^ (pos.pieces(Us, PAWN) & ~shift<Down>(pos.pieces(Them))))
+           : Pt ==   ROOK ? attacks_bb<  ROOK>(s, pos.pieces() ^ pos.pieces(QUEEN) ^ pos.pieces(Us, ROOK) ^ (pos.pieces(Us, PAWN) & ~shift<Down>(pos.pieces(Them))))
+                          : pos.attacks_from<Pt>(s);
+
         if (pos.blockers_for_king(Us) & s)
-            b &= LineBB[pos.square<KING>(Us)][s];
+        {
+            b  &= LineBB[pos.square<KING>(Us)][s];
+            bb &= LineBB[pos.square<KING>(Us)][s];
+        }
 
         attackedBy2[Us] |= attackedBy[Us][ALL_PIECES] & b;
         attackedBy[Us][Pt] |= b;
@@ -318,6 +330,13 @@ namespace {
             kingAttackersCount[Us]++;
             kingAttackersWeight[Us] += KingAttackWeights[Pt];
             kingAttacksCount[Us] += popcount(b & attackedBy[Them][KING]);
+        }
+
+        else if (bb & kingRing[Them])
+        {
+            kingBlockedAttackersCount++;
+            kingBlockedAttackersWeight += KingAttackWeights[Pt];
+            kingBlockedAttacksCount += popcount(b & attackedBy[Them][KING]);
         }
 
         int mob = popcount(b & mobilityArea[Us]);
@@ -397,6 +416,11 @@ namespace {
                 score -= WeakQueen;
         }
     }
+
+    kingAttackersCount[Us] += kingBlockedAttackersCount / 2;
+    kingAttackersWeight[Us] += kingBlockedAttackersWeight / 2;
+    kingAttacksCount[Us] +=  kingBlockedAttacksCount / 2;
+
     if (T)
         Trace::add(Pt, Us, score);
 
