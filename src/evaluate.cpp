@@ -299,10 +299,6 @@ namespace {
 
     attackedBy[Us][Pt] = 0;
 
-    int kingBlockedAttackersCount = 0;
-    int kingBlockedAttackersWeight = 0;
-    int kingBlockedAttacksCount = 0;
-
     while ((s = *pl++) != SQ_NONE)
     {
         // Find attacked squares, including x-ray attacks for bishops and rooks
@@ -333,11 +329,7 @@ namespace {
         }
 
         else if (bb & kingRing[Them])
-        {
-            kingBlockedAttackersCount++;
-            kingBlockedAttackersWeight += KingAttackWeights[Pt];
-            kingBlockedAttacksCount += popcount(b & attackedBy[Them][KING]);
-        }
+            kingAttackersWeight[Us] += KingAttackWeights[Pt] / 2;
 
         int mob = popcount(b & mobilityArea[Us]);
 
@@ -416,11 +408,6 @@ namespace {
                 score -= WeakQueen;
         }
     }
-
-    kingAttackersCount[Us] += kingBlockedAttackersCount / 2;
-    kingAttackersWeight[Us] += kingBlockedAttackersWeight / 2;
-    kingAttacksCount[Us] +=  kingBlockedAttacksCount / 2;
-
     if (T)
         Trace::add(Pt, Us, score);
 
