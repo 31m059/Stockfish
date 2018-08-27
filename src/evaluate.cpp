@@ -481,7 +481,7 @@ namespace {
                      + 185 * popcount(kingRing[Us] & weak)
                      + 129 * popcount(pos.blockers_for_king(Us) | unsafeChecks)
                      +   4 * tropism
-                     +   5 * enemiesOnFile * enemiesOnFile
+                     +   7 * enemiesOnFile * enemiesOnFile
                      - 873 * !pos.count<QUEEN>(Them)
                      -   6 * mg_value(score) / 8
                      -   30;
