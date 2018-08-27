@@ -470,6 +470,8 @@ namespace {
         else
             unsafeChecks |= b;
 
+        int enemiesOnFile = popcount(pos.pieces(Them, ROOK, QUEEN) & file_bb(ksq));
+
         // Unsafe or occupied checking squares will also be considered, as long as
         // the square is in the attacker's mobility area.
         unsafeChecks &= mobilityArea[Them];
@@ -479,6 +481,7 @@ namespace {
                      + 185 * popcount(kingRing[Us] & weak)
                      + 129 * popcount(pos.blockers_for_king(Us) | unsafeChecks)
                      +   4 * tropism
+                     +   4 * enemiesOnFile * enemiesOnFile
                      - 873 * !pos.count<QUEEN>(Them)
                      -   6 * mg_value(score) / 8
                      -   30;
