@@ -470,18 +470,22 @@ namespace {
         else
             unsafeChecks |= b;
 
-        int enemiesOnFile = popcount(pos.pieces(Them, ROOK, QUEEN) & file_bb(ksq));
-
         // Unsafe or occupied checking squares will also be considered, as long as
         // the square is in the attacker's mobility area.
         unsafeChecks &= mobilityArea[Them];
+
+        int enemiesOnFile = popcount(pos.pieces(Them, ROOK, QUEEN) & file_bb(ksq));
+        if (file_of(ksq) > FILE_A)
+            enemiesOnFile = std::max(enemiesOnFile, popcount(pos.pieces(Them, ROOK, QUEEN) & file_bb(ksq + WEST)));
+        if (file_of(ksq) < FILE_H)
+            enemiesOnFile = std::max(enemiesOnFile, popcount(pos.pieces(Them, ROOK, QUEEN) & file_bb(ksq + EAST)));
 
         kingDanger +=        kingAttackersCount[Them] * kingAttackersWeight[Them]
                      +  69 * kingAttacksCount[Them]
                      + 185 * popcount(kingRing[Us] & weak)
                      + 129 * popcount(pos.blockers_for_king(Us) | unsafeChecks)
                      +   4 * tropism
-                     +  30 * enemiesOnFile * enemiesOnFile
+                     +  15 * enemiesOnFile * enemiesOnFile
                      - 873 * !pos.count<QUEEN>(Them)
                      -   6 * mg_value(score) / 8
                      -   30;
