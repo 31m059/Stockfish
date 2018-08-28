@@ -488,7 +488,7 @@ namespace {
                      +  15 * enemiesOnFile * enemiesOnFile
                      - 873 * !pos.count<QUEEN>(Them)
                      -   6 * mg_value(score) / 8
-                     -   30;
+                     -   41;
         // Transform the kingDanger units into a Score, and subtract it from the evaluation
         if (kingDanger > 0)
         {
