@@ -594,8 +594,11 @@ namespace {
     score += ThreatBySafePawn * popcount(b);
     
     // Bonus for holes in the enemy position
-    b = (Us == WHITE ? Rank6BB : Rank3BB) & ~pos.pieces(Them, PAWN) & ~attackedBy[Them][PAWN];
-    score += Hole * popcount(b);
+    if (pos.pieces(Us, BISHOP, KNIGHT))
+    {
+        b = (Us == WHITE ? Rank6BB : Rank3BB) & ~pos.pieces(Them, PAWN) & ~attackedBy[Them][PAWN];
+        score += Hole * popcount(b);
+    }
 
     // Bonus for threats on the next moves against enemy queen
     if (pos.count<QUEEN>(Them) == 1)
