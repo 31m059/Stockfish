@@ -160,6 +160,7 @@ namespace {
   constexpr Score CorneredBishop     = S( 50, 50);
   constexpr Score Hanging            = S( 57, 32);
   constexpr Score HinderPassedPawn   = S(  8,  0);
+  constexpr Score Hole               = S(  5,  0);
   constexpr Score KingProtector      = S(  6,  6);
   constexpr Score KnightOnQueen      = S( 21, 11);
   constexpr Score LongDiagonalBishop = S( 22,  0);
@@ -591,6 +592,10 @@ namespace {
 
     b = pawn_attacks_bb<Us>(b) & nonPawnEnemies;
     score += ThreatBySafePawn * popcount(b);
+    
+    // Bonus for holes in the enemy position
+    b = (Us == WHITE ? Rank6BB : Rank3BB) & ~pos.pieces(Them, PAWN) & ~attackedBy[Them][PAWN];
+    score += Hole * popcount(b);
 
     // Bonus for threats on the next moves against enemy queen
     if (pos.count<QUEEN>(Them) == 1)
