@@ -657,7 +657,7 @@ namespace {
             // If blockSq is not the queening square then consider also a second push
             bool connected = pos.pieces(Us, PAWN) & adjacent_files_bb(file_of(s)) & (rank_bb(s+NORTH) | rank_bb(s) | rank_bb(s+SOUTH));
             if (r != RANK_7)
-                bonus -= make_score(0, king_proximity(Us, blockSq + Up) * w * 3 / (3 + connected));
+                bonus -= make_score(0, king_proximity(Us, blockSq + Up) * w * (4 - connected) / 4);
 
             // If the pawn is free to advance, then increase the bonus
             if (pos.empty(blockSq))
