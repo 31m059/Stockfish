@@ -384,7 +384,7 @@ namespace {
                 {
                     Square blockSq = lsb(bb);
                     bool blocked = more_than_one(PawnAttacks[Us][blockSq] & pos.pieces(Them, PAWN));
-                    score += RookOnFile[bool(pe->semiopen_file(Them, file_of(s)))] / (1 + blocked);
+                    score += RookOnFile[bool(pe->semiopen_file(Them, file_of(s)))] * (4 - blocked) / 4;
                 }
                 else
                     score += RookOnFile[bool(pe->semiopen_file(Them, file_of(s)))];
