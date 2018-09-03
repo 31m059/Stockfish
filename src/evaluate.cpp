@@ -379,7 +379,8 @@ namespace {
             // Bonus for rook on an open or semi-open file
             if (pe->semiopen_file(Us, file_of(s)))
             {
-                bool blocked = forward_file_bb(Us, s) & b & (pos.pieces(Them) ^ pos.pieces(Them, ROOK, QUEEN)) & attackedBy[Them][PAWN];
+                bool blocked =  forward_file_bb(Us, s) & b & (pos.pieces(Them) ^ pos.pieces(Them, ROOK, QUEEN))
+                              & attackedBy[Them][PAWN] & ~attackedBy[Us][PAWN];
                 if (blocked)
                     score += RookOnFile[false];
                 else
