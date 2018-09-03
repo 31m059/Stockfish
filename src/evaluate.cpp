@@ -630,6 +630,16 @@ namespace {
     Bitboard b, bb, squaresToQueen, defendedSquares, unsafeSquares;
     Score score = SCORE_ZERO;
 
+    // Check whether any of our passed pawns are isolated
+    b = pe->passed_pawns(Us);
+    bool isolated = false;
+    while (b)
+    {
+        Square s = pop_lsb(&b);
+        if (!(pos.pieces(Us, PAWN) & adjacent_files_bb(file_of(s)) & DistanceRingBB[s][1]))
+            isolated = true;
+    }
+
     b = pe->passed_pawns(Us);
 
     while (b)
@@ -656,7 +666,7 @@ namespace {
 
             // If blockSq is not the queening square then consider also a second push
             if (r != RANK_7)
-                bonus -= make_score(0, king_proximity(Us, blockSq + Up) * w);
+                bonus -= make_score(0, king_proximity(Us, blockSq + Up) * w * (3 + isolated) / 4);
 
             // If the pawn is free to advance, then increase the bonus
             if (pos.empty(blockSq))
