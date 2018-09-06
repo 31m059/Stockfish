@@ -378,8 +378,18 @@ namespace {
 
             // Bonus for rook on an open or semi-open file
             if (pe->semiopen_file(Us, file_of(s)))
-                score += RookOnFile[bool(pe->semiopen_file(Them, file_of(s)))];
-
+            {
+                bb = forward_file_bb(Us, s) & b & (pos.pieces(Them) ^ pos.pieces(Them, ROOK, QUEEN));
+                if (bb)
+                {
+                    Square blockSq = lsb(bb);
+                    bool open =     pe->semiopen_file(Them, file_of(s))
+                                && (!(attackedBy[Them][PAWN] & blockSq) || pawn_attack_span(Them, blockSq) & pos.pieces(Us, PAWN));
+                    score += RookOnFile[open];
+                }
+                else
+                    score += RookOnFile[bool(pe->semiopen_file(Them, file_of(s)))];
+            }
             // Penalty when trapped by the king, even more if the king cannot castle
             else if (mob <= 3)
             {
