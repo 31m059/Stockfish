@@ -289,6 +289,7 @@ namespace {
 
     constexpr Color     Them = (Us == WHITE ? BLACK : WHITE);
     constexpr Direction Down = (Us == WHITE ? SOUTH : NORTH);
+    constexpr Direction Up   = (Us == WHITE ? NORTH : SOUTH);
     constexpr Bitboard OutpostRanks = (Us == WHITE ? Rank4BB | Rank5BB | Rank6BB
                                                    : Rank5BB | Rank4BB | Rank3BB);
     const Square* pl = pos.squares<Pt>(Us);
@@ -380,12 +381,9 @@ namespace {
             if (pe->semiopen_file(Us, file_of(s)))
             {
                 bb = forward_file_bb(Us, s) & b & pos.pieces(Them, PAWN);
-                bool open     =  pe->semiopen_file(Them, file_of(s));
-                bool openable = attackedBy[Us][PAWN] & ~attackedBy[Them][PAWN] & bb;
-                if (openable)
-                    score += (RookOnFile[0] + RookOnFile[1]) / 2;
-                else
-                    score += RookOnFile[open];
+                bool openable =   pe->semiopen_file(Them, file_of(s))
+                               || shift<Up>(attackedBy[Us][PAWN]) & ~attackedBy[Them][PAWN] & bb;
+                score += RookOnFile[openable];
             }
 
             // Penalty when trapped by the king, even more if the king cannot castle
