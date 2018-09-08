@@ -380,9 +380,12 @@ namespace {
             if (pe->semiopen_file(Us, file_of(s)))
             {
                 bb = forward_file_bb(Us, s) & b & pos.pieces(Them, PAWN);
-                bool openable =   pe->semiopen_file(Them, file_of(s))
-                               || attackedBy[Us][PAWN] & ~attackedBy[Them][PAWN] & bb;
-                score += RookOnFile[openable];
+                bool open     =  pe->semiopen_file(Them, file_of(s));
+                bool openable = attackedBy[Us][PAWN] & ~attackedBy[Them][PAWN] & bb;
+                if (openable)
+                    score += (RookOnFile[0] + RookOnFile[1]) / 2;
+                else
+                    score += RookOnFile[open];
             }
 
             // Penalty when trapped by the king, even more if the king cannot castle
