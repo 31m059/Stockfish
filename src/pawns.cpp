@@ -98,9 +98,6 @@ namespace {
         e->semiopenFiles[Us]   &= ~(1 << f);
         e->pawnAttacksSpan[Us] |= pawn_attack_span(Us, s);
 
-        if (more_than_one(pos.pieces(Us, PAWN) & file_bb(f)))
-            e->doubledPawns[Us]++;
-
         // Flag the pawn
         opposed    = theirPawns & forward_file_bb(Us, s);
         stoppers   = theirPawns & passed_pawn_mask(Us, s);
@@ -145,7 +142,10 @@ namespace {
             score -= Backward, e->weakUnopposed[Us] += !opposed;
 
         if (doubled && !supported)
+        {
             score -= Doubled;
+            e->doubledPawns[Us]++;
+        }
     }
 
     return score;
