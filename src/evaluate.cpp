@@ -348,7 +348,7 @@ namespace {
 
                 // Doubly-pawn-protected enemy pawns on the same color squares as the bishop
                 int strongPawns = 0;
-                bb = pos.pieces(Them, PAWN) & CenterFiles;
+                bb = pos.pieces(Them, PAWN) & CenterFiles & (DarkSquares & s ? DarkSquares : ~DarkSquares);
                 while (bb)
                 {
                     Square s2 = pop_lsb(&bb);
@@ -356,8 +356,7 @@ namespace {
                 }
 
                 score -= BishopPawns * pe->pawns_on_same_color_squares(Us, s)
-                                     * (1 + popcount(blocked & CenterFiles));
-                score -= BishopPawns * strongPawns;
+                                     * (1 + popcount(blocked & CenterFiles) + strongPawns);
 
                 // Bonus for bishop on a long diagonal which can "see" both center squares
                 if (more_than_one(attacks_bb<BISHOP>(s, pos.pieces(PAWN)) & Center))
