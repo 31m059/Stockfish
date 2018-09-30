@@ -174,6 +174,7 @@ namespace {
   constexpr Score TrappedRook        = S( 92,  0);
   constexpr Score WeakQueen          = S( 50, 10);
   constexpr Score WeakUnopposedPawn  = S(  5, 29);
+  constexpr Score WorthlessRook      = S( 10, 10);
 
 #undef S
 
@@ -371,6 +372,15 @@ namespace {
 
         if (Pt == ROOK)
         {
+            // If our rook cannot accomplish anything, penalize it
+            int rookOpportunities = pe->weak_unopposed(Them);
+            for (File f = FILE_A; f <= FILE_H; ++f)
+            {
+                rookOpportunities +=   (pe->semiopen_file(Us, f) && pe->semiopen_file(Them, f))
+                                    || (pe->semiopen_file(Us, f) && pe->passed_pawns(Us) & file_bb(f));
+            }
+            score -= WorthlessRook * std::max(0, 2 - rookOpportunities);
+
             // Bonus for aligning rook with enemy pawns on the same rank/file
             if (relative_rank(Us, s) >= RANK_5)
                 score += RookOnPawn * popcount(pos.pieces(Them, PAWN) & PseudoAttacks[ROOK][s]);
