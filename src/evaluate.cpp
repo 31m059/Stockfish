@@ -379,7 +379,8 @@ namespace {
                 rookOpportunities +=   (pe->semiopen_file(Us, f) && pe->semiopen_file(Them, f))
                                     || (pe->semiopen_file(Us, f) && pe->passed_pawns(Us) & file_bb(f));
             }
-            score -= WorthlessRook * std::max(0, 2 - rookOpportunities);
+            if (!rookOpportunities)
+                score -= WorthlessRook;
 
             // Bonus for aligning rook with enemy pawns on the same rank/file
             if (relative_rank(Us, s) >= RANK_5)
