@@ -373,7 +373,7 @@ namespace {
         {
             // Penalty if most of our pawns are blocked
             Bitboard blocked = pos.pieces(Us, PAWN) & shift<Down>(pos.pieces());
-            int penalty = std::max(0, (4 * popcount(blocked) - 2 *pos.count<PAWN>(Us))
+            int penalty = std::max(0, (2 * popcount(blocked) - pos.count<PAWN>(Us))
                           * (pos.count<BISHOP>(Them) + pos.count<KNIGHT>(Them) - pos.count<BISHOP>(Us) - pos.count<KNIGHT>(Us)));
             score -= make_score(penalty, penalty);
 
