@@ -371,6 +371,11 @@ namespace {
 
         if (Pt == ROOK)
         {
+            // Penalty if most of our pawns are blocked
+            Bitboard blocked = pos.pieces(Us, PAWN) & shift<Down>(pos.pieces());
+            int penalty = std::max(0, 2 * popcount(blocked) - pos.count<PAWN>(Us));
+            score -= make_score(penalty, penalty);
+
             // Bonus for aligning rook with enemy pawns on the same rank/file
             if (relative_rank(Us, s) >= RANK_5)
                 score += RookOnPawn * popcount(pos.pieces(Them, PAWN) & PseudoAttacks[ROOK][s]);
