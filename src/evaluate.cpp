@@ -375,7 +375,7 @@ namespace {
             if (pos.count<BISHOP>(Them) == 2)
             {
                 Bitboard blocked = pos.pieces(Us, PAWN) & shift<Down>(pos.pieces());
-                int penalty = std::max(0, 4 * popcount(blocked) - 2 * pos.count<PAWN>(Us));
+                int penalty = std::max(0, 8 * popcount(blocked) - 4 * pos.count<PAWN>(Us));
                 score -= make_score(penalty, penalty);
             }
 
