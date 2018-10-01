@@ -373,7 +373,7 @@ namespace {
         {
             // Penalty if most of our pawns are blocked
             Bitboard blocked = pos.pieces(Us, PAWN) & shift<Down>(pos.pieces());
-            int penalty = std::max(0, 3 * popcount(blocked) - pos.count<PAWN>(Us));
+            int penalty = std::max(0, 3 * popcount(blocked) - 2 * pos.count<PAWN>(Us));
             score -= make_score(penalty, penalty);
 
             // Bonus for aligning rook with enemy pawns on the same rank/file
