@@ -323,7 +323,7 @@ namespace {
 
         mobility[Us] += MobilityBonus[Pt - 2][mob];
         if (Pt == BISHOP && pos.count<ROOK>(Them) > pos.count<ROOK>(Us))
-            mobility[Us] += MobilityBonus[Pt - 2][mob] / 8;
+            mobility[Us] += MobilityBonus[Pt - 2][mob] / 5;
 
         if (Pt == BISHOP || Pt == KNIGHT)
         {
