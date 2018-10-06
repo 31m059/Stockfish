@@ -371,6 +371,10 @@ namespace {
 
         if (Pt == ROOK)
         {
+            int blocked = popcount(pos.pieces(Us, PAWN) & shift<Down>(pos.pieces()));
+            if (pos.count<BISHOP>(Them) > pos.count<BISHOP>(Us))
+                score -= make_score(blocked, blocked);
+
             // Bonus for aligning rook with enemy pawns on the same rank/file
             if (relative_rank(Us, s) >= RANK_5)
                 score += RookOnPawn * popcount(pos.pieces(Them, PAWN) & PseudoAttacks[ROOK][s]);
