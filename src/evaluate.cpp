@@ -373,7 +373,7 @@ namespace {
         {
             int blocked = popcount(pos.pieces(Us, PAWN) & shift<Down>(pos.pieces()));
             if (pos.count<BISHOP>(Them) > pos.count<BISHOP>(Us))
-                score -= make_score(blocked, blocked);
+                score -= make_score(2*blocked, 2*blocked);
 
             // Bonus for aligning rook with enemy pawns on the same rank/file
             if (relative_rank(Us, s) >= RANK_5)
