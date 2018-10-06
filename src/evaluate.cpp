@@ -322,7 +322,8 @@ namespace {
         int mob = popcount(b & mobilityArea[Us]);
 
         mobility[Us] += MobilityBonus[Pt - 2][mob];
-        if (Pt == BISHOP && pos.count<ROOK>(Them) > pos.count<ROOK>(Us) && pos.count<BISHOP>(Us) > pos.count<BISHOP>(Them))
+        if (    (Pt == BISHOP && pos.count<ROOK  >(Them) > pos.count<ROOK  >(Us))
+             || (Pt == ROOK   && pos.count<BISHOP>(Them) > pos.count<BISHOP>(Us)))
             mobility[Us] += MobilityBonus[Pt - 2][mob] / 10;
 
         if (Pt == BISHOP || Pt == KNIGHT)
