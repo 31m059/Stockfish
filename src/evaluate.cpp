@@ -591,9 +591,9 @@ namespace {
     b = pawn_attacks_bb<Us>(b) & nonPawnEnemies;
     score += ThreatBySafePawn * popcount(b);
 
-    // Bonus for threats on the next moves against enemy queen
     if (pos.count<QUEEN>(Them) == 1)
     {
+        // Bonus for threats on the next moves against enemy queen
         Square s = pos.square<QUEEN>(Them);
         safe = mobilityArea[Us] & ~stronglyProtected;
 
@@ -605,6 +605,17 @@ namespace {
            | (attackedBy[Us][ROOK  ] & pos.attacks_from<ROOK  >(s));
 
         score += SliderOnQueen * popcount(b & safe & attackedBy2[Us]);
+        
+        Bitboard ourSide = (Us == WHITE
+                          ? Rank1BB | Rank2BB | Rank3BB | Rank4BB
+                          : Rank5BB | Rank6BB | Rank7BB | Rank8BB);
+        if (ourSide & s && !(attackedBy[Them][QUEEN] & pos.pieces(Us, QUEEN)))
+        {
+            // Bonus if the enemy queen is at risk of being trapped
+            b =   ((attackedBy[Them][QUEEN] & ~pos.pieces(Them)) | s) & attackedBy[Us][ALL_PIECES]
+               & ~(~attackedBy2[Us] & attackedBy[Us][QUEEN] & attackedBy2[Them]);
+            score += make_score(std::max(0, 30 - 10 * popcount(b)), 0);
+        }
     }
 
     if (T)
