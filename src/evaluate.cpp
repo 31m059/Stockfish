@@ -614,7 +614,7 @@ namespace {
             // Bonus if the enemy queen is at risk of being trapped
             b =   ((attackedBy[Them][QUEEN] & ~pos.pieces(Them)) | s) & attackedBy[Us][ALL_PIECES]
                & ~(~attackedBy2[Us] & attackedBy[Us][QUEEN] & attackedBy2[Them]);
-            score += make_score(std::max(0, 30 - 10 * popcount(b)), 0);
+            score += make_score(std::max(0, 15 - 5 * popcount(b)), 0);
         }
     }
 
