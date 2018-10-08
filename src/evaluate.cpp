@@ -615,7 +615,7 @@ namespace {
             b  = (attackedBy[Them][QUEEN] & ~pos.pieces(Them)) | s;
             b &=   ~attackedBy[Us][ALL_PIECES]
                 | (attackedBy[Us][QUEEN] & ~attackedBy2[Us] & attackedBy2[Them]);
-            score += make_score(std::max(0, 30 - 10 * popcount(b)), 0);
+            score += make_score(std::max(0, 15 - 5 * popcount(b)), 0);
         }
     }
 
