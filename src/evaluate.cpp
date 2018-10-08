@@ -616,7 +616,7 @@ namespace {
             b &=   ~attackedBy[Us][ALL_PIECES]
                 | (attackedBy[Us][QUEEN] & ~attackedBy2[Us] & attackedBy2[Them]);
             int bonus = std::max(0, 45 - 15 * popcount(b));
-            score += make_score(bonus, bonus);
+            score += make_score(bonus, bonus / 2);
         }
     }
 
