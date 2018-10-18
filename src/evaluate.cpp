@@ -395,6 +395,13 @@ namespace {
             if (pos.slider_blockers(pos.pieces(Them, ROOK, BISHOP), s, queenPinners))
                 score -= WeakQueen;
         }
+        
+        if (   (Pt == ROOK || Pt == QUEEN)
+            && pos.pieces(Us, QUEEN) && !pos.pieces(Them, QUEEN))
+        {
+            bb = b & mobilityArea[Us] & ~pos.pieces(Us) & (Us == WHITE ? Rank3BB : Rank6BB);
+            score += make_score(popcount(bb), 0);
+        }
     }
     if (T)
         Trace::add(Pt, Us, score);
