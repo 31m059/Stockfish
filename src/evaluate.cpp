@@ -219,6 +219,9 @@ namespace {
     // and h6. It is set to 0 when king safety evaluation is skipped.
     Bitboard kingRing[COLOR_NB];
 
+    // queenBlockers[color] holds the queen blockers for the given color.
+    Bitboard queenBlockers[COLOR_NB];
+
     // kingAttackersCount[color] is the number of pieces of the given color
     // which attack a square in the kingRing of the enemy king.
     int kingAttackersCount[COLOR_NB];
@@ -279,6 +282,14 @@ namespace {
     }
     else
         kingRing[Us] = kingAttackersCount[Them] = 0;
+
+    if (pos.count<QUEEN>(Us) == 1)
+    {
+        Bitboard queenPinners;
+        queenBlockers[Us] = pos.slider_blockers(pos.pieces(Them, ROOK, BISHOP), pos.square<QUEEN>(Us), queenPinners);
+    }
+    else
+        queenBlockers[Us] = 0;
   }
 
 
@@ -391,8 +402,7 @@ namespace {
         if (Pt == QUEEN)
         {
             // Penalty if any relative pin or discovered attack against the queen
-            Bitboard queenPinners;
-            if (pos.slider_blockers(pos.pieces(Them, ROOK, BISHOP), s, queenPinners))
+            if (queenBlockers[Us])
                 score -= WeakQueen;
         }
     }
@@ -561,7 +571,7 @@ namespace {
         score += Hanging * popcount(weak & ~attackedBy[Them][ALL_PIECES]);
 
         b = weak & nonPawnEnemies & attackedBy[Them][ALL_PIECES];
-        score += Overload * (popcount(b) + bool(b & attackedBy[Them][QUEEN]));
+        score += Overload * (popcount(b) + bool(b & attackedBy[Them][QUEEN] & ~queenBlockers[Them]));
     }
 
     // Bonus for enemy unopposed weak pawns
