@@ -158,7 +158,7 @@ namespace {
   constexpr Score BishopPawns        = S(  3,  7);
   constexpr Score CloseEnemies       = S(  6,  0);
   constexpr Score CorneredBishop     = S( 50, 50);
-  constexpr Score EscapeBishop       = S( 20,  0);
+  constexpr Score EscapeBishop       = S( 10,  0);
   constexpr Score Hanging            = S( 57, 32);
   constexpr Score KingProtector      = S(  6,  6);
   constexpr Score KnightOnQueen      = S( 21, 11);
@@ -358,7 +358,7 @@ namespace {
                 // Penalty if we cannot escape to our home ranks if the opponent attacks with a pawn
                 if (   relative_rank(Us, s) >= RANK_4
                     && pawn_attack_span(Us, s) & pos.pieces(Them, PAWN)
-                    && !(b & HomeRanks))
+                    && !(b & HomeRanks & ~pos.pieces(Us) & ~attackedBy[Them][PAWN]))
                     score -= EscapeBishop;
 
             }
