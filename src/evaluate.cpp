@@ -291,7 +291,7 @@ namespace {
     constexpr Direction Down = (Us == WHITE ? SOUTH : NORTH);
     constexpr Bitboard OutpostRanks = (Us == WHITE ? Rank4BB | Rank5BB | Rank6BB
                                                    : Rank5BB | Rank4BB | Rank3BB);
-    constexpr Bitboard HomeRanks = (Us == WHITE ? Rank1BB | Rank2BB : Rank7BB | Rank8BB);
+    constexpr Bitboard HomeRanks = (Us == WHITE ? Rank1BB | Rank2BB | Rank3BB : Rank6BB | Rank7BB | Rank8BB);
     const Square* pl = pos.squares<Pt>(Us);
 
     Bitboard b, bb;
@@ -358,7 +358,7 @@ namespace {
                 // Penalty if we cannot escape to our home ranks if the opponent attacks with a pawn
                 if (   relative_rank(Us, s) >= RANK_4
                     && pawn_attack_span(Us, s) & pos.pieces(Them, PAWN)
-                    && !(b & HomeRanks & ~pos.pieces(Us) & ~attackedBy[Them][PAWN]))
+                    && !(b & HomeRanks))
                     score -= EscapeBishop;
 
             }
