@@ -399,7 +399,7 @@ namespace {
             if (pos.count<QUEEN>() == 1)
             {
                 int x = (pos.key() & 7) - 3;
-                score += make_score(x, 0);
+                score += make_score(0, x);
             }
         }
     }
