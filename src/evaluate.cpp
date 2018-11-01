@@ -394,6 +394,13 @@ namespace {
             Bitboard queenPinners;
             if (pos.slider_blockers(pos.pieces(Them, ROOK, BISHOP), s, queenPinners))
                 score -= WeakQueen;
+
+            // Stochastic queen: add small degree of noise to bend the search tree towards higher queen mobility
+            if (pos.count<QUEEN>() == 1)
+            {
+                int x = (pos.key() & 7) - 3;
+                score += make_score(x, x);
+            }
         }
     }
     if (T)
