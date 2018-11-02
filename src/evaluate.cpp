@@ -296,9 +296,6 @@ namespace {
     Square s;
     Score score = SCORE_ZERO;
 
-    if (pos.count<Pt>() == 1 && Us == WHITE)
-        score += make_score(0, (pos.key() & 7) - 3);
-
     attackedBy[Us][Pt] = 0;
 
     while ((s = *pl++) != SQ_NONE)
@@ -844,6 +841,12 @@ namespace {
             + threats<WHITE>() - threats<BLACK>()
             + passed< WHITE>() - passed< BLACK>()
             + space<  WHITE>() - space<  BLACK>();
+
+    if (   pos.count<KNIGHT>() == 1
+        || pos.count<BISHOP>() == 1
+        || pos.count<ROOK  >() == 1
+        || pos.count<QUEEN >() == 1 )
+        score += make_score(0, (pos.key() & 7) - 3);
 
     score += initiative(eg_value(score));
 
