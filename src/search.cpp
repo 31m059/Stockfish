@@ -744,7 +744,7 @@ namespace {
                         p < 0 ? (-p + 2500) / 512 : 0;
 
             pureStaticEval = evaluate(pos);
-            if (pos.count<QUEEN>() == 1 && depth < 5)
+            if (pos.count<QUEEN>() == 1 && depth < 10)
             {
                 Material::Entry* me = Material::probe(pos);
                 pureStaticEval += ((pos.key() & 7) - 3) * int(PHASE_MIDGAME - me->game_phase()) / int(PHASE_MIDGAME);
