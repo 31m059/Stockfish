@@ -758,6 +758,7 @@ namespace {
         int noise = ((pos.key() & 8) - 3) * int(PHASE_MIDGAME - me->game_phase()) / int(PHASE_MIDGAME);
         ss->staticEval += noise;
         eval += noise;
+        pureStaticEval += noise;
      }
 
     // Step 7. Razoring (~2 Elo)
