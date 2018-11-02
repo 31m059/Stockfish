@@ -747,7 +747,7 @@ namespace {
             if (pos.count<QUEEN>() == 1 && ss->ply < 15 * ONE_PLY)
             {
                 Material::Entry* me = Material::probe(pos);
-                pureStaticEval += ((pos.key() & 7) - 3) * int(PHASE_MIDGAME - me->game_phase()) / int(PHASE_MIDGAME);
+                pureStaticEval += ((pos.key() & 15) - 7) * int(PHASE_MIDGAME - me->game_phase()) / int(PHASE_MIDGAME);
             }
             ss->staticEval = eval = pureStaticEval + bonus;
         }
