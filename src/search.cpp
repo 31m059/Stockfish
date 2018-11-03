@@ -755,7 +755,7 @@ namespace {
      if (pos.count<BISHOP>() == 1 || pos.count<QUEEN>() == 1)
      {
         Material::Entry* me = Material::probe(pos);
-        int noise = ((pos.key() & 7) - 3) * int(PHASE_MIDGAME - me->game_phase()) / int(PHASE_MIDGAME);
+        int noise = ((pos.key() & 15) - 7) * int(PHASE_MIDGAME - me->game_phase()) / int(PHASE_MIDGAME);
         ss->staticEval += noise;
         eval += noise;
      }
