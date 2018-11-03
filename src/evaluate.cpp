@@ -298,6 +298,10 @@ namespace {
 
     attackedBy[Us][Pt] = 0;
 
+    bool twoRooks = Pt == ROOK && more_than_one(pos.pieces(Us, Pt));
+    int harmonicN = 2;
+    int harmonicD = 0;
+
     while ((s = *pl++) != SQ_NONE)
     {
         // Find attacked squares, including x-ray attacks for bishops and rooks
@@ -321,7 +325,13 @@ namespace {
 
         int mob = popcount(b & mobilityArea[Us]);
 
-        mobility[Us] += MobilityBonus[Pt - 2][mob];
+        if (!twoRooks)
+            mobility[Us] += MobilityBonus[Pt - 2][mob];
+        else
+        {
+            harmonicN *= mob;
+            harmonicD += mob;
+        }
 
         if (Pt == BISHOP || Pt == KNIGHT)
         {
@@ -396,6 +406,12 @@ namespace {
                 score -= WeakQueen;
         }
     }
+
+    if (twoRooks && harmonicD == 0)
+        mobility[Us] += MobilityBonus[Pt - 2][0] * 2;
+    else if (twoRooks)
+        mobility[Us] += MobilityBonus[Pt - 2][harmonicN / harmonicD] * 2;
+
     if (T)
         Trace::add(Pt, Us, score);
 
