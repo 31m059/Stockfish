@@ -755,7 +755,7 @@ namespace {
      if (pos.count<QUEEN>() == 1 && ss->ply < 15 * ONE_PLY)
      {
         Material::Entry* me = Material::probe(pos);
-        int noise = ((pos.key() & 7) - 3) * int(PHASE_MIDGAME - me->game_phase()) / int(PHASE_MIDGAME);
+        int noise = ((pos.key() & 15) - 7) * int(PHASE_MIDGAME - me->game_phase()) / int(PHASE_MIDGAME);
         ss->staticEval += noise;
         eval += noise;
      }
