@@ -752,13 +752,12 @@ namespace {
         tte->save(posKey, VALUE_NONE, BOUND_NONE, DEPTH_NONE, MOVE_NONE, pureStaticEval);
     }
 
-     if (pos.count<QUEEN>() == 1 && ss->ply < 15 * ONE_PLY)
+     if (pos.count<QUEEN>() == 1)
      {
         Material::Entry* me = Material::probe(pos);
         int noise = ((pos.key() & 8) - 3) * int(PHASE_MIDGAME - me->game_phase()) / int(PHASE_MIDGAME);
         ss->staticEval += noise;
         eval += noise;
-        pureStaticEval += noise;
      }
 
     // Step 7. Razoring (~2 Elo)
