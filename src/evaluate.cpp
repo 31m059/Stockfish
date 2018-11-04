@@ -213,7 +213,7 @@ namespace {
     // pawn or squares attacked by 2 pawns are not explicitly added.
     Bitboard attackedBy2[COLOR_NB];
 
-    // cannotMove[color] are the squares occupied by bishops of the given color
+    // cannotMove[color] are the squares occupied by knights of the given color
     // that do not have safe moves, i.e., that attack no squares that are not
     // occupied by friendly pieces or attacked by enemy pawns.
     Bitboard cannotMove[COLOR_NB];
@@ -332,7 +332,7 @@ namespace {
         else
             mob = popcount(b & mobilityArea[Us] & ~cannotMove[Us]);
 
-        if (Pt == BISHOP && !(b & mobilityArea[Us] & ~pos.pieces(Us)))
+        if (Pt == KNIGHT && !(b & mobilityArea[Us] & ~pos.pieces(Us)))
             cannotMove[Us] |= s;
 
         mobility[Us] += MobilityBonus[Pt - 2][mob];
