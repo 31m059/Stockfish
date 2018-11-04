@@ -213,7 +213,7 @@ namespace {
     // pawn or squares attacked by 2 pawns are not explicitly added.
     Bitboard attackedBy2[COLOR_NB];
 
-    // cannotMove[color] are the squares occupied by knights of the given color
+    // cannotMove[color] are the squares occupied by minors of the given color
     // that do not have safe moves, i.e., that attack no squares that are not
     // occupied by friendly pieces or attacked by enemy pawns.
     Bitboard cannotMove[COLOR_NB];
@@ -297,6 +297,7 @@ namespace {
     constexpr Direction Down = (Us == WHITE ? SOUTH : NORTH);
     constexpr Bitboard OutpostRanks = (Us == WHITE ? Rank4BB | Rank5BB | Rank6BB
                                                    : Rank5BB | Rank4BB | Rank3BB);
+    constexpr Bitboard rank1 = (Us == WHITE ? Rank1BB : Rank8BB);
     const Square* pl = pos.squares<Pt>(Us);
 
     Bitboard b, bb;
@@ -330,9 +331,9 @@ namespace {
         if (Pt != ROOK)
             mob = popcount(b & mobilityArea[Us]);
         else
-            mob = popcount(b & mobilityArea[Us] & ~cannotMove[Us]);
+            mob = popcount(b & mobilityArea[Us] & ~(cannotMove[Us] & rank1));
 
-        if (Pt == KNIGHT && !(b & mobilityArea[Us] & ~pos.pieces(Us)))
+        if ((Pt == BISHOP || Pt == KNIGHT) && !(b & mobilityArea[Us] & ~pos.pieces(Us)))
             cannotMove[Us] |= s;
 
         mobility[Us] += MobilityBonus[Pt - 2][mob];
