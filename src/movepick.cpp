@@ -48,6 +48,9 @@ namespace {
             *q = tmp;
         }
   }
+  
+  Value threshold55 = Value(-55);
+  TUNE(threshold55);
 
 } // namespace
 
@@ -176,7 +179,7 @@ top:
 
   case GOOD_CAPTURE:
       if (select<Best>([&](){
-                       return pos.see_ge(move, Value(-55 * (cur-1)->value / 1024)) ?
+                       return pos.see_ge(move, Value(threshold55 * (cur-1)->value / 1024)) ?
                               // Move losing capture to endBadCaptures to be tried later
                               true : (*endBadCaptures++ = move, false); }))
           return move;
