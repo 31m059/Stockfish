@@ -950,8 +950,9 @@ moves_loop: // When in check, search starts from here
           extension = ONE_PLY;
           
       // Extension for queen moves when only one side has queens
-      if (   bool(pos.pieces(WHITE, QUEEN)) !=  bool(pos.pieces(BLACK, QUEEN))
-          && type_of(movedPiece) == QUEEN)
+      if (   bool(pos.pieces(WHITE, QUEEN)) != bool(pos.pieces(BLACK, QUEEN))
+          && type_of(movedPiece) == QUEEN
+          && depth < 2 * ONE_PLY)
           extension = ONE_PLY;
 
       // Calculate new depth for this move
