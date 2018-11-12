@@ -213,6 +213,10 @@ namespace {
     // pawn or squares attacked by 2 pawns are not explicitly added.
     Bitboard attackedBy2[COLOR_NB];
 
+    // BishopThroughRook[color] are the squares attacked by a bishop of the given color
+    // through a rook of the opposite color.
+    Bitboard BishopThroughRook[COLOR_NB];
+
     // kingRing[color] are the squares adjacent to the king, plus (only for a
     // king on its first rank) the squares two ranks in front. For instance,
     // if black's king is on g8, kingRing[BLACK] is f8, h8, f7, g7, h7, f6, g6
@@ -261,6 +265,8 @@ namespace {
     attackedBy[Us][ALL_PIECES] = attackedBy[Us][KING] | attackedBy[Us][PAWN];
     attackedBy2[Us]            = attackedBy[Us][KING] & attackedBy[Us][PAWN];
 
+    BishopThroughRook[Us] = 0;
+
     // Init our king safety tables only if we are going to use them
     if (pos.non_pawn_material(Them) >= RookValueMg + KnightValueMg)
     {
@@ -304,9 +310,13 @@ namespace {
         b = Pt == BISHOP ? attacks_bb<BISHOP>(s, pos.pieces() ^ pos.pieces(QUEEN))
           : Pt ==   ROOK ? attacks_bb<  ROOK>(s, pos.pieces() ^ pos.pieces(QUEEN) ^ pos.pieces(Us, ROOK))
                          : pos.attacks_from<Pt>(s);
-
+        bb = Pt == BISHOP ? attacks_bb<BISHOP>(s, pos.pieces() ^ pos.pieces(QUEEN) ^ pos.pieces(Them, ROOK)) : 0;
         if (pos.blockers_for_king(Us) & s)
-            b &= LineBB[pos.square<KING>(Us)][s];
+        {
+            b  &= LineBB[pos.square<KING>(Us)][s];
+            bb &= LineBB[pos.square<KING>(Us)][s];
+        }
+        BishopThroughRook[Us] |= bb & ~b;
 
         attackedBy2[Us] |= attackedBy[Us][ALL_PIECES] & b;
         attackedBy[Us][Pt] |= b;
@@ -541,6 +551,13 @@ namespace {
             score += ThreatByMinor[type_of(pos.piece_on(s))];
             if (type_of(pos.piece_on(s)) != PAWN)
                 score += ThreatByRank * (int)relative_rank(Them, s);
+        }
+
+        b = (defended | weak) & BishopThroughRook[Us];
+        while (b)
+        {
+            Square s = pop_lsb(&b);
+            score += ThreatByMinor[type_of(pos.piece_on(s))];
         }
 
         b = weak & attackedBy[Us][ROOK];
