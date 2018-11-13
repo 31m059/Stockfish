@@ -953,7 +953,8 @@ moves_loop: // When in check, search starts from here
        if (   type_of(pos.piece_on(to_sq(move))) == BISHOP
            && pos.count<BISHOP>( us) == 1
            && pos.count<BISHOP>(~us) == 2
-           && (DarkSquares & pos.square<BISHOP>(us) ? DarkSquares : ~DarkSquares) & to_sq(move))
+           && (DarkSquares & pos.square<BISHOP>(us) ? DarkSquares : ~DarkSquares) & to_sq(move)
+           && depth < 4 * ONE_PLY)
            extension = ONE_PLY;
 
       // Calculate new depth for this move
