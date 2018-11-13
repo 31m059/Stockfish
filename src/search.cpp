@@ -949,6 +949,11 @@ moves_loop: // When in check, search starts from here
           && depth < 12 * ONE_PLY)
           extension = ONE_PLY;
 
+      // Extension for non-pawn captures in OCB positions
+      if (    pos.opposite_bishops()
+          && (pos.pieces() ^ pos.pieces(PAWN)) & to_sq(move))
+          extension = ONE_PLY;
+
       // Calculate new depth for this move
       newDepth = depth - ONE_PLY + extension;
 
