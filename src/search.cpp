@@ -949,6 +949,11 @@ moves_loop: // When in check, search starts from here
           && depth < 12 * ONE_PLY)
           extension = ONE_PLY;
 
+      // Extension for knight promotions
+      if (   type_of(move) == PROMOTION
+          && promotion_type(move) == KNIGHT)
+          extension = ONE_PLY;
+
       // Calculate new depth for this move
       newDepth = depth - ONE_PLY + extension;
 
