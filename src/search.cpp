@@ -949,6 +949,13 @@ moves_loop: // When in check, search starts from here
           && depth < 12 * ONE_PLY)
           extension = ONE_PLY;
 
+       // Extension for captures that create OCB
+       if (   type_of(pos.piece_on(to_sq(move))) == BISHOP
+           && pos.count<BISHOP>( us) == 1
+           && pos.count<BISHOP>(~us) == 2
+           && (DarkSquares & pos.square<BISHOP>(us) ? DarkSquares : ~DarkSquares) & to_sq(move))
+           extension = ONE_PLY;
+
       // Calculate new depth for this move
       newDepth = depth - ONE_PLY + extension;
 
