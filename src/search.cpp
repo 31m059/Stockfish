@@ -950,10 +950,10 @@ moves_loop: // When in check, search starts from here
           extension = ONE_PLY;
 
       // Cancel extension if shuffling
-      if (   pos.rule50_count() > 25
-          && pos.rule50_count() < 50
+      if (   pos.rule50_count() > 20
+          && pos.rule50_count() < 30
           && !(type_of(movedPiece) == PAWN || captureOrPromotion))
-          extension = DEPTH_ZERO;
+          extension -= ONE_PLY;
 
       // Calculate new depth for this move
       newDepth = depth - ONE_PLY + extension;
