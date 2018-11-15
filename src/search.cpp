@@ -944,13 +944,23 @@ moves_loop: // When in check, search starts from here
           extension = ONE_PLY;
 
       // Extension for moves that change castling rights
-      if ( pos.can_castle(us) && depth < 12 * ONE_PLY)
+      if (pos.can_castle(us) && depth < 12 * ONE_PLY)
       {
+          CastlingRight kingSide  = us == WHITE ? WHITE_OO  : BLACK_OO;
+          CastlingRight queenSide = us == WHITE ? WHITE_OOO : BLACK_OOO;
+          Square kingRook  = us == WHITE ? SQ_H1 : SQ_H8;
+          Square queenRook = us == WHITE ? SQ_A1 : SQ_A8;
+
           if (type_of(movedPiece) == KING)
              extension = ONE_PLY;
-
-          else if (type_of(movedPiece) == ROOK)
-             extension = DEPTH_ZERO;
+          else if (   from_sq(move) == kingRook
+                   && type_of(movedPiece) == ROOK
+                   && pos.can_castle(kingSide))
+             extension = ONE_PLY;
+          else if (   from_sq(move) == queenRook
+                   && type_of(movedPiece) == ROOK
+                   && pos.can_castle(queenSide))
+             extension = ONE_PLY;
        }
 
       // Calculate new depth for this move
