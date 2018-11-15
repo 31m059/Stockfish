@@ -956,11 +956,11 @@ moves_loop: // When in check, search starts from here
           else if (   from_sq(move) == kingRook
                    && type_of(movedPiece) == ROOK
                    && pos.can_castle(kingSide))
-             extension = ONE_PLY;
+             extension -= ONE_PLY;
           else if (   from_sq(move) == queenRook
                    && type_of(movedPiece) == ROOK
                    && pos.can_castle(queenSide))
-             extension = ONE_PLY;
+             extension -= ONE_PLY;
        }
 
       // Calculate new depth for this move
