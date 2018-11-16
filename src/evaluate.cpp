@@ -142,21 +142,21 @@ namespace {
 
   // PassedRank[Rank] contains a bonus according to the rank of a passed pawn
   constexpr Score PassedRank[RANK_NB] = {
-    S(0, 0), S(5, 18), S(12, 23), S(10, 31), S(57, 62), S(163, 167), S(271, 250)
+    S(0, 0), S(0, 18), S(11, 21), S(12, 26), S(61, 73), S(163, 171), S(274, 250)
   };
 
   // PassedFile[File] contains a bonus according to the file of a passed pawn
   constexpr Score PassedFile[FILE_NB] = {
-    S( -1,  7), S( 0,  9), S(-9, -8), S(-30,-14),
-    S(-30,-14), S(-9, -8), S( 0,  9), S( -1,  7)
+    S(  0,  1), S( 0,  13), S(-14,-18), S(-23,-14),
+    S(-23,-14), S(-14,-18), S(  0, 13), S(  0,  1)
   };
 
   // Assorted bonuses and penalties
-  constexpr Score BishopPawns        = S(  3,  7);
-  constexpr Score CloseEnemies       = S(  6,  0);
+  constexpr Score BishopPawns        = S(  3,  5);
+  constexpr Score CloseEnemies       = S(  7,  0);
   constexpr Score CorneredBishop     = S( 50, 50);
   constexpr Score Hanging            = S( 57, 32);
-  constexpr Score KingProtector      = S(  6,  6);
+  constexpr Score KingProtector      = S(  7,  6);
   constexpr Score KnightOnQueen      = S( 21, 11);
   constexpr Score LongDiagonalBishop = S( 46,  0);
   constexpr Score MinorBehindPawn    = S( 16,  0);
@@ -164,13 +164,13 @@ namespace {
   constexpr Score PawnlessFlank      = S( 19, 84);
   constexpr Score RookOnPawn         = S( 10, 29);
   constexpr Score SliderOnQueen      = S( 42, 21);
-  constexpr Score ThreatByKing       = S( 22, 78);
-  constexpr Score ThreatByPawnPush   = S( 45, 40);
+  constexpr Score ThreatByKing       = S( 21, 82);
+  constexpr Score ThreatByPawnPush   = S( 50, 31);
   constexpr Score ThreatByRank       = S( 16,  3);
-  constexpr Score ThreatBySafePawn   = S(173,102);
+  constexpr Score ThreatBySafePawn   = S(160, 79);
   constexpr Score TrappedRook        = S( 96,  5);
   constexpr Score WeakQueen          = S( 50, 10);
-  constexpr Score WeakUnopposedPawn  = S( 15, 19);
+  constexpr Score WeakUnopposedPawn  = S(  5, 22);
 
 #undef S
 
