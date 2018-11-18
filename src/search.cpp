@@ -574,6 +574,7 @@ namespace {
     bool ttHit, inCheck, givesCheck, improving;
     bool captureOrPromotion, doFullDepthSearch, moveCountPruning, skipQuiets, ttCapture, pvExact;
     Piece movedPiece;
+    Piece capturedPiece;
     int moveCount, captureCount, quietCount;
 
     // Step 1. Initialize node
@@ -910,6 +911,7 @@ moves_loop: // When in check, search starts from here
       extension = DEPTH_ZERO;
       captureOrPromotion = pos.capture_or_promotion(move);
       movedPiece = pos.moved_piece(move);
+      capturedPiece = pos.captured_piece();
       givesCheck = gives_check(pos, move);
 
       moveCountPruning =   depth < 16 * ONE_PLY
@@ -947,6 +949,13 @@ moves_loop: // When in check, search starts from here
       if (   pos.can_castle(us)
           && type_of(movedPiece) == KING
           && depth < 12 * ONE_PLY)
+          extension = ONE_PLY;
+
+      // Extension for middlegame queen exchange
+      Phase gamephase =  Material::probe(pos)->game_phase();
+      if (   type_of(capturedPiece) == QUEEN
+          && type_of(movedPiece) == QUEEN
+          && int(gamephase) > int(PHASE_MIDGAME - gamephase))
           extension = ONE_PLY;
 
       // Calculate new depth for this move
