@@ -955,7 +955,7 @@ moves_loop: // When in check, search starts from here
       Phase gamephase =  Material::probe(pos)->game_phase();
       if (   type_of(capturedPiece) == QUEEN
           && type_of(movedPiece) == QUEEN
-          && int(gamephase) > int(PHASE_MIDGAME - gamephase))
+          && int(gamephase) < int(PHASE_MIDGAME - gamephase))
           extension = ONE_PLY;
 
       // Calculate new depth for this move
