@@ -947,6 +947,19 @@ moves_loop: // When in check, search starts from here
       else if (   pos.can_castle(us) // Extension for king moves that change castling rights
                && type_of(movedPiece) == KING)
           extension = ONE_PLY;
+          
+      // If the enemy has a pawn blocking a discovered attack on our king,
+      // extend moves that give them a new opportunity to unblock the pawn.
+      Bitboard b = pos.blockers_for_king(us) & pos.pieces(~us, PAWN);
+      b = (us == WHITE ? shift<SOUTH>(b) : shift<NORTH>(b)) & pos.pieces(us);
+      while (b)
+      {
+          Square s = pop_lsb(&b); // Our piece blocking a discovered attack
+          if (from_sq(move) == s || to_sq(move) == s + EAST || to_sq(move) == s + WEST)
+              extension = ONE_PLY;
+          
+      }
+          
 
       // Calculate new depth for this move
       newDepth = depth - ONE_PLY + extension;
