@@ -663,12 +663,16 @@ namespace {
                 int k = !unsafeSquares ? 20 : !(unsafeSquares & blockSq) ? 9 : 0;
 
                 // If the path to the queen is fully defended, assign a big bonus.
-                // Otherwise assign a smaller bonus if the block square is defended.
+                // Otherwise assign a smaller bonus if the block square is defended,
+                // or if the passed pawn is doubly defended.
                 if (defendedSquares == squaresToQueen)
                     k += 6;
 
                 else if (defendedSquares & blockSq)
                     k += 4;
+
+                else if (attackedBy2[Us] & s)
+                    k += 2;
 
                 bonus += make_score(k * w, k * w);
             }
