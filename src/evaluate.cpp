@@ -672,7 +672,7 @@ namespace {
                     k += 4;
 
                 else if (attackedBy2[Us] & s)
-                    k += 2;
+                    k += 4;
 
                 bonus += make_score(k * w, k * w);
             }
