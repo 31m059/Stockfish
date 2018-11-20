@@ -155,6 +155,7 @@ namespace {
   constexpr Score BishopPawns        = S(  3,  8);
   constexpr Score CloseEnemies       = S(  7,  0);
   constexpr Score CorneredBishop     = S( 50, 50);
+  constexpr Score DiscoverPawn       = S( 15, 15);
   constexpr Score Hanging            = S( 62, 34);
   constexpr Score KingProtector      = S(  6,  7);
   constexpr Score KnightOnQueen      = S( 20, 12);
@@ -586,6 +587,15 @@ namespace {
 
     b = pawn_attacks_bb<Us>(b) & nonPawnEnemies;
     score += ThreatBySafePawn * popcount(b);
+
+    // Bonus for discovered checks with pawns
+    b = pos.pieces(Us, PAWN) & pos.blockers_for_king(Them);
+    while (b)
+    {
+        Square s = pop_lsb(&b);
+        if (~pos.pieces(Them) & (s + Up) || PawnAttacks[Us][s] & pos.pieces(Them))
+            score += DiscoverPawn;
+    }
 
     // Bonus for threats on the next moves against enemy queen
     if (pos.count<QUEEN>(Them) == 1)
