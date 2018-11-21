@@ -679,8 +679,7 @@ namespace {
                 else if (defendedSquares & blockSq)
                     k += 4;
 
-                else if (attackedBy2[Us] & s)
-                    k += 2;
+                k += bool(attackedBy2[Us] & s);
 
                 bonus += make_score(k * w, k * w);
             }
