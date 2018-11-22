@@ -952,6 +952,21 @@ moves_loop: // When in check, search starts from here
                && type_of(movedPiece) == KING)
           extension = ONE_PLY;
 
+      // Extension for moves that immediately enable castling
+      constexpr Bitboard OOOfiles = FileBBB | FileCBB | FileDBB;
+      constexpr Bitboard OOfiles  = FileFBB | FileGBB;
+      Bitboard homeRank = us == WHITE ? Rank1BB : Rank8BB;
+      CastlingRight kingSide  = us == WHITE ? WHITE_OO  : BLACK_OO;
+      CastlingRight queenSide = us == WHITE ? WHITE_OOO : BLACK_OOO;
+      if (   pos.can_castle(kingSide)
+          && !more_than_one(pos.pieces() & OOfiles & homeRank)
+          && pos.pieces() & OOfiles & homeRank & from_sq(move))
+          extension = ONE_PLY;
+      else if (   pos.can_castle(queenSide)
+          && !more_than_one(pos.pieces() & OOOfiles & homeRank)
+          && pos.pieces() & OOOfiles & homeRank & from_sq(move))
+          extension = ONE_PLY;
+
       // Calculate new depth for this move
       newDepth = depth - ONE_PLY + extension;
 
