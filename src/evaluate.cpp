@@ -680,7 +680,7 @@ namespace {
                     k += 4;
 
                 else if (attackedBy2[Us] & attackedBy[Us][ROOK] & s)
-                    bonus += make_score(10, 10);
+                    bonus += make_score(30, 30);
 
                 bonus += make_score(k * w, k * w);
             }
