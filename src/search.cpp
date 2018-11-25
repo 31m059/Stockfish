@@ -952,6 +952,10 @@ moves_loop: // When in check, search starts from here
                && type_of(movedPiece) == KING)
           extension = ONE_PLY;
 
+      // Extension for en passant
+      else if (type_of(move) == ENPASSANT)
+          extension = ONE_PLY;
+
       // Calculate new depth for this move
       newDepth = depth - ONE_PLY + extension;
 
