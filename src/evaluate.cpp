@@ -540,6 +540,8 @@ namespace {
             if (type_of(pos.piece_on(s)) != PAWN)
                 score += ThreatByRank * (int)relative_rank(Them, s);
         }
+        if (pos.pieces(Them, QUEEN) & (attackedBy[Us][KNIGHT] | attackedBy[Us][BISHOP]) & ~b)
+            score += ThreatByMinor[QUEEN] / 2;
 
         b = weak & attackedBy[Us][ROOK];
         while (b)
