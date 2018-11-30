@@ -553,7 +553,7 @@ namespace {
         while (b)
         {
             Square s = pop_lsb(&b);
-            if (attacks_bb<ROOK>(s, pos.pieces() ^ pos.pieces(QUEEN) ^ pos.pieces(Us, ROOK)) & pos.pieces(Us, ROOK) & attackedBy[Us][ALL_PIECES])
+            if (attacks_bb<ROOK>(s, pos.pieces() ^ pos.pieces(QUEEN) ^ pos.pieces(Us, ROOK)) & pos.pieces(Us, ROOK) & attackedBy[Us][ALL_PIECES] & ~attackedBy2[Them])
                 score += ThreatByRook[QUEEN] / 2;
         }
 
