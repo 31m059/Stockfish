@@ -549,13 +549,8 @@ namespace {
             if (type_of(pos.piece_on(s)) != PAWN)
                 score += ThreatByRank * (int)relative_rank(Them, s);
         }
-        b = pos.pieces(Them, QUEEN) & attackedBy[Us][ROOK] & ~b;
-        while (b)
-        {
-            Square s = pop_lsb(&b);
-            if (attacks_bb<ROOK>(s, pos.pieces() ^ pos.pieces(QUEEN) ^ pos.pieces(Us, ROOK)) & pos.pieces(Us, ROOK) & attackedBy[Us][ALL_PIECES] & ~attackedBy2[Them])
-                score += ThreatByRook[QUEEN] / 2;
-        }
+        if (pos.pieces(Them, QUEEN) & attackedBy[Us][ROOK] & ~b)
+            score += ThreatByRook[QUEEN] / 4;
 
         if (weak & attackedBy[Us][KING])
             score += ThreatByKing;
