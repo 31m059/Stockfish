@@ -429,11 +429,10 @@ namespace {
         int kingDanger = 0;
         unsafeChecks = 0;
 
-        // Attacked squares defended at most once by our queen or king, or doubly attacked and adjacent to our king
+        // Attacked squares defended at most once by our queen or king
         weak =  attackedBy[Them][ALL_PIECES]
               & ~attackedBy2[Us]
               & (~attackedBy[Us][ALL_PIECES] | attackedBy[Us][KING] | attackedBy[Us][QUEEN]);
-        weak |= attackedBy2[Them] & attackedBy[Us][KING];
 
         // Analyse the safe enemy's checks which are possible on next move
         safe  = ~pos.pieces(Them);
@@ -475,6 +474,7 @@ namespace {
         kingDanger +=        kingAttackersCount[Them] * kingAttackersWeight[Them]
                      +  69 * kingAttacksCount[Them]
                      + 185 * popcount(kingRing[Us] & weak)
+                     +  50 * popcount(kingRing[Us] & weak & attackedBy2[Them])
                      + 150 * popcount(pos.blockers_for_king(Us) | unsafeChecks)
                      +       tropism * tropism / 4
                      - 873 * !pos.count<QUEEN>(Them)
