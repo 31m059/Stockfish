@@ -429,10 +429,11 @@ namespace {
         int kingDanger = 0;
         unsafeChecks = 0;
 
-        // Attacked squares defended at most once by our queen or king
+        // Attacked squares defended at most once by our queen or king, or doubly attacked and adjacent to our king
         weak =  attackedBy[Them][ALL_PIECES]
               & ~attackedBy2[Us]
               & (~attackedBy[Us][ALL_PIECES] | attackedBy[Us][KING] | attackedBy[Us][QUEEN]);
+        weak |= attackedBy2[Them] & attackedBy[Us][KING];
 
         // Analyse the safe enemy's checks which are possible on next move
         safe  = ~pos.pieces(Them);
