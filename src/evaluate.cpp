@@ -598,7 +598,13 @@ namespace {
         b =  (attackedBy[Us][BISHOP] & pos.attacks_from<BISHOP>(s))
            | (attackedBy[Us][ROOK  ] & pos.attacks_from<ROOK  >(s));
 
-        score += SliderOnQueen * popcount(b & safe & attackedBy2[Us]);
+        if (pos.count<QUEEN>(Us) == 1)
+        {
+            Bitboard queenThroughRook = attacks_bb<ROOK>(pos.square<QUEEN>(Us), pos.pieces() ^ pos.pieces(Us, ROOK));
+            score += SliderOnQueen * popcount(b & safe & (attackedBy2[Us] | queenThroughRook));
+        }
+        else
+            score += SliderOnQueen * popcount(b & safe & attackedBy2[Us]);
     }
 
     if (T)
