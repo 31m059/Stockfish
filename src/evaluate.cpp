@@ -311,8 +311,8 @@ namespace {
 
         if (Pt == QUEEN)
         {
-            b |=  attacks_bb<BISHOP>(s, pos.pieces() ^ (pos.pieces(Us, BISHOP) & b & PseudoAttacks[BISHOP][s]))
-                | attacks_bb<ROOK  >(s, pos.pieces() ^ (pos.pieces(Us, ROOK  ) & b & file_bb(s)));
+            b |=  attacks_bb<BISHOP>(s, pos.pieces() ^ (pos.pieces(Us, BISHOP) & PseudoAttacks[BISHOP][s]))
+                | attacks_bb<ROOK  >(s, pos.pieces() ^ (pos.pieces(Us, ROOK  ) & file_bb(s)));
         }
 
         attackedBy2[Us] |= attackedBy[Us][ALL_PIECES] & b;
