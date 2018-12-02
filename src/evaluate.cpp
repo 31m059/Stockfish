@@ -310,8 +310,8 @@ namespace {
         mobility[Us] += MobilityBonus[Pt - 2][mob];
 
         if (Pt == QUEEN)
-            b |= attacks_bb<ROOK>(s, pos.pieces() ^ pos.pieces(Us, ROOK));
-
+            b |= attacks_bb<ROOK>(s, pos.pieces() ^ (pos.pieces(Us, ROOK) & PseudoAttacks[ROOK][s]));
+        
         attackedBy2[Us] |= attackedBy[Us][ALL_PIECES] & b;
         attackedBy[Us][Pt] |= b;
         attackedBy[Us][ALL_PIECES] |= b;
