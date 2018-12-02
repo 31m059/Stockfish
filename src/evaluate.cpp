@@ -305,6 +305,16 @@ namespace {
         if (pos.blockers_for_king(Us) & s)
             b &= LineBB[pos.square<KING>(Us)][s];
 
+        int mob = popcount(b & mobilityArea[Us]);
+
+        mobility[Us] += MobilityBonus[Pt - 2][mob];
+
+        if (Pt == QUEEN)
+        {
+            b |=  attacks_bb<BISHOP>(s, pos.pieces() ^ (pos.pieces(Us, BISHOP) & b & PseudoAttacks[BISHOP][s]))
+                | attacks_bb<ROOK  >(s, pos.pieces() ^ (pos.pieces(Us, ROOK  ) & b & file_bb(s)));
+        }
+
         attackedBy2[Us] |= attackedBy[Us][ALL_PIECES] & b;
         attackedBy[Us][Pt] |= b;
         attackedBy[Us][ALL_PIECES] |= b;
@@ -315,10 +325,6 @@ namespace {
             kingAttackersWeight[Us] += KingAttackWeights[Pt];
             kingAttacksCount[Us] += popcount(b & attackedBy[Them][KING]);
         }
-
-        int mob = popcount(b & mobilityArea[Us]);
-
-        mobility[Us] += MobilityBonus[Pt - 2][mob];
 
         if (Pt == BISHOP || Pt == KNIGHT)
         {
