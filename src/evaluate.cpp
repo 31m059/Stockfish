@@ -313,10 +313,11 @@ namespace {
         attackedBy[Us][ALL_PIECES] |= b;
 
         if (Pt == QUEEN)
-            b |= attacks_bb<ROOK>(s, pos.pieces() ^ (pos.pieces(Us, ROOK) & PseudoAttacks[ROOK][s]));
+            b |= attacks_bb<ROOK>(s, pos.pieces() ^ (pos.pieces(Us, ROOK) & b & file_bb(s)));
+
         attackedBy2[Us] |= attackedBy[Us][ALL_PIECES] & b;
 
-        if (b & kingRing[Them])
+        if (b & kingRing[Them] & ~double_pawn_attacks_bb<Them>(pos.pieces(Them, PAWN)))
         {
             kingAttackersCount[Us]++;
             kingAttackersWeight[Us] += KingAttackWeights[Pt];
