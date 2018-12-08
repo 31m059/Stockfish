@@ -946,8 +946,8 @@ moves_loop: // When in check, search starts from here
                &&  pos.see_ge(move))
           extension = ONE_PLY;
 
-      // Extension if castling
-      else if (type_of(move) == CASTLING)
+      // Extension for promotion, en passant, or castling
+      else if (type_of(move) != NORMAL)
           extension = ONE_PLY;
 
       // Calculate new depth for this move
