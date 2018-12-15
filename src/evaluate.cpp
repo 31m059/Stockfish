@@ -368,9 +368,12 @@ namespace {
 
         if (Pt == ROOK)
         {
-            // Bonus for aligning rook with enemy pawns on the same rank/file
+            // Bonus for aligning rook with enemy pawns or queens on the same rank/file
             if (relative_rank(Us, s) >= RANK_5)
+            {
                 score += RookOnPawn * popcount(pos.pieces(Them, PAWN) & PseudoAttacks[ROOK][s]);
+                score += ThreatByRook[QUEEN] / 2 * bool(pos.pieces(Them, QUEEN) & PseudoAttacks[ROOK][s]);
+            }
 
             // Bonus for rook on an open or semi-open file
             if (pe->semiopen_file(Us, file_of(s)))
