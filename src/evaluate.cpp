@@ -559,9 +559,11 @@ namespace {
     }
 
     // Bonus for restricting their piece moves
+    constexpr Bitboard dangerousRanks = Us == WHITE ? Rank6BB | Rank7BB | Rank8BB
+                                                    : Rank3BB | Rank2BB | Rank1BB;
     restricted =   attackedBy[Them][ALL_PIECES]
                 & ~stronglyProtected
-                &  (attackedBy[Us][ALL_PIECES] | shift<Up>(pe->passed_pawns(Us)));
+                &  (attackedBy[Us][ALL_PIECES] | (shift<Up>(pe->passed_pawns(Us)) & dangerousRanks));
     score += RestrictedPiece * popcount(restricted);
 
     // Bonus for enemy unopposed weak pawns
