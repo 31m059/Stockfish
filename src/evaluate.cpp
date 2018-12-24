@@ -273,8 +273,8 @@ namespace {
         else if (file_of(pos.square<KING>(Us)) == FILE_A)
             kingRing[Us] |= shift<EAST>(kingRing[Us]);
 
-        kingAttackersCount[Them] = popcount(kingRing[Us] & pe->pawn_attacks(Them));
         kingRing[Us] &= ~double_pawn_attacks_bb<Us>(pos.pieces(Us, PAWN));
+        kingAttackersCount[Them] = popcount(kingRing[Us] & pe->pawn_attacks(Them));
         kingAttacksCount[Them] = kingAttackersWeight[Them] = 0;
     }
   }
@@ -419,7 +419,7 @@ namespace {
     // which are attacked twice in that flank.
     kingFlank = KingFlank[file_of(ksq)];
     b1 = attackedBy[Them][ALL_PIECES] & kingFlank & Camp;
-    b2 = b1 & attackedBy2[Them];
+    b2 = b1 & (attackedBy2[Them] | double_pawn_attacks_bb<Them>(pos.pieces(Them, PAWN)));
 
     int tropism = popcount(b1) + popcount(b2);
 
