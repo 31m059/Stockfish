@@ -419,12 +419,13 @@ namespace {
     // which are attacked twice in that flank.
     kingFlank = KingFlank[file_of(ksq)];
     b1 = attackedBy[Them][ALL_PIECES] & kingFlank & Camp;
-    b2 = b1 & attackedBy2[Them];
+    b2 = b1 & (attackedBy2[Them] | double_pawn_attacks_bb<Them>(pos.pieces(Them, PAWN)));
 
     int tropism = popcount(b1) + popcount(b2);
 
     // Main king safety evaluation
-    if (kingAttackersCount[Them] > 1 - pos.count<QUEEN>(Them))
+    if ((kingAttackersCount[Them] > 1 - pos.count<QUEEN>(Them))
+          || (tropism > 14 && (pos.non_pawn_material(Them) >= RookValueMg + KnightValueMg)))
     {
         int kingDanger = 0;
         unsafeChecks = 0;
