@@ -422,7 +422,7 @@ namespace {
     b2 = b1 & attackedBy2[Them];
     b3 = pe->passed_pawns(Them) & kingFlank & Camp;
 
-    int tropism = popcount(b1) + popcount(b2) + popcount(b3);
+    int tropism = popcount(b1) + popcount(b2) + 2 * popcount(b3);
 
     // Main king safety evaluation
     if (kingAttackersCount[Them] > 1 - pos.count<QUEEN>(Them))
