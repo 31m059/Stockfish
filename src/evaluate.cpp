@@ -430,7 +430,7 @@ namespace {
 
     // Main king safety evaluation
     if (   kingAttackersCount[Them] > 1 - pos.count<QUEEN>(Them)
-        || (pos.non_pawn_material(Them) > RookValueMg + KnightValueMg && popcount(attackers) - popcount(defenders) > 1))
+        || (pos.non_pawn_material(Them) > RookValueMg + KnightValueMg && popcount(attackers) > popcount(defenders)))
     {
         int kingDanger = 0;
         unsafeChecks = 0;
