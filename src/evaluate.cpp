@@ -410,7 +410,7 @@ namespace {
                                            : AllSquares ^ Rank1BB ^ Rank2BB ^ Rank3BB);
 
     const Square ksq = pos.square<KING>(Us);
-    Bitboard kingFlank, weak, b, b1, b2, safe, unsafeChecks;
+    Bitboard kingFlank, kingArea, weak, b, b1, b2, safe, unsafeChecks;
 
     // King shelter and enemy pawns storm
     Score score = pe->king_safety<Us>(pos);
@@ -418,13 +418,19 @@ namespace {
     // Find the squares that opponent attacks in our king flank, and the squares
     // which are attacked twice in that flank.
     kingFlank = KingFlank[file_of(ksq)];
-    b1 = attackedBy[Them][ALL_PIECES] & kingFlank & Camp;
+    kingArea = kingFlank & Camp;
+
+    b1 = attackedBy[Them][ALL_PIECES] & kingArea;
     b2 = b1 & attackedBy2[Them];
 
     int tropism = popcount(b1) + popcount(b2);
+    
+    Bitboard attackers = (pos.pieces(Them) ^ pos.pieces(Them, PAWN, KING)) & kingArea;
+    Bitboard defenders = (pos.pieces(Us)   ^ pos.pieces(Us,   PAWN, KING)) & kingArea;
 
     // Main king safety evaluation
-    if (kingAttackersCount[Them] > 1 - pos.count<QUEEN>(Them))
+    if (   kingAttackersCount[Them] > 1 - pos.count<QUEEN>(Them)
+        || (pos.non_pawn_material(Them) > RookValueMg + KnightValueMg && popcount(attackers) - popcount(defenders) > 1))
     {
         int kingDanger = 0;
         unsafeChecks = 0;
