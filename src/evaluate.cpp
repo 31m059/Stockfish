@@ -161,7 +161,7 @@ namespace {
   constexpr Score LongDiagonalBishop = S( 45,  0);
   constexpr Score MinorBehindPawn    = S( 18,  3);
   constexpr Score PawnlessFlank      = S( 17, 95);
-  constexpr Score RestrictedPiece    = S(  7,  7);
+  constexpr Score RestrictedPiece    = S(  8,  8);
   constexpr Score RookOnPawn         = S( 10, 32);
   constexpr Score SliderOnQueen      = S( 59, 18);
   constexpr Score ThreatByKing       = S( 24, 89);
@@ -552,9 +552,9 @@ namespace {
 
     // Bonus for restricting their piece moves
     restricted =   attackedBy[Them][ALL_PIECES]
-                & ~stronglyProtected;
-    score +=  make_score(7, 0) * popcount(restricted & ((attackedBy[Us][ALL_PIECES] & ~attackedBy[Us][KING]) | attackedBy2[Us]))
-            + make_score(0, 7) * popcount(restricted & attackedBy[Us][ALL_PIECES]);
+                & ~stronglyProtected
+                & ((attackedBy[Us][ALL_PIECES] & ~attackedBy[Us][KING]) | attackedBy2[Us]);
+    score += RestrictedPiece * popcount(restricted);
 
     // Bonus for enemy unopposed weak pawns
     if (pos.pieces(Us, ROOK, QUEEN))
