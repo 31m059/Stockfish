@@ -155,7 +155,6 @@ namespace {
   constexpr Score BishopPawns        = S(  3,  7);
   constexpr Score CloseEnemies       = S(  8,  0);
   constexpr Score CorneredBishop     = S( 50, 50);
-  constexpr Score FawnPawn           = S( 15, 15);
   constexpr Score Hanging            = S( 69, 36);
   constexpr Score KingProtector      = S(  7,  8);
   constexpr Score KnightOnQueen      = S( 16, 12);
@@ -485,13 +484,6 @@ namespace {
 
     // King tropism bonus, to anticipate slow motion attacks on our king
     score -= CloseEnemies * tropism;
-
-    constexpr CastlingRight kside = (Us == WHITE ? WHITE_OO : BLACK_OO);
-    if (   (relative_square(Us, SQ_G1) == ksq || relative_square(Us, SQ_H1) == ksq || relative_square(Us, SQ_F1) == ksq || pos.can_castle(kside))
-		&& pos.pieces(Them, PAWN) & relative_square(Us, SQ_H3)
-		&& pos.pieces(Us, PAWN) & relative_square(Us, SQ_H2)
-		&& pos.pieces(Us, PAWN) & relative_square(Us, SQ_G3))
-         score -= FawnPawn;
 
     if (T)
         Trace::add(KING, Us, score);
