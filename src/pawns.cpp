@@ -146,6 +146,10 @@ namespace {
         && pos.pieces(Us,  PAWN) & relative_square(Us, SQ_H2)
         && pos.pieces(Us,  PAWN) & relative_square(Us, SQ_G3))
        score -= FawnPawn;
+    if (   pos.pieces(~Us, PAWN) & relative_square(Us, SQ_A3)
+        && pos.pieces(Us,  PAWN) & relative_square(Us, SQ_A2)
+        && pos.pieces(Us,  PAWN) & relative_square(Us, SQ_B3))
+       score -= FawnPawn;
 
     return score;
   }
