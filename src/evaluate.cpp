@@ -484,6 +484,15 @@ namespace {
 
     // King tropism bonus, to anticipate slow motion attacks on our king
     score -= CloseEnemies * tropism;
+    
+    // If our king and an enemy fawn pawn are on one side,
+    // and the enemy has a passer on the other, large penalty.
+    constexpr Bitboard ABC = FileABB | FileBBB | FileCBB;
+    constexpr Bitboard FGH = FileFBB | FileGBB | FileHBB;
+    if (   (FGH & ksq && pe->fawnpawn[Them][0] && ABC & pe->passed_pawns(Them))
+        || (ABC & ksq && pe->fawnpawn[Them][1] && FGH & pe->passed_pawns(Them)))
+        score -= make_score(50, 50);
+       
 
     if (T)
         Trace::add(KING, Us, score);

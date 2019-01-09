@@ -35,7 +35,6 @@ namespace {
   constexpr Score Backward = S( 9, 24);
   constexpr Score Doubled  = S(11, 56);
   constexpr Score Isolated = S( 5, 15);
-  constexpr Score FawnPawn = S(20, 30);
 
   // Connected pawn bonus by opposed, phalanx, #support and rank
   Score Connected[2][2][3][RANK_NB];
@@ -142,10 +141,12 @@ namespace {
             score -= Doubled;
     }
 
-    if (   pos.pieces(~Us, PAWN) & relative_square(Us, SQ_H3)
-        && pos.pieces(Us,  PAWN) & relative_square(Us, SQ_H2)
-        && !(pos.pieces(Us,  PAWN) & relative_square(Us, SQ_G2)))
-       score -= FawnPawn;
+    e->fawnpawn[~Us][0] =   pos.pieces(~Us, PAWN) & relative_square(Us, SQ_H3)
+                         && pos.pieces(Us,  PAWN) & relative_square(Us, SQ_H2)
+                         && pos.pieces(Us,  PAWN) & relative_square(Us, SQ_G3);
+    e->fawnpawn[~Us][1] =   pos.pieces(~Us, PAWN) & relative_square(Us, SQ_A3)
+                         && pos.pieces(Us,  PAWN) & relative_square(Us, SQ_A2)
+                         && pos.pieces(Us,  PAWN) & relative_square(Us, SQ_B3);
 
     return score;
   }
