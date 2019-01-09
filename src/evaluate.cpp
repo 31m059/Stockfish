@@ -510,7 +510,7 @@ namespace {
     // Squares strongly protected by the enemy, either because they defend the
     // square with a pawn, or because they defend the square twice and we don't.
     stronglyProtected =  attackedBy[Them][PAWN]
-                       | (attackedBy2[Them] & ~attackedBy2[Us]);
+                       | ((attackedBy2[Them] | (attackedBy[Them][ALL_PIECES] & attackedBy[Us][QUEEN])) & ~attackedBy2[Us]);
 
     // Non-pawn enemies, strongly protected
     defended = nonPawnEnemies & stronglyProtected;
@@ -553,7 +553,7 @@ namespace {
     // Bonus for restricting their piece moves
     restricted =   attackedBy[Them][ALL_PIECES]
                 & ~stronglyProtected
-                & (attackedBy2[Us] | (attackedBy[Us][ALL_PIECES] & ~attackedBy[Us][KING] & ~attackedBy[Us][QUEEN]));
+                & ((attackedBy[Us][ALL_PIECES] & ~attackedBy[Us][KING]) | attackedBy2[Us]);
     score += RestrictedPiece * popcount(restricted);
 
     // Bonus for enemy unopposed weak pawns
