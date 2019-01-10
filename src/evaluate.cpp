@@ -156,7 +156,7 @@ namespace {
   constexpr Score CloseEnemies       = S(  8,  0);
   constexpr Score CorneredBishop     = S( 50, 50);
   constexpr Score Hanging            = S( 69, 36);
-  constexpr Score HinderBishop       = S( 10, 15);
+  constexpr Score HinderKnight       = S( 10, 15);
   constexpr Score KingProtector      = S(  7,  8);
   constexpr Score KnightOnQueen      = S( 16, 12);
   constexpr Score LongDiagonalBishop = S( 45,  0);
@@ -480,8 +480,8 @@ namespace {
         score -= make_score(kingDanger * kingDanger / 4096, kingDanger / 16);
 
     // Penalty if our king hinders the mobility of a bishop.
-    else if (attackedBy[Us][BISHOP] & ksq)
-        score -= HinderBishop;
+    else if (attackedBy[Us][KNIGHT] & ksq)
+        score -= HinderKnight;
 
     // Penalty when our king is on a pawnless flank
     if (!(pos.pieces(PAWN) & kingFlank))
