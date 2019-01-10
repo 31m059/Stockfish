@@ -255,18 +255,16 @@ Score Entry::do_king_safety(const Position& pos) {
 
   Score score =  make_score(bonus, -16 * minKingPawnDistance);
 
-  constexpr CastlingRight kside = (Us == WHITE ? WHITE_OO  : BLACK_OO );
-  constexpr CastlingRight qside = (Us == WHITE ? WHITE_OOO : BLACK_OOO);
   if (relative_rank(Us, ksq) == RANK_1)
   {
       if (   pos.pieces(~Us, PAWN) & relative_square(Us, SQ_H3)
           && pos.pieces(Us,  PAWN) & relative_square(Us, SQ_H2)
           && pos.pieces(Us,  PAWN) & relative_square(Us, SQ_G3))
-          score -= FawnPawn * (2 * bool((FileGBB | FileHBB) & ksq) + pos.can_castle(kside));
+          score -= FawnPawn * (1 + bool((FileGBB | FileHBB) & ksq));
       if (   pos.pieces(~Us, PAWN) & relative_square(Us, SQ_A3)
           && pos.pieces(Us,  PAWN) & relative_square(Us, SQ_A2)
           && pos.pieces(Us,  PAWN) & relative_square(Us, SQ_B3))
-          score -= FawnPawn * (2 * bool((FileABB | FileBBB) & ksq) + pos.can_castle(qside));
+          score -= FawnPawn * (1 + bool((FileABB | FileBBB) & ksq));
   }
   return score;
 }
