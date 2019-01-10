@@ -35,7 +35,7 @@ namespace {
   constexpr Score Backward = S( 9, 24);
   constexpr Score Doubled  = S(11, 56);
   constexpr Score Isolated = S( 5, 15);
-  constexpr Score FawnPawn = S(20, 30);
+  constexpr Score FawnPawn = S(10, 15);
 
   // Connected pawn bonus by opposed, phalanx, #support and rank
   Score Connected[2][2][3][RANK_NB];
@@ -141,11 +141,6 @@ namespace {
         if (doubled && !support)
             score -= Doubled;
     }
-
-    if (   pos.pieces(~Us, PAWN) & relative_square(Us, SQ_H3)
-        && pos.pieces(Us,  PAWN) & relative_square(Us, SQ_H2)
-        && !(pos.pieces(Us,  PAWN) & relative_square(Us, SQ_G2)))
-       score -= FawnPawn;
 
     return score;
   }
@@ -258,7 +253,22 @@ Score Entry::do_king_safety(const Position& pos) {
   if (pos.can_castle(Us | QUEEN_SIDE))
       bonus = std::max(bonus, evaluate_shelter<Us>(pos, relative_square(Us, SQ_C1)));
 
-  return make_score(bonus, -16 * minKingPawnDistance);
+  Score score =  make_score(bonus, -16 * minKingPawnDistance);
+
+  constexpr CastlingRight kside = (Us == WHITE ? WHITE_OO  : BLACK_OO );
+  constexpr CastlingRight qside = (Us == WHITE ? WHITE_OOO : BLACK_OOO);
+  if (relative_rank(Us, ksq) == RANK_1)
+  {
+      if (   pos.pieces(~Us, PAWN) & relative_square(Us, SQ_H3)
+          && pos.pieces(Us,  PAWN) & relative_square(Us, SQ_H2)
+          && pos.pieces(Us,  PAWN) & relative_square(Us, SQ_G3))
+          score -= FawnPawn * (2 * bool((FileGBB | FileHBB) & ksq) + pos.can_castle(kside));
+      if (   pos.pieces(~Us, PAWN) & relative_square(Us, SQ_A3)
+          && pos.pieces(Us,  PAWN) & relative_square(Us, SQ_A2)
+          && pos.pieces(Us,  PAWN) & relative_square(Us, SQ_B3))
+          score -= FawnPawn * (2 * bool((FileABB | FileBBB) & ksq) + pos.can_castle(qside));
+  }
+  return score;
 }
 
 // Explicit template instantiation
