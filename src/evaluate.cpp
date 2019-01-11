@@ -523,7 +523,7 @@ namespace {
 
     // Malus for enemy fawn pawns
     if (   relative_rank(Us, pos.square<KING>(Us)) == RANK_1
-        && pos.pieces(Us, QUEEN, ROOK)
+        && pos.pieces(Them, QUEEN, ROOK)
         && TRank3BB & pos.pieces(Them, PAWN) & ~attackedBy[Us][PAWN] & stronglyProtected & (FileABB | FileHBB))
         score -= make_score(30, 30);
 
