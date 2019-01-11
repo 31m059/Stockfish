@@ -139,6 +139,10 @@ namespace {
 
         if (doubled && !support)
             score -= Doubled;
+
+        if (    opposed && support && !lever
+            && (FileABB | FileHBB) & (Us == WHITE ? Rank6BB : Rank3BB) & s)
+            score -= make_score(30, 30);
     }
 
     return score;
