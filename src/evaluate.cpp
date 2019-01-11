@@ -521,6 +521,10 @@ namespace {
     // Safe or protected squares
     safe = ~attackedBy[Them][ALL_PIECES] | attackedBy[Us][ALL_PIECES];
 
+    // Malus for enemy fawn pawns
+    if (kingRing[Us] & pos.pieces(Them, PAWN) & ~attackedBy[Us][PAWN] & ~weak & (FileABB | FileHBB))
+        score -= make_score(30, 30);
+
     // Bonus according to the kind of attacking pieces
     if (defended | weak)
     {
