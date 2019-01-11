@@ -129,7 +129,12 @@ namespace {
 
         // Score this pawn
         if (support | phalanx)
-            score += Connected[opposed][bool(phalanx)][popcount(support)][relative_rank(Us, s)];
+        {
+            if (support && (FileABB | FileHBB) & s)
+                score += Connected[opposed][bool(phalanx)][2][relative_rank(Us, s)];
+            else
+                score += Connected[opposed][bool(phalanx)][popcount(support)][relative_rank(Us, s)];
+        }
 
         else if (!neighbours)
             score -= Isolated, e->weakUnopposed[Us] += !opposed;
