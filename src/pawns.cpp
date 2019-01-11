@@ -131,9 +131,9 @@ namespace {
         if (support | phalanx)
         {
             if (support && (FileABB | FileHBB) & s)
-                score += Connected[opposed][bool(phalanx)][2][relative_rank(Us, s)];
+                score += (Connected[opposed][bool(phalanx)][1][relative_rank(Us, s)] + Connected[opposed][bool(phalanx)][2][relative_rank(Us, s)]) / 2;
             else
-                score += Connected[opposed][bool(phalanx)][popcount(support)][relative_rank(Us, s)];
+                score +=  Connected[opposed][bool(phalanx)][popcount(support)][relative_rank(Us, s)];
         }
 
         else if (!neighbours)
