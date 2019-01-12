@@ -347,7 +347,8 @@ namespace {
                 if (more_than_one(attacks_bb<BISHOP>(s, pos.pieces(PAWN)) & Center))
                     score += LongDiagonalBishop;
             }
-            else if (popcount(attackedBy[Them][BISHOP] & b) > 3) // Pt == KNIGHT
+            else if (   (FileABB | FileHBB | Rank1BB | Rank8BB) & s
+                     && popcount(attackedBy[Them][BISHOP] & b) > 3) // Pt == KNIGHT
                 score -= DominatedKnight;
 
             // An important Chess960 pattern: A cornered bishop blocked by a friendly
