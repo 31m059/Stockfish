@@ -475,7 +475,7 @@ namespace {
                  +       mg_value(mobility[Them] - mobility[Us])
                  -   50;
 
-    // Penalty when the opponent takes material by discovered check or has a double check,
+    // Penalty when the opponent takes material or threatens our queen by discovered check,
     // like in the windmill combination
     b = pos.blockers_for_king(Us) & pos.pieces(Them);
     while (b)
@@ -483,9 +483,11 @@ namespace {
         Square s = pop_lsb(&b);
         PieceType pt = type_of(pos.piece_on(s));
         Bitboard attacks = (pt == PAWN ? pos.attacks_from<PAWN>(s, Them) : pos.attacks_from(pt, s));
-        Bitboard checks = (pt == PAWN || pt == KING ? 0 : pos.attacks_from(pt, ksq) & (attackedBy2[Them] | ~attackedBy[Us][KING]));
+        Bitboard qThreats = (  pt == PAWN || pt == KING || pos.count<QUEEN>(Us) != 1
+                             ? 0
+                             : pos.attacks_from(pt, pos.square<QUEEN>(Us)) & (attackedBy2[Them] | ~attackedBy[Us][KING]));
 
-        if (attacks & (pos.pieces(Us) | checks))
+        if (attacks & (pos.pieces(Us) | qThreats))
             kingDanger += Windmill;
     }
 
