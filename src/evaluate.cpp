@@ -335,7 +335,7 @@ namespace {
             
             // Penalty if no mobility and trapping a rook
             if (mob == 0 && DistanceRingBB[s][1] & rank_bb(s) & pos.pieces(Us, ROOK))
-                score -= make_score(75, 75);
+                score -= make_score(100, 100);
 
             if (Pt == BISHOP)
             {
