@@ -483,7 +483,7 @@ namespace {
         Square s = pop_lsb(&b);
         PieceType pt = type_of(pos.piece_on(s));
         Bitboard attacks = (pt == PAWN ? pos.attacks_from<PAWN>(s, Them) : pos.attacks_from(pt, s));
-        Bitboard checks = (pt == PAWN || pt == KING ? 0 : pos.attacks_from(pt, ksq));
+        Bitboard checks = (pt == PAWN || pt == KING ? 0 : pos.attacks_from(pt, ksq) & (attackedBy2[Them] | ~attackedBy[Us][KING]));
 
         if (attacks & (pos.pieces(Us) | checks))
             kingDanger += Windmill;
