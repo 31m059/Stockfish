@@ -155,7 +155,7 @@ namespace {
   constexpr Score BishopPawns        = S(  3,  7);
   constexpr Score CloseEnemies       = S(  8,  0);
   constexpr Score CorneredBishop     = S( 50, 50);
-  constexpr Score DominatedKnight    = S( 20, 20);
+  constexpr Score DominatedKnight    = S( 30, 30);
   constexpr Score Hanging            = S( 69, 36);
   constexpr Score KingProtector      = S(  7,  8);
   constexpr Score KnightOnQueen      = S( 16, 12);
@@ -348,7 +348,7 @@ namespace {
                     score += LongDiagonalBishop;
             }
             else if (   (FileABB | FileHBB | Rank1BB | Rank8BB) & s
-                     && !(b & mobilityArea[Us] & ~attackedBy[Them][BISHOP])) // Pt == KNIGHT
+                     && !(b & ~attackedBy[Them][BISHOP])) // Pt == KNIGHT
                 score -= DominatedKnight;
 
             // An important Chess960 pattern: A cornered bishop blocked by a friendly
