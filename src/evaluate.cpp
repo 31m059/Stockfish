@@ -675,7 +675,7 @@ namespace {
         // Scale down bonus for candidate passers which need more than one
         // pawn push to become passed.
         if (!pos.pawn_passed(Us, s + Up))
-            bonus = bonus * 3 / 4;
+            bonus = bonus * 3 / 8;
 
         score += bonus + PassedFile[file_of(s)];
     }
