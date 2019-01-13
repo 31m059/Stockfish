@@ -156,7 +156,7 @@ namespace {
   constexpr Score CloseEnemies       = S(  8,  0);
   constexpr Score CorneredBishop     = S( 50, 50);
   constexpr Score Hanging            = S( 69, 36);
-  constexpr Score HinderMinor        = S( 15, 15);
+  constexpr Score HinderMinor        = S( 10, 15);
   constexpr Score KingProtector      = S(  7,  8);
   constexpr Score KnightOnQueen      = S( 16, 12);
   constexpr Score LongDiagonalBishop = S( 45,  0);
@@ -483,8 +483,8 @@ namespace {
     // The king is not in danger, so try some heuristics to improve gameplay
     // that make sense only if the king is already safe.
     // Penalty if our king hinders the mobility of a minor.
-    else if ((attackedBy[Us][BISHOP] | attackedBy[Us][KNIGHT]) & ~Edges & ksq)
-        score -= HinderMinor;
+    else if ((attackedBy[Us][BISHOP] | attackedBy[Us][KNIGHT]) & ksq)
+        score -= HinderMinor * (Edges & ksq ? 1 : 2);
 
     // Penalty when our king is on a pawnless flank
     if (!(pos.pieces(PAWN) & kingFlank))
