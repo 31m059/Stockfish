@@ -404,7 +404,7 @@ namespace {
     constexpr Color    Them = (Us == WHITE ? BLACK : WHITE);
     constexpr Bitboard Camp = (Us == WHITE ? AllSquares ^ Rank6BB ^ Rank7BB ^ Rank8BB
                                            : AllSquares ^ Rank1BB ^ Rank2BB ^ Rank3BB);
-    constexpr Bitboard Edges = FileABB | FileHBB | Rank1BB | Rank8BB;
+    constexpr Bitboard Corners = (FileABB | FileHBB) & (Rank1BB | Rank8BB);
 
     const Square ksq = pos.square<KING>(Us);
     Bitboard kingFlank, weak, b, b1, b2, safe, unsafeChecks;
@@ -480,7 +480,7 @@ namespace {
     if (kingDanger > 0)
         score -= make_score(kingDanger * kingDanger / 4096, kingDanger / 16);
     // Penalty if our king hinders the mobility of a minor.
-    else if ((attackedBy[Us][BISHOP] | attackedBy[Us][KNIGHT]) & ~Edges & ksq)
+    else if ((attackedBy[Us][BISHOP] | attackedBy[Us][KNIGHT]) & ~Corners & ksq)
         score -= HinderMinor;
 
     // Penalty when our king is on a pawnless flank
