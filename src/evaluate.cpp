@@ -484,7 +484,7 @@ namespace {
     // that make sense only if the king is already safe.
     // Penalty if our king hinders the mobility of a minor.
     else if ((attackedBy[Us][BISHOP] | attackedBy[Us][KNIGHT]) & ksq)
-        score -= HinderMinor * (Edges & ksq ? 1 : 2);
+        score -= HinderMinor / (Edges & ksq ? 2 : 1);
 
     // Penalty when our king is on a pawnless flank
     if (!(pos.pieces(PAWN) & kingFlank))
