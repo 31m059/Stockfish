@@ -156,7 +156,7 @@ namespace {
   constexpr Score CloseEnemies       = S(  8,  0);
   constexpr Score CorneredBishop     = S( 50, 50);
   constexpr Score Hanging            = S( 69, 36);
-  constexpr Score HinderMinor        = S( 20, 30);
+  constexpr Score HinderMinor        = S( 15, 23);
   constexpr Score KingProtector      = S(  7,  8);
   constexpr Score KnightOnQueen      = S( 16, 12);
   constexpr Score LongDiagonalBishop = S( 45,  0);
@@ -479,6 +479,9 @@ namespace {
     // Transform the kingDanger units into a Score, and subtract it from the evaluation
     if (kingDanger > 0)
         score -= make_score(kingDanger * kingDanger / 4096, kingDanger / 16);
+
+    // The king is not in danger, so try some heuristics to improve gameplay
+    // that make sense only if the king is already safe.
     // Penalty if our king hinders the mobility of a minor.
     else if ((attackedBy[Us][BISHOP] | attackedBy[Us][KNIGHT]) & ~Edges & ksq)
         score -= HinderMinor;
