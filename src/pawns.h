@@ -68,6 +68,7 @@ struct Entry {
   Square kingSquares[COLOR_NB];
   Score kingSafety[COLOR_NB];
   int weakUnopposed[COLOR_NB];
+  int semiDoubled[COLOR_NB];
   int castlingRights[COLOR_NB];
   int semiopenFiles[COLOR_NB];
   int pawnsOnSquares[COLOR_NB][COLOR_NB]; // [color][light/dark squares]
