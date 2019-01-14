@@ -404,7 +404,7 @@ namespace {
     constexpr Color    Them = (Us == WHITE ? BLACK : WHITE);
     constexpr Bitboard Camp = (Us == WHITE ? AllSquares ^ Rank6BB ^ Rank7BB ^ Rank8BB
                                            : AllSquares ^ Rank1BB ^ Rank2BB ^ Rank3BB);
-    constexpr Bitboard Edges = FileABB | FileHBB | Rank1BB | Rank8BB;
+    constexpr Bitboard Edges = FileABB | FileHBB;
 
     const Square ksq = pos.square<KING>(Us);
     Bitboard kingFlank, weak, b, b1, b2, safe, unsafeChecks;
@@ -483,8 +483,8 @@ namespace {
     // The king is not in danger, so try some heuristics to improve gameplay
     // that make sense only if the king is already safe.
     // Penalty if our king hinders the mobility of a minor.
-    else if ((attackedBy[Us][BISHOP] | attackedBy[Us][KNIGHT]) & ksq)
-        score -= HinderMinor / (Edges & ksq ? 2 : 1);
+    else if ((attackedBy[Us][BISHOP] | attackedBy[Us][KNIGHT]) & ~Edges & ksq)
+        score -= HinderMinor;
 
     // Penalty when our king is on a pawnless flank
     if (!(pos.pieces(PAWN) & kingFlank))
