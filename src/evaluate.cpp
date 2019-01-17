@@ -381,7 +381,7 @@ namespace {
                 CastlingRight rookside  = (KingSide & s ? kside : qside);
                 CastlingRight otherside = (KingSide & s ? qside : kside);
                 if ((kf < FILE_E) == (file_of(s) < kf))
-                    score -= (TrappedRook - make_score(mob * 22, 0)) * (3 + 2 * !pos.can_castle(rookside) + !pos.can_castle(otherside)) / 3;
+                    score -= (TrappedRook - make_score(mob * 22, 0)) * (3 + !pos.can_castle(rookside) + 2 * !pos.can_castle(otherside)) / 3;
             }
         }
 
