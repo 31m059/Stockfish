@@ -156,6 +156,7 @@ namespace {
   constexpr Score CloseEnemies       = S(  8,  0);
   constexpr Score CorneredBishop     = S( 50, 50);
   constexpr Score Hanging            = S( 69, 36);
+  constexpr Score HinderMinor        = S( 10, 15);
   constexpr Score KingProtector      = S(  7,  8);
   constexpr Score KnightOnQueen      = S( 16, 12);
   constexpr Score LongDiagonalBishop = S( 45,  0);
@@ -403,6 +404,7 @@ namespace {
     constexpr Color    Them = (Us == WHITE ? BLACK : WHITE);
     constexpr Bitboard Camp = (Us == WHITE ? AllSquares ^ Rank6BB ^ Rank7BB ^ Rank8BB
                                            : AllSquares ^ Rank1BB ^ Rank2BB ^ Rank3BB);
+    constexpr Bitboard Edges = FileABB | FileHBB | Rank1BB | Rank8BB;
 
     const Square ksq = pos.square<KING>(Us);
     Bitboard kingFlank, weak, b, b1, b2, safe, unsafeChecks;
@@ -477,6 +479,12 @@ namespace {
     // Transform the kingDanger units into a Score, and subtract it from the evaluation
     if (kingDanger > 0)
         score -= make_score(kingDanger * kingDanger / 4096, kingDanger / 16);
+
+    // The king is not in danger, so try some heuristics to improve gameplay
+    // that make sense only if the king is already safe.
+    // Penalty if our king hinders the mobility of a minor.
+    else if ((attackedBy[Us][BISHOP] | attackedBy[Us][KNIGHT]) & ~Edges & ksq)
+        score -= HinderMinor;
 
     // Penalty when our king is on a pawnless flank
     if (!(pos.pieces(PAWN) & kingFlank))
