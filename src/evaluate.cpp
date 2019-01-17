@@ -283,6 +283,8 @@ namespace {
     constexpr Direction Down = (Us == WHITE ? SOUTH : NORTH);
     constexpr Bitboard OutpostRanks = (Us == WHITE ? Rank4BB | Rank5BB | Rank6BB
                                                    : Rank5BB | Rank4BB | Rank3BB);
+    constexpr CastlingRight kside = (Us == WHITE ? WHITE_OO  : BLACK_OO );
+    constexpr CastlingRight qside = (Us == WHITE ? WHITE_OOO : BLACK_OOO);
     const Square* pl = pos.squares<Pt>(Us);
 
     Bitboard b, bb;
@@ -377,7 +379,7 @@ namespace {
             {
                 File kf = file_of(pos.square<KING>(Us));
                 if ((kf < FILE_E) == (file_of(s) < kf))
-                    score -= (TrappedRook - make_score(mob * 22, 0)) * (1 + !pos.castling_rights(Us));
+                    score -= (TrappedRook - make_score(mob * 22, 0)) * (2 + !pos.can_castle(kside) + !pos.can_castle(qside)) / 2;
             }
         }
 
