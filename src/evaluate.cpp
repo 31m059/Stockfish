@@ -483,7 +483,7 @@ namespace {
         score -= PawnlessFlank;
 
     // King tropism bonus, to anticipate slow motion attacks on our king
-    score -= CloseEnemies * std::min(tropism, 12);
+    score -= CloseEnemies * std::min(tropism, 10);
 
     if (T)
         Trace::add(KING, Us, score);
