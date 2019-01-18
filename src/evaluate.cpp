@@ -378,10 +378,9 @@ namespace {
             else if (mob <= 3)
             {
                 File kf = file_of(pos.square<KING>(Us));
-                CastlingRight rookside  = (KingSide & s ? kside : qside);
-                CastlingRight otherside = (KingSide & s ? qside : kside);
+                int castlingFactor = 4 + (pos.can_castle(kside) != pos.can_castle(qside)) + 4 * !pos.castling_rights(Us);
                 if ((kf < FILE_E) == (file_of(s) < kf))
-                    score -= (TrappedRook - make_score(mob * 22, 0)) * (3 + !pos.can_castle(rookside) + 2 * !pos.can_castle(otherside)) / 3;
+                    score -= (TrappedRook - make_score(mob * 22, 0)) * castlingFactor / 4;
             }
         }
 
