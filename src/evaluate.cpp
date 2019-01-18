@@ -477,6 +477,12 @@ namespace {
     // Transform the kingDanger units into a Score, and subtract it from the evaluation
     if (kingDanger > 0)
         score -= make_score(kingDanger * kingDanger / 4096, kingDanger / 16);
+    // The king is not in danger, so try some heuristics to improve gameplay
+    // that make sense only if the king is already safe.
+    // Bonus for threats by the king
+    else if (  pos.pieces(Them) & ~(attackedBy[Them][PAWN] | (attackedBy2[Them] & ~attackedBy2[Us]))
+             & attackedBy[Us][ALL_PIECES] & attackedBy[Us][KING])
+         score += ThreatByKing;
 
     // Penalty when our king is on a pawnless flank
     if (!(pos.pieces(PAWN) & kingFlank))
@@ -541,9 +547,6 @@ namespace {
             if (type_of(pos.piece_on(s)) != PAWN)
                 score += ThreatByRank * (int)relative_rank(Them, s);
         }
-
-        if (weak & attackedBy[Us][KING])
-            score += ThreatByKing;
 
         b =  ~attackedBy[Them][ALL_PIECES]
            | (nonPawnEnemies & attackedBy2[Us]);
