@@ -378,7 +378,7 @@ namespace {
             else if (mob <= 3)
             {
                 File kf = file_of(pos.square<KING>(Us));
-                int castlingFactor = 4 + (pos.can_castle(kside) != pos.can_castle(qside)) + 4 * !pos.castling_rights(Us);
+                int castlingFactor = 4 + 3 * (pos.can_castle(kside) != pos.can_castle(qside)) + 4 * !pos.castling_rights(Us);
                 if ((kf < FILE_E) == (file_of(s) < kf))
                     score -= (TrappedRook - make_score(mob * 22, 0)) * castlingFactor / 4;
             }
