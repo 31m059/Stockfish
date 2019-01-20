@@ -531,9 +531,12 @@ namespace {
     safe = ~attackedBy[Them][ALL_PIECES] | attackedBy[Us][ALL_PIECES];
 
     // Penalty for fawn pawns if they can bring a rook to our back two ranks
-    if (   RookFileAttacks[Them] & ~attackedBy[Us][ALL_PIECES] & TRanks12
+    Bitboard rooks = pos.pieces(Them, ROOK);
+    if (   pos.count<ROOK>(Them) > 1
+        && file_of(lsb(rooks)) == file_of(msb(rooks))
+        && RookFileAttacks[Them] & TRanks12
         && pos.pieces(Them, PAWN) & TRank3BB & ~pe->pawn_attacks_span(Us) & ~pe->passed_pawns(Them))
-        score -= make_score(30, 30);
+        score -= make_score(15, 15);
 
     // Bonus according to the kind of attacking pieces
     if (defended | weak)
