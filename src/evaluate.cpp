@@ -508,7 +508,7 @@ namespace {
     constexpr Color     Them     = (Us == WHITE ? BLACK   : WHITE);
     constexpr Direction Up       = (Us == WHITE ? NORTH   : SOUTH);
     constexpr Bitboard  TRank3BB = (Us == WHITE ? Rank3BB : Rank6BB);
-    constexpr Bitboard  TRanks78 = (Us == WHITE ? Rank7BB | Rank8BB : Rank1BB | Rank2BB);
+    constexpr Bitboard  TRanks12 = (Us == WHITE ? Rank1BB | Rank2BB : Rank7BB | Rank8BB);
 
     Bitboard b, weak, defended, nonPawnEnemies, stronglyProtected, safe, restricted;
     Score score = SCORE_ZERO;
@@ -530,11 +530,9 @@ namespace {
     // Safe or protected squares
     safe = ~attackedBy[Them][ALL_PIECES] | attackedBy[Us][ALL_PIECES];
 
-    // Bonus for fawn pawns if we can bring a rook to the seventh or eighth rank
-    if (   RookFileAttacks[Us] & ~attackedBy[Them][ALL_PIECES] & TRanks78
-        && pos.pieces(Us, PAWN)  & relative_square(Us, SQ_H6)
-        && pos.pieces(~Us, PAWN) & relative_square(Us, SQ_H7)
-        && pos.pieces(~Us, PAWN) & relative_square(Us, SQ_G6))
+    // Penalty for fawn pawns if they can bring a rook to our back two ranks
+    if (   RookFileAttacks[Them] & ~attackedBy[Us][ALL_PIECES] & TRanks12
+        && pos.pieces(Them, PAWN) & TRank3BB & ~pe->pawn_attacks_span(Us) & ~pe->passed_pawns(Them))
         score += make_score(30, 30);
 
     // Bonus according to the kind of attacking pieces
