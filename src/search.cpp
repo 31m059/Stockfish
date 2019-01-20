@@ -973,8 +973,7 @@ moves_loop: // When in check, search starts from here
       // Extension for pawn moves adjacent to pinned pieces
       else if (   type_of(movedPiece) == PAWN
                && !captureOrPromotion
-               && pawn_attack_span(us, to_sq(move)) & pos.blockers_for_king(~us) & pos.pieces(~us)
-               && adjacent_files_bb(file_of(to_sq(move))) & pos.pieces(us, ROOK, QUEEN))
+               && pawn_attack_span(us, to_sq(move)) & pos.blockers_for_king(~us) & pos.pieces(~us))
                extension = ONE_PLY;
 
       // Calculate new depth for this move
