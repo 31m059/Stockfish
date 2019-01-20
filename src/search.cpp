@@ -931,7 +931,9 @@ moves_loop: // When in check, search starts from here
                         && moveCount >= FutilityMoveCounts[improving][depth / ONE_PLY];
 
       // Step 13. Extensions (~70 Elo)
-
+      Direction Up = (us == WHITE ? NORTH : SOUTH);
+      Square to = to_sq(move);
+      
       // Singular extension search (~60 Elo). If all moves but one fail low on a
       // search of (alpha-s, beta-s), and just one fails high on (alpha, beta),
       // then that move is singular and should be extended. To verify this we do
@@ -973,7 +975,7 @@ moves_loop: // When in check, search starts from here
       // Extension for pawn moves adjacent to pinned pieces
       else if (   type_of(movedPiece) == PAWN
                && !captureOrPromotion
-               && pawn_attack_span(us, to_sq(move)) & pos.blockers_for_king(~us) & (pos.pieces(~us) ^ pos.pieces(~us, PAWN)))
+               && (PawnAttacks[us][to] | PawnAttacks[us][to + Up]) & pos.blockers_for_king(~us) & (pos.pieces(~us) ^ pos.pieces(~us, PAWN)))
                extension = ONE_PLY;
 
       // Calculate new depth for this move
