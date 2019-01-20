@@ -1048,6 +1048,9 @@ moves_loop: // When in check, search starts from here
 
           if (!captureOrPromotion)
           {
+              Direction Up = (us == WHITE ? NORTH : SOUTH);
+              Square to = to_sq(move);
+
               // Increase reduction if ttMove is a capture (~0 Elo)
               if (ttCapture)
                   r += ONE_PLY;
@@ -1078,7 +1081,8 @@ moves_loop: // When in check, search starts from here
 
               // Decrease reduction for pawn pushes alongside enemy pinned pieces
               else if (   type_of(movedPiece) == PAWN
-                       && pawn_attack_span(us, to_sq(move)) & pos.blockers_for_king(~us) & (pos.pieces(~us) ^ pos.pieces(~us, PAWN)))
+                      && !captureOrPromotion
+                      && (PawnAttacks[us][to] | PawnAttacks[us][to + Up]) & pos.blockers_for_king(~us) & (pos.pieces(~us) ^ pos.pieces(~us, PAWN)))
                   r -= ONE_PLY;
 
               // Decrease/increase reduction for moves with a good/bad history (~30 Elo)
