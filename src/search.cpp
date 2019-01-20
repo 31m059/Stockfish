@@ -1076,6 +1076,11 @@ moves_loop: // When in check, search starts from here
               else if ((ss-1)->statScore >= 0 && ss->statScore < 0)
                   r += ONE_PLY;
 
+              // Decrease reduction for pawn pushes alongside enemy pinned pieces
+              else if (   type_of(movedPiece) == PAWN
+                       && pawn_attack_span(us, to_sq(move)) & pos.blockers_for_king(~us) & pos.pieces(~us))
+                  r -= ONE_PLY;
+
               // Decrease/increase reduction for moves with a good/bad history (~30 Elo)
               r -= ss->statScore / 20000 * ONE_PLY;
           }
