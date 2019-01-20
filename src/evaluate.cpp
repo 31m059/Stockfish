@@ -533,7 +533,7 @@ namespace {
     // Penalty for fawn pawns if they can bring a rook to our back two ranks
     if (   RookFileAttacks[Them] & ~attackedBy[Us][ALL_PIECES] & TRanks12
         && pos.pieces(Them, PAWN) & TRank3BB & ~pe->pawn_attacks_span(Us) & ~pe->passed_pawns(Them))
-        score += make_score(30, 30);
+        score -= make_score(30, 30);
 
     // Bonus according to the kind of attacking pieces
     if (defended | weak)
