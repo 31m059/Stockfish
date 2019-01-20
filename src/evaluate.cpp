@@ -216,6 +216,10 @@ namespace {
     // and h6.
     Bitboard kingRing[COLOR_NB];
 
+    // RookFileAttacks are the squares attacked along files only
+    // by rooks of the given color.
+    Bitboard RookFileAttacks[COLOR_NB];
+
     // kingAttackersCount[color] is the number of pieces of the given color
     // which attack a square in the kingRing of the enemy king.
     int kingAttackersCount[COLOR_NB];
@@ -244,6 +248,8 @@ namespace {
     constexpr Direction Up   = (Us == WHITE ? NORTH : SOUTH);
     constexpr Direction Down = (Us == WHITE ? SOUTH : NORTH);
     constexpr Bitboard LowRanks = (Us == WHITE ? Rank2BB | Rank3BB: Rank7BB | Rank6BB);
+
+    RookFileAttacks[Us] = 0;
 
     // Find our pawns that are blocked or on the first two ranks
     Bitboard b = pos.pieces(Us, PAWN) & (shift<Down>(pos.pieces()) | LowRanks);
@@ -364,6 +370,8 @@ namespace {
 
         if (Pt == ROOK)
         {
+            RookFileAttacks[Us] |= file_bb(s) & b;
+
             // Bonus for aligning rook with enemy pawns on the same rank/file
             if (relative_rank(Us, s) >= RANK_5)
                 score += RookOnPawn * popcount(pos.pieces(Them, PAWN) & PseudoAttacks[ROOK][s]);
@@ -500,6 +508,7 @@ namespace {
     constexpr Color     Them     = (Us == WHITE ? BLACK   : WHITE);
     constexpr Direction Up       = (Us == WHITE ? NORTH   : SOUTH);
     constexpr Bitboard  TRank3BB = (Us == WHITE ? Rank3BB : Rank6BB);
+    constexpr Bitboard  TRanks78 = (Us == WHITE ? Rank7BB | Rank8BB : Rank1BB | Rank2BB);
 
     Bitboard b, weak, defended, nonPawnEnemies, stronglyProtected, safe, restricted;
     Score score = SCORE_ZERO;
@@ -520,6 +529,13 @@ namespace {
 
     // Safe or protected squares
     safe = ~attackedBy[Them][ALL_PIECES] | attackedBy[Us][ALL_PIECES];
+
+    // Bonus for fawn pawns if we can bring a rook to the seventh or eighth rank
+    if (   RookFileAttacks[Us] & ~attackedBy[Them][ALL_PIECES] & TRanks78
+        && pos.pieces(Us, PAWN)  & relative_square(Us, SQ_H6)
+        && pos.pieces(~Us, PAWN) & relative_square(Us, SQ_H7)
+        && pos.pieces(~Us, PAWN) & relative_square(Us, SQ_G6))
+        score += make_score(30, 30);
 
     // Bonus according to the kind of attacking pieces
     if (defended | weak)
