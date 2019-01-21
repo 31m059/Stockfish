@@ -129,7 +129,12 @@ namespace {
 
         // Score this pawn
         if (support | phalanx)
+        {
             score += Connected[opposed][bool(phalanx)][popcount(support)][relative_rank(Us, s)];
+            if (     theirPawns & (s + Up)
+                && !(theirPawns & pawn_attack_span(Us, s)))
+                score += make_score(0, 15);
+        }
 
         else if (!neighbours)
             score -= Isolated, e->weakUnopposed[Us] += !opposed;
