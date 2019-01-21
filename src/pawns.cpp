@@ -131,7 +131,9 @@ namespace {
         if (support | phalanx)
         {
             score += Connected[opposed][bool(phalanx)][popcount(support)][relative_rank(Us, s)];
-            if (stoppers == SquareBB[s + Up])
+            if (     relative_rank(Us, s) >= RANK_4
+                &&   theirPawns & (s + Up)
+                && !(theirPawns & pawn_attack_span(Us, s)))
                 score += make_score(0, 15);
         }
 
