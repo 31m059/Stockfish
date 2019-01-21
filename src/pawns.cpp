@@ -133,7 +133,7 @@ namespace {
             score += Connected[opposed][bool(phalanx)][popcount(support)][relative_rank(Us, s)];
             if (     theirPawns & (s + Up)
                 && !(theirPawns & pawn_attack_span(Us, s)))
-                score += make_score(0, 45);
+                score += make_score(0, 60);
         }
 
         else if (!neighbours)
