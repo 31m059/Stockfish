@@ -131,10 +131,9 @@ namespace {
         if (support | phalanx)
         {
             score += Connected[opposed][bool(phalanx)][popcount(support)][relative_rank(Us, s)];
-            if (     support
-                &&   theirPawns & (s + Up)
+            if (     theirPawns & (s + Up)
                 && !(theirPawns & pawn_attack_span(Us, s)))
-                score += make_score(0, 30);
+                score += make_score(0, 45);
         }
 
         else if (!neighbours)
