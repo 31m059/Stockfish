@@ -135,7 +135,7 @@ namespace {
             score -= Isolated, e->weakUnopposed[Us] += !opposed;
 
         else if (backward)
-            score -= Backward / (more_than_one(stoppers) ? 1 : 2), e->weakUnopposed[Us] += !opposed;
+            score -= Backward * more_than_one(stoppers), e->weakUnopposed[Us] += !opposed;
 
         if (doubled && !support)
             score -= Doubled;
