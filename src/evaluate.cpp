@@ -379,7 +379,7 @@ namespace {
             {
                 File kf = file_of(pos.square<KING>(Us));
                 if ((kf < FILE_E) == (file_of(s) < kf))
-                    score -= TrappedRook * (2 + !pos.can_castle(kside) + !pos.can_castle(qside)) / 2;
+                    score -= TrappedRook * (1 + !pos.can_castle(kside) + !pos.can_castle(qside));
             }
         }
 
