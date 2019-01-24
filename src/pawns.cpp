@@ -135,7 +135,7 @@ namespace {
             score -= Isolated, e->weakUnopposed[Us] += !opposed;
 
         else if (backward)
-            score -= Backward * more_than_one(stoppers), e->weakUnopposed[Us] += !opposed;
+            score -= Backward / (f == FILE_A || f == FILE_H ? 2 : 1), e->weakUnopposed[Us] += !opposed;
 
         if (doubled && !support)
             score -= Doubled;
