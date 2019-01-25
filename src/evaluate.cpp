@@ -341,6 +341,9 @@ namespace {
 
                 score -= BishopPawns * pe->pawns_on_same_color_squares(Us, s)
                                      * (1 + popcount(blocked & CenterFiles));
+                // Bonus for having a bishop when we have 7th-rank passed pawns
+                constexpr Bitboard TRank7BB = (Us == WHITE ? Rank7BB : Rank2BB);
+                score += BishopPawns * popcount(TRank7BB & pos.pieces(Us, PAWN));
 
                 // Bonus for bishop on a long diagonal which can "see" both center squares
                 if (more_than_one(attacks_bb<BISHOP>(s, pos.pieces(PAWN)) & Center))
