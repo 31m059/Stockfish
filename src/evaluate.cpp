@@ -283,7 +283,7 @@ namespace {
     constexpr Direction Down = (Us == WHITE ? SOUTH : NORTH);
     constexpr Bitboard OutpostRanks = (Us == WHITE ? Rank4BB | Rank5BB | Rank6BB
                                                    : Rank5BB | Rank4BB | Rank3BB);
-    constexpr Bitboard HighRanks = (Us == WHITE ? Rank6BB | Rank7BB: Rank2BB | Rank3BB);
+    constexpr Bitboard HighRanks = (Us == WHITE ? Rank7BB : Rank2BB);
     const Square* pl = pos.squares<Pt>(Us);
 
     Bitboard b, bb;
