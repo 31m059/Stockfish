@@ -135,7 +135,13 @@ namespace {
             score -= Isolated, e->weakUnopposed[Us] += !opposed;
 
         else if (backward)
-            score -= Backward, e->weakUnopposed[Us] += !opposed;
+        {
+            e->weakUnopposed[Us] += !opposed;
+            if (!more_than_one(stoppers))
+                score -= Backward - make_score(0, 2 * relative_rank(Us, s));
+            else
+                score -= Backward;
+        }
 
         if (doubled && !support)
             score -= Doubled;
