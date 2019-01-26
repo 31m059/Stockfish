@@ -138,7 +138,7 @@ namespace {
         {
             e->weakUnopposed[Us] += !opposed;
             if (f == FILE_A || f == FILE_H)
-                score -= Backward - make_score(0, 2 * relative_rank(Us, s));
+                score -= Backward - make_score(0, -25 / relative_rank(Us, s) + 15);
             else
                 score -= Backward;
         }
