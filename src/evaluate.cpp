@@ -330,9 +330,6 @@ namespace {
             if (shift<Down>(pos.pieces(PAWN)) & s)
                 score += MinorBehindPawn;
 
-            // Penalty if the piece is far from the king
-            score -= KingProtector * distance(s, pos.square<KING>(Us));
-
             if (Pt == BISHOP)
             {
                 // Penalty according to number of pawns on the same color square as the
@@ -476,7 +473,16 @@ namespace {
 
     // Transform the kingDanger units into a Score, and subtract it from the evaluation
     if (kingDanger > 0)
+    {
         score -= make_score(kingDanger * kingDanger / 4096, kingDanger / 16);
+        b = pos.pieces(Us, BISHOP, KNIGHT);
+        while (b)
+        {
+            // Penalty if the piece is far from the king
+            Square s = pop_lsb(&b);
+            score -= KingProtector * distance(s, ksq);
+        }
+    }
 
     // Penalty when our king is on a pawnless flank
     if (!(pos.pieces(PAWN) & kingFlank))
