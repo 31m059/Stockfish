@@ -69,7 +69,7 @@ struct Entry {
   Score kingSafety[COLOR_NB];
   int8_t weakUnopposed[COLOR_NB];
   int8_t castlingRights[COLOR_NB];
-  uint8_t semiopenFiles[COLOR_NB];
+  int semiopenFiles[COLOR_NB];
   int8_t pawnsOnSquares[COLOR_NB][COLOR_NB]; // [color][light/dark squares]
   int8_t asymmetry;
 };
