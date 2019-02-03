@@ -328,7 +328,7 @@ namespace {
 
             // Knight and Bishop bonus for being right behind a pawn
             if (    shift<Down>(pos.pieces(Them, PAWN)) & s
-                || (relative_rank(Us, s) > RANK_1 && shift<Down>(pos.pieces(Us, PAWN)) & s))
+                || (relative_rank(Us, s) > RANK_2 && shift<Down>(pos.pieces(Us, PAWN)) & s))
                 score += MinorBehindPawn;
 
             // Penalty if the piece is far from the king
