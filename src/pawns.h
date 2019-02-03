@@ -69,9 +69,14 @@ struct Entry {
   Score kingSafety[COLOR_NB];
   int weakUnopposed[COLOR_NB];
   int castlingRights[COLOR_NB];
-  int semiopenFiles[COLOR_NB];
   int pawnsOnSquares[COLOR_NB][COLOR_NB]; // [color][light/dark squares]
   int asymmetry;
+
+  // semiopenFiles[color] describes the semi-open files of the given color.
+  // Squares on ranks 2 through 8 are always false (0), and all true (1) values, if any,
+  // are located on White's home rank (A1 to H1) for both semiopenFiles[WHITE] and semiopenFiles[BLACK].
+  // Squares on this rank are true (1) if and only if the file is semi-open for the given color.
+  Bitboard semiopenFiles[COLOR_NB];
 };
 
 typedef HashTable<Entry, 16384> Table;
