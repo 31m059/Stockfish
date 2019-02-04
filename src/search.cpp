@@ -1039,6 +1039,13 @@ moves_loop: // When in check, search starts from here
           if ((ss-1)->moveCount > 15)
               r -= ONE_PLY;
 
+          // Less reduction in case of perpetual threat
+          Bitboard enemyCheckers = pos.checkers() & pos.pieces(~us);
+          if (   inCheck
+              && !more_than_one(enemyCheckers)
+              && !(DistanceRingBB[pos.square<KING>(us)][1] & enemyCheckers))
+              r -= ONE_PLY;
+
           if (!captureOrPromotion)
           {
               // Increase reduction if ttMove is a capture (~0 Elo)
