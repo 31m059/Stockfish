@@ -331,7 +331,7 @@ namespace {
                 score += MinorBehindPawn;
 
             // Penalty if the piece is far from the king
-            score -= KingProtector * distance(s, pos.square<KING>(Us));
+            score -= KingProtector * std::max(distance(s, pos.square<KING>(Us)), 2);
 
             if (Pt == BISHOP)
             {
