@@ -1040,10 +1040,8 @@ moves_loop: // When in check, search starts from here
               r -= ONE_PLY;
 
           // Less reduction in case of perpetual threat
-          Bitboard enemyCheckers = pos.checkers() & pos.pieces(~us);
           if (   inCheck
-              && !more_than_one(enemyCheckers)
-              && !(DistanceRingBB[pos.square<KING>(us)][1] & enemyCheckers))
+              && !(pos.pieces(PAWN) & pos.checkers()))
               r -= ONE_PLY;
 
           if (!captureOrPromotion)
