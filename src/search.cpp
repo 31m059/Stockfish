@@ -1041,7 +1041,7 @@ moves_loop: // When in check, search starts from here
 
           // Less reduction in case of perpetual threat
           if (   inCheck
-              && pos.pieces(QUEEN) & pos.checkers())
+              && !(pos.pieces(~us) & DistanceRingBB[pos.square<KING>(~us)][1]))
               r -= ONE_PLY;
 
           if (!captureOrPromotion)
