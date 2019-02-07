@@ -343,7 +343,7 @@ namespace {
 
                 score -= BishopPawns * pe->pawns_on_same_color_squares(Us, s)
                                      * (1 + popcount(blocked & CenterFiles))
-                                     / (b & WhiteHalf && b & BlackHalf ? 2 : 1);
+                                     * (b & WhiteHalf && b & BlackHalf ? 1 : 2);
 
                 // Bonus for bishop on a long diagonal which can "see" both center squares
                 if (more_than_one(attacks_bb<BISHOP>(s, pos.pieces(PAWN)) & Center))
