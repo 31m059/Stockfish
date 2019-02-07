@@ -544,6 +544,10 @@ namespace {
         while (b)
         {
             Square s = pop_lsb(&b);
+            if (   relative_rank(Them, s) >= RANK_6
+                && attackedBy[Them][PAWN] & ~attackedBy2[Us] & s
+                && !(pos.pieces(Us, PAWN) & passed_pawn_mask(Them, s)))
+                 continue;
             score += ThreatByMinor[type_of(pos.piece_on(s))];
             if (type_of(pos.piece_on(s)) != PAWN)
                 score += ThreatByRank * (int)relative_rank(Them, s);
