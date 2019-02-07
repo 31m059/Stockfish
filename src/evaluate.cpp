@@ -320,8 +320,10 @@ namespace {
         {
             // Bonus if piece is on an outpost square or can reach one
             bb = OutpostRanks & ~pe->pawn_attacks_span(Them);
+            bool SiberianOutpost =   !(b & KingFlank[Them]
+                                  || b & pos.pieces(Them) & ~(pos.pieces(Them, PAWN) & attackedBy[Them][PAWN]));
             if (bb & s)
-                score += Outpost[Pt == BISHOP][bool(attackedBy[Us][PAWN] & s)] * 2;
+                score += Outpost[Pt == BISHOP][bool(attackedBy[Us][PAWN] & s)] * (SiberianOutpost ? 1 : 2);
 
             else if (bb &= b & ~pos.pieces(Us))
                 score += Outpost[Pt == BISHOP][bool(attackedBy[Us][PAWN] & bb)];
