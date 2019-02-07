@@ -283,6 +283,8 @@ namespace {
     constexpr Direction Down = (Us == WHITE ? SOUTH : NORTH);
     constexpr Bitboard OutpostRanks = (Us == WHITE ? Rank4BB | Rank5BB | Rank6BB
                                                    : Rank5BB | Rank4BB | Rank3BB);
+    constexpr Bitboard WhiteHalf = Rank1BB | Rank2BB | Rank3BB | Rank4BB;
+    constexpr Bitboard BlackHalf = Rank5BB | Rank6BB | Rank7BB | Rank8BB;
     const Square* pl = pos.squares<Pt>(Us);
 
     Bitboard b, bb;
@@ -340,7 +342,8 @@ namespace {
                 Bitboard blocked = pos.pieces(Us, PAWN) & shift<Down>(pos.pieces());
 
                 score -= BishopPawns * pe->pawns_on_same_color_squares(Us, s)
-                                     * (1 + popcount(blocked & CenterFiles));
+                                     * (1 + popcount(blocked & CenterFiles))
+                                     / (b & WhiteHalf && b & BlackHalf ? 2 : 1);
 
                 // Bonus for bishop on a long diagonal which can "see" both center squares
                 if (more_than_one(attacks_bb<BISHOP>(s, pos.pieces(PAWN)) & Center))
