@@ -317,12 +317,19 @@ namespace {
             // Bonus if piece is on an outpost square or can reach one
             bb = OutpostRanks & ~pe->pawn_attacks_span(Them);
             if (bb & s)
-                score += Outpost * (Pt == KNIGHT ? 4 : 2)
-                                 * (1 + bool(attackedBy[Us][PAWN] & s));
+            {
+                int pieceDist = 8;
+                Bitboard enemies = pos.pieces(Them) ^ pos.pieces(Them, PAWN);
+                while (enemies && pieceDist > 3)
+                {
+                    Square enemy = pop_lsb(&enemies);
+                    pieceDist = std::min(pieceDist, distance(s, enemy));
+                }
+                score += Outpost * (Pt == KNIGHT ? 2 : 1) * (attackedBy[Us][PAWN] & s  ? 2 : 1) * (pieceDist <= 3 ? 2 : 1);
+            }
 
             else if (bb &= b & ~pos.pieces(Us))
-                score += Outpost * (Pt == KNIGHT ? 2 : 1)
-                                 * (1 + bool(attackedBy[Us][PAWN] & bb));
+                score += Outpost * (Pt == KNIGHT ? 2 : 1) * (attackedBy[Us][PAWN] & bb ? 2 : 1);
 
             // Knight and Bishop bonus for being right behind a pawn
             if (shift<Down>(pos.pieces(PAWN)) & s)
