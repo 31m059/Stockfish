@@ -319,9 +319,15 @@ namespace {
         if (Pt == BISHOP || Pt == KNIGHT)
         {
             // Bonus if piece is on an outpost square or can reach one
+            constexpr Bitboard FilesABBB = FileABB | FileBBB;
+            constexpr Bitboard FilesGHBB = FileGBB | FileHBB;
+            Square theirksq = pos.square<KING>(Them);
+
             bb = OutpostRanks & ~pe->pawn_attacks_span(Them);
+            bool SiberianOutpost =   (FilesABBB & s && FilesGHBB & theirksq)
+                                  || (FilesGHBB & s && FilesABBB & theirksq);
             if (bb & s)
-                score += Outpost[Pt == BISHOP][bool(attackedBy[Us][PAWN] & s)] * 2;
+                score += Outpost[Pt == BISHOP][bool(attackedBy[Us][PAWN] & s)] * (SiberianOutpost ? 1 : 2);
 
             else if (bb &= b & ~pos.pieces(Us))
                 score += Outpost[Pt == BISHOP][bool(attackedBy[Us][PAWN] & bb)];
