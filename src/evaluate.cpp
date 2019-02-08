@@ -323,7 +323,7 @@ namespace {
             bool SiberianOutpost =   !(distance(s, pos.square<KING>(Them)) <= 4
                                   || b & pos.pieces(Them) & ~(pos.pieces(Them, PAWN) & attackedBy[Them][PAWN]));
             if (bb & s)
-                score += Outpost[Pt == BISHOP][bool(attackedBy[Us][PAWN] & s)] * (SiberianOutpost ? 1 : 2);
+                score += Outpost[Pt == BISHOP][bool(attackedBy[Us][PAWN] & s)] * (SiberianOutpost ? 3 : 4) / 2;
 
             else if (bb &= b & ~pos.pieces(Us))
                 score += Outpost[Pt == BISHOP][bool(attackedBy[Us][PAWN] & bb)];
