@@ -561,7 +561,7 @@ namespace {
         if (weak & attackedBy[Us][KING])
             score += ThreatByKing;
 
-        if (pe->backward_pawns(Them) & attackedBy[Us][BISHOP] & attackedBy[Them][BISHOP])
+        if (pos.pieces(Them, PAWN) & attackedBy[Us][BISHOP] & attackedBy[Them][BISHOP] & ~attackedBy[Them][PAWN] & shift<Up>(pos.pieces(Us)))
             score += make_score(15, 15);
 
         b =  ~attackedBy[Them][ALL_PIECES]
