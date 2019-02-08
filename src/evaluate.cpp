@@ -562,7 +562,7 @@ namespace {
             score += ThreatByKing;
 
         if (pos.pieces(Them, PAWN) & attackedBy[Us][BISHOP] & attackedBy[Them][BISHOP] & ~attackedBy[Them][PAWN] & shift<Up>(pos.pieces(Us)))
-            score += make_score(25, 25);
+            score += make_score(35, 35);
 
         b =  ~attackedBy[Them][ALL_PIECES]
            | (nonPawnEnemies & attackedBy2[Us]);
