@@ -325,7 +325,7 @@ namespace {
                     Square enemy = pop_lsb(&enemies);
                     pieceDist = std::min(pieceDist, distance(s, enemy));
                 }
-                score += Outpost * (Pt == KNIGHT ? 2 : 1) * (attackedBy[Us][PAWN] & s  ? 2 : 1) * (pieceDist <= 3 ? 2 : 1);
+                score += Outpost * (Pt == KNIGHT ? 2 : 1) * (attackedBy[Us][PAWN] & s  ? 2 : 1) * (pieceDist <= 3 || relative_rank(Us, s) != RANK_6 ? 2 : 1);
             }
 
             else if (bb &= b & ~pos.pieces(Us))
