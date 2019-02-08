@@ -327,7 +327,7 @@ namespace {
             bool SiberianOutpost =   (FilesABBB & s && FilesGHBB & theirksq)
                                   || (FilesGHBB & s && FilesABBB & theirksq);
             if (bb & s)
-                score += Outpost[Pt == BISHOP][bool(attackedBy[Us][PAWN] & s)] * (SiberianOutpost ? 1 : 2);
+                score += Outpost[Pt == BISHOP][bool(attackedBy[Us][PAWN] & s)] * (relative_rank(Us, s) == RANK_6 && SiberianOutpost ? 1 : 2);
 
             else if (bb &= b & ~pos.pieces(Us))
                 score += Outpost[Pt == BISHOP][bool(attackedBy[Us][PAWN] & bb)];
