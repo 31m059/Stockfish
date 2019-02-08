@@ -561,6 +561,9 @@ namespace {
         if (weak & attackedBy[Us][KING])
             score += ThreatByKing;
 
+        if (pe->backward_pawns(Them) & attackedBy[Us][BISHOP] & attackedBy[Them][BISHOP])
+            score += make_score(15, 15);
+
         b =  ~attackedBy[Them][ALL_PIECES]
            | (nonPawnEnemies & attackedBy2[Us]);
         score += Hanging * popcount(weak & b);
