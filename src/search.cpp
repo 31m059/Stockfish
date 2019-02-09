@@ -1047,7 +1047,8 @@ moves_loop: // When in check, search starts from here
 
               // Less reduction for pawn moves near the king
               if (   type_of(movedPiece) == PAWN
-                  && file_of(to_sq(move)) == file_of(pos.square<KING>(~us))
+                  && pos.non_pawn_material(us) > RookValueMg + 2 * KnightValueMg
+                  && std::abs(file_of(to_sq(move)) - file_of(pos.square<KING>(~us))) <= 1
                   && std::abs(rank_of(to_sq(move)) - rank_of(pos.square<KING>(~us))) <= 3)
                   r -= ONE_PLY;
 
