@@ -960,7 +960,8 @@ moves_loop: // When in check, search starts from here
           extension = ONE_PLY;
 
       // Extension for captures that create passed pawns
-      else if (pos.pieces(~us, PAWN) & to_sq(move))
+      else if (   type_of(movedPiece) != PAWN
+               && pos.pieces(~us, PAWN) & to_sq(move))
       {
           Bitboard pawns = file_bb(to_sq(move));
           pawns = (shift<WEST>(pawns) | shift<EAST>(pawns)) & pos.pieces(us, PAWN);
