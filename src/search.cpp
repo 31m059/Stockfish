@@ -959,6 +959,19 @@ moves_loop: // When in check, search starts from here
       else if (type_of(move) == CASTLING)
           extension = ONE_PLY;
 
+      // Extension for captures that create passed pawns
+      else if (pos.pieces(~us, PAWN) & to_sq(move))
+      {
+          Bitboard pawns = file_bb(to_sq(move));
+          pawns = (shift<WEST>(pawns) | shift<EAST>(pawns)) & pos.pieces(us, PAWN);
+          while (pawns)
+          {
+              Square pawn = pop_lsb(&pawns);
+              if ((passed_pawn_mask(us, pawn) & pos.pieces(~us, PAWN)) == SquareBB[to_sq(move)])
+                  extension = ONE_PLY;
+          }
+      }
+
       // Calculate new depth for this move
       newDepth = depth - ONE_PLY + extension;
 
