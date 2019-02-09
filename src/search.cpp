@@ -1047,10 +1047,10 @@ moves_loop: // When in check, search starts from here
 
               // Less reduction for pawn moves near the king
               if (   type_of(movedPiece) == PAWN
-                  && relative_rank(us, to_sq(move)) < relative_rank(us, pos.square<KING>(~us))
-                  && file_of(to_sq(move)) == file_of(pos.square<KING>(~us))
+                  && pos.non_pawn_material(us) > RookValueMg + 2 * KnightValueMg
+                  && std::abs(file_of(to_sq(move)) - file_of(pos.square<KING>(~us))) <= 1
                   && std::abs(rank_of(to_sq(move)) - rank_of(pos.square<KING>(~us))) <= 3)
-                  r -= ONE_PLY;
+                  r -= 2 * ONE_PLY;
 
               // Decrease reduction for moves that escape a capture. Filter out
               // castling moves, because they are coded as "king captures rook" and
