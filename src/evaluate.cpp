@@ -325,7 +325,8 @@ namespace {
                                  * (1 + bool(attackedBy[Us][PAWN] & bb));
 
             // Knight and Bishop bonus for being right behind a pawn
-            if (shift<Down>(pos.pieces(PAWN)) & s)
+            if (    shift<Down>(pos.pieces(Them, PAWN)) & s
+                || (shift<Down>(pos.pieces(Us, PAWN)) & s && pos.pieces(Us, PAWN) & adjacent_files_bb(file_of(s))))
                 score += MinorBehindPawn;
 
             // Penalty if the piece is far from the king
