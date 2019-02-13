@@ -664,7 +664,14 @@ namespace {
                     defendedSquares &= attackedBy[Us][ALL_PIECES];
 
                 if (!(pos.pieces(Them) & bb))
-                    unsafeSquares &= (attackedBy[Them][ALL_PIECES] | pos.pieces(Them)) & ~attackedBy[Us][PAWN];
+                    unsafeSquares &= attackedBy[Them][ALL_PIECES] | pos.pieces(Them);
+
+                Bitboard defendingPawns = adjacent_files_bb(file_of(s)) & pos.pieces(Us, PAWN) & ~pe->passed_pawns(Us);
+                while (defendingPawns)
+                {
+                    Square defendingPawn = pop_lsb(&defendingPawns);
+                    unsafeSquares &= ~PawnAttacks[Us][defendingPawn];
+                }
 
                 // If there aren't any enemy attacks, assign a big bonus. Otherwise
                 // assign a smaller bonus if the block square isn't attacked.
