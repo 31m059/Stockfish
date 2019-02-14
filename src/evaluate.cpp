@@ -687,6 +687,11 @@ namespace {
         if (   !pos.pawn_passed(Us, s + Up)
             || (pos.pieces(PAWN) & forward_file_bb(Us, s)))
             bonus = bonus / 2;
+        // More bonus in the MG for a well protected passed pawn
+        else if (((attackedBy2[Us] & ~attackedBy2[Them])
+               | (attackedBy[Us][ALL_PIECES] & ~attackedBy[Them][ALL_PIECES])
+               |  attackedBy[Us][PAWN]) & s)
+            bonus += bonus / 16 ;
 
         score += bonus + PassedFile[file_of(s)];
     }
