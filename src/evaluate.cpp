@@ -690,7 +690,7 @@ namespace {
             if (((attackedBy2[Us] & ~attackedBy2[Them])
                | (attackedBy[Us][ALL_PIECES] & ~attackedBy[Them][ALL_PIECES])
                |  attackedBy[Us][PAWN]) & s)
-               bonus += bonus / 16;
+               bonus += bonus / 8;
             
             bonus = bonus / 2;
         }
