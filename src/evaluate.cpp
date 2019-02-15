@@ -125,11 +125,11 @@ namespace {
   // which piece type attacks which one. Attacks on lesser pieces which are
   // pawn-defended are not considered.
   constexpr Score ThreatByMinor[PIECE_TYPE_NB] = {
-    S(0, 0), S(0, 31), S(39, 42), S(57, 44), S(68, 112), S(62, 120)
+    S(0, 0), S(6, 31), S(39, 42), S(57, 44), S(68, 112), S(62, 120)
   };
 
   constexpr Score ThreatByRook[PIECE_TYPE_NB] = {
-    S(0, 0), S(0, 24), S(38, 71), S(38, 61), S(0, 38), S(51, 38)
+    S(0, 0), S(6, 24), S(38, 71), S(38, 61), S(0, 38), S(51, 38)
   };
 
   // PassedRank[Rank] contains a bonus according to the rank of a passed pawn
@@ -320,7 +320,7 @@ namespace {
                 score += Outpost * (Pt == KNIGHT ? 4 : 2)
                                  * (1 + bool(attackedBy[Us][PAWN] & s));
 
-            else if (bb &= b & ~pos.pieces(Us))
+            else if (bb &= b & ~pos.pieces())
                 score += Outpost * (Pt == KNIGHT ? 2 : 1)
                                  * (1 + bool(attackedBy[Us][PAWN] & bb));
 
