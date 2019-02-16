@@ -1043,8 +1043,7 @@ moves_loop: // When in check, search starts from here
                 lazy = me->evaluate(pos);
               else
               {
-                  Pawns::Entry* pe = Pawns::probe(pos);
-                  lazy = mg_value(pos.psq_score() + me->imbalance() + pos.this_thread()->contempt + pe->pawn_score(WHITE) - pe->pawn_score(BLACK));
+                  lazy = mg_value(pos.psq_score() + me->imbalance() + pos.this_thread()->contempt);
               }
               lazy = (us == WHITE ? lazy : -lazy);
 
