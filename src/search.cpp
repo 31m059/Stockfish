@@ -1035,6 +1035,23 @@ moves_loop: // When in check, search starts from here
           if ((ss-1)->moveCount > 15)
               r -= ONE_PLY;
 
+          if (pos.non_pawn_material(us) > 5000)
+          {
+              Value lazy;
+              Material::Entry* me = Material::probe(pos);
+              if (me->specialized_eval_exists())
+                lazy = me->evaluate(pos);
+              else
+              {
+                  Pawns::Entry* pe = Pawns::probe(pos);
+                  lazy = mg_value(pos.psq_score() + me->imbalance() + pos.this_thread()->contempt + pe->pawn_score(WHITE) - pe->pawn_score(BLACK));
+              }
+              lazy = (us == WHITE ? lazy : -lazy);
+
+              if (eval > lazy + 200)
+                  r -= ONE_PLY;
+          }
+
           if (!captureOrPromotion)
           {
               // Increase reduction if ttMove is a capture (~0 Elo)
