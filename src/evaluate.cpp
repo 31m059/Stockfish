@@ -374,9 +374,9 @@ namespace {
             else if (mob <= 3)
             {
                 File kf = file_of(pos.square<KING>(Us));
-                bool fawn = attackedBy[Them][PAWN] & (attackedBy[Us][KING] | b) & (Us == WHITE ? Rank2BB : Rank7BB);
+                bool fawn = attackedBy[Them][PAWN] & (attackedBy[Us][KING] | b) & ~pos.pieces(Us) & (Us == WHITE ? Rank2BB : Rank7BB);
                 if ((kf < FILE_E) == (file_of(s) < kf))
-                    score -= TrappedRook * (1 + !pos.castling_rights(Us)) * (2 + fawn) / 2;
+                    score -= TrappedRook * (1 + !pos.castling_rights(Us)) * (1 + fawn);
             }
         }
 
