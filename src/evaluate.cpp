@@ -317,8 +317,15 @@ namespace {
             // Bonus if piece is on an outpost square or can reach one
             bb = OutpostRanks & ~pe->pawn_attacks_span(Them);
             if (bb & s)
+            {
+                bool pawnDefended = attackedBy[Us][PAWN] & s;
+                bool futurePasser =   pawnDefended
+                                   && relative_rank(Us, s) == RANK_6
+                                   && pos.pieces(Them, KNIGHT) | (pos.pieces(Them, BISHOP) & (DarkSquares & s ? DarkSquares : ~DarkSquares))
+                                   && !(pos.pieces(Them, PAWN) & forward_file_bb(Us, s));
                 score += Outpost * (Pt == KNIGHT ? 4 : 2)
-                                 * (1 + bool(attackedBy[Us][PAWN] & s));
+                                 * (1 + pawnDefended + futurePasser);
+            }
 
             else if (bb &= b & ~pos.pieces(Us))
                 score += Outpost * (Pt == KNIGHT ? 2 : 1)
