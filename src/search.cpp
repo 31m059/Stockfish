@@ -957,7 +957,13 @@ moves_loop: // When in check, search starts from here
 
       // Castling extension
       else if (type_of(move) == CASTLING)
+      {
           extension = ONE_PLY;
+          // Even more extension if enemy fawn pawn
+          if (   (to_sq(move) == relative_square(us, SQ_H1) && pos.pieces(~us, PAWN) & relative_square(us, SQ_H3))
+              || (to_sq(move) == relative_square(us, SQ_A1) && pos.pieces(~us, PAWN) & relative_square(us, SQ_A3)))
+            extension += ONE_PLY;
+      }
 
       // Calculate new depth for this move
       newDepth = depth - ONE_PLY + extension;
