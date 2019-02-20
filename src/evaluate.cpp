@@ -326,7 +326,7 @@ namespace {
                 score += Outpost * (Pt == KNIGHT ? 4 : 2)
                                  * (1 + pawnDefended);
                 if (futurePasser)
-                    score += make_score(10, 10);
+                    score += make_score(10, 0);
             }
 
             else if (bb &= b & ~pos.pieces(Us))
