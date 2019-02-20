@@ -324,7 +324,9 @@ namespace {
                                    && pos.pieces(Them, KNIGHT) | (pos.pieces(Them, BISHOP) & (DarkSquares & s ? DarkSquares : ~DarkSquares))
                                    && !(pos.pieces(Them, PAWN) & forward_file_bb(Us, s));
                 score += Outpost * (Pt == KNIGHT ? 4 : 2)
-                                 * (1 + pawnDefended + futurePasser);
+                                 * (1 + pawnDefended);
+                if (futurePasser)
+                    score += make_score(10, 10);
             }
 
             else if (bb &= b & ~pos.pieces(Us))
