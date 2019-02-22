@@ -402,7 +402,7 @@ namespace {
     constexpr Bitboard Camp = (Us == WHITE ? AllSquares ^ Rank6BB ^ Rank7BB ^ Rank8BB
                                            : AllSquares ^ Rank1BB ^ Rank2BB ^ Rank3BB);
 
-    Bitboard weak, b, b1, b2, safe, unsafeChecks = 0;
+    Bitboard weak, b1, b2, safe, unsafeChecks = 0;
     int kingDanger = 0;
     const Square ksq = pos.square<KING>(Us);
 
@@ -427,7 +427,7 @@ namespace {
                         & attackedBy[Them][ROOK];
 
     if (RookCheck)
-        kingDanger += RookSafeCheck;
+        kingDanger += RookSafeCheck * (!(RookCheck & ~(pos.pieces(Us) ^ pos.pieces(Us, PAWN))) ? 3 : 4) / 4;
     else
         unsafeChecks |= b1 & attackedBy[Them][ROOK];
 
@@ -440,7 +440,7 @@ namespace {
                          & ~RookCheck;
 
     if (QueenCheck)
-        kingDanger += QueenSafeCheck;
+        kingDanger += QueenSafeCheck * (!(QueenCheck & ~(pos.pieces(Us) ^ pos.pieces(Us, PAWN))) ? 3 : 4) / 4;
 
     // Enemy bishops checks: we count them only if they are from squares from
     // which we can't give a queen check, because queen checks are more valuable.
@@ -450,17 +450,17 @@ namespace {
                           & ~QueenCheck;
 
     if (BishopCheck)
-        kingDanger += BishopSafeCheck;
+        kingDanger += BishopSafeCheck * (!(BishopCheck & ~(pos.pieces(Us) ^ pos.pieces(Us, PAWN))) ? 3 : 4) / 4;
     else
         unsafeChecks |= b2 & attackedBy[Them][BISHOP];
 
     // Enemy knights checks
-    b = pos.attacks_from<KNIGHT>(ksq) & attackedBy[Them][KNIGHT];
+    Bitboard KnightCheck = pos.attacks_from<KNIGHT>(ksq) & attackedBy[Them][KNIGHT];
 
-    if (b & safe)
-        kingDanger += KnightSafeCheck;
+    if (KnightCheck & safe)
+        kingDanger += KnightSafeCheck * (!(KnightCheck & ~(pos.pieces(Us) ^ pos.pieces(Us, PAWN))) ? 3 : 4) / 4;
     else
-        unsafeChecks |= b;
+        unsafeChecks |= KnightCheck;
 
     // Unsafe or occupied checking squares will also be considered, as long as
     // the square is in the attacker's mobility area.
