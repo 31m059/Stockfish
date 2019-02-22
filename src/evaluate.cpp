@@ -427,7 +427,7 @@ namespace {
                         & attackedBy[Them][ROOK];
 
     if (RookCheck)
-        kingDanger += RookSafeCheck * (!(RookCheck & ~(pos.pieces(Us) ^ pos.pieces(Us, PAWN))) ? 3 : 4) / 4;
+        kingDanger += RookSafeCheck * (!(RookCheck & ~(pos.pieces(Us) ^ pos.pieces(Us, PAWN))) ? 5 : 4) / 4;
     else
         unsafeChecks |= b1 & attackedBy[Them][ROOK];
 
@@ -440,7 +440,7 @@ namespace {
                          & ~RookCheck;
 
     if (QueenCheck)
-        kingDanger += QueenSafeCheck * (!(QueenCheck & ~(pos.pieces(Us) ^ pos.pieces(Us, PAWN))) ? 3 : 4) / 4;
+        kingDanger += QueenSafeCheck * (!(QueenCheck & ~(pos.pieces(Us) ^ pos.pieces(Us, PAWN))) ? 5 : 4) / 4;
 
     // Enemy bishops checks: we count them only if they are from squares from
     // which we can't give a queen check, because queen checks are more valuable.
@@ -450,7 +450,7 @@ namespace {
                           & ~QueenCheck;
 
     if (BishopCheck)
-        kingDanger += BishopSafeCheck;
+        kingDanger += BishopSafeCheck * (!(BishopCheck & ~(pos.pieces(Us) ^ pos.pieces(Us, PAWN))) ? 5 : 4) / 4;
     else
         unsafeChecks |= b2 & attackedBy[Them][BISHOP];
 
@@ -458,7 +458,7 @@ namespace {
     Bitboard KnightCheck = pos.attacks_from<KNIGHT>(ksq) & attackedBy[Them][KNIGHT];
 
     if (KnightCheck & safe)
-        kingDanger += KnightSafeCheck;
+        kingDanger += KnightSafeCheck * (!(KnightCheck & ~(pos.pieces(Us) ^ pos.pieces(Us, PAWN))) ? 5 : 4) / 4;
     else
         unsafeChecks |= KnightCheck;
 
