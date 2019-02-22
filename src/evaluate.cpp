@@ -450,7 +450,7 @@ namespace {
                           & ~QueenCheck;
 
     if (BishopCheck)
-        kingDanger += BishopSafeCheck * (!(BishopCheck & ~(pos.pieces(Us) ^ pos.pieces(Us, PAWN))) ? 3 : 4) / 4;
+        kingDanger += BishopSafeCheck;
     else
         unsafeChecks |= b2 & attackedBy[Them][BISHOP];
 
@@ -458,7 +458,7 @@ namespace {
     Bitboard KnightCheck = pos.attacks_from<KNIGHT>(ksq) & attackedBy[Them][KNIGHT];
 
     if (KnightCheck & safe)
-        kingDanger += KnightSafeCheck * (!(KnightCheck & ~(pos.pieces(Us) ^ pos.pieces(Us, PAWN))) ? 3 : 4) / 4;
+        kingDanger += KnightSafeCheck;
     else
         unsafeChecks |= KnightCheck;
 
