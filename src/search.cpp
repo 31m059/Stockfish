@@ -959,6 +959,13 @@ moves_loop: // When in check, search starts from here
       else if (type_of(move) == CASTLING)
           extension = ONE_PLY;
 
+      else if (   type_of(movedPiece) == PAWN
+              && pos.count<ROOK>() + pos.count<QUEEN>() == 0
+              && PawnAttacks[us][to_sq(move)] &  pos.pieces(~us, PAWN)
+              && PawnAttacks[us][to_sq(move)] & (pos.pieces(~us) ^ pos.pieces(~us, PAWN))
+              && !(pos.pieces(~us, PAWN) & adjacent_files_bb(file_of(to_sq(move))) & ~PawnAttacks[us][to_sq(move)]))
+          extension = ONE_PLY;
+
       // Calculate new depth for this move
       newDepth = depth - ONE_PLY + extension;
 
