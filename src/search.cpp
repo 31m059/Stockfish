@@ -1031,6 +1031,13 @@ moves_loop: // When in check, search starts from here
           // Decrease reduction if opponent's move count is high (~10 Elo)
           if ((ss-1)->moveCount > 15)
               r -= ONE_PLY;
+          
+          if (   type_of(movedPiece) == PAWN
+              && pos.count<ROOK>() + pos.count<QUEEN>() == 0
+              && PawnAttacks[us][to_sq(move)] &  pos.pieces(~us, PAWN)
+              && PawnAttacks[us][to_sq(move)] & (pos.pieces(~us) ^ pos.pieces(~us, PAWN))              
+              && !(pos.pieces(~us, PAWN) & adjacent_files_bb(file_of(to_sq(move))) & ~PawnAttacks[us][to_sq(move)]))
+              r -= ONE_PLY;
 
           if (!captureOrPromotion)
           {
