@@ -70,7 +70,7 @@ namespace {
     Bitboard b, neighbours, stoppers, doubled, support, phalanx;
     Bitboard lever, leverPush;
     Square s;
-    bool opposed, backward;
+    bool opposed, backward, isolated;
     Score score = SCORE_ZERO;
     const Square* pl = pos.squares<PAWN>(Us);
 
@@ -104,6 +104,17 @@ namespace {
         phalanx    = neighbours & rank_bb(s);
         support    = neighbours & rank_bb(s - Up);
 
+        isolated = !neighbours;
+        if (neighbours && !(neighbours & (passed_pawn_mask(Them, s) | PawnAttacks[Us][s])))
+        {
+            Bitboard enemies = lever | leverPush;
+            while (enemies)
+            {
+                Square enemy = pop_lsb(&enemies);
+                isolated |= !more_than_one(passed_pawn_mask(Them, enemy) & ourPawns);
+            }
+        }
+
         // A pawn is backward when it is behind all pawns of the same color
         // on the adjacent files and cannot be safely advanced.
         backward =  !(ourPawns & pawn_attack_span(Them, s + Up))
@@ -131,8 +142,8 @@ namespace {
         if (support | phalanx)
             score += Connected[opposed][bool(phalanx)][popcount(support)][relative_rank(Us, s)];
 
-        else if (!neighbours)
-            score -= Isolated, e->weakUnopposed[Us] += !opposed;
+        else if (isolated)
+            score -= Isolated, e->weakUnopposed[Us] += !neighbours && !opposed;
 
         else if (backward)
             score -= Backward, e->weakUnopposed[Us] += !opposed;
