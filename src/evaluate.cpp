@@ -403,8 +403,9 @@ namespace {
     // Attacked squares defended at most once by our queen or king
     weak =  attackedBy[Them][ALL_PIECES]
           & ~attackedBy2[Us]
-          & (~attackedBy[Us][ALL_PIECES] | attackedBy[Us][KING] | attackedBy[Us][QUEEN])
-          & ~(pos.pieces(Them, PAWN) & (ksq + Up));
+          & (~attackedBy[Us][ALL_PIECES] | attackedBy[Us][KING] | attackedBy[Us][QUEEN]);
+    if (relative_rank(Us, ksq) < RANK_7)
+        weak &= ~(pos.pieces(Them, PAWN) & (ksq + Up));
 
     // Analyse the safe enemy's checks which are possible on next move
     safe  = ~pos.pieces(Them);
