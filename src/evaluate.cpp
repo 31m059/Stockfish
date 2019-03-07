@@ -669,7 +669,7 @@ namespace {
 
                 // Reduce bonus for doubled pawns that have a passed pawn in front of them.
                 if (k > 0 && (forward_file_bb(Us, s) & b))
-                    k -= 6;
+                    k -= 2;
 
                 bonus += make_score(k * w, k * w);
             }
