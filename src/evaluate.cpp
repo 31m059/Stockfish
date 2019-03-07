@@ -667,6 +667,10 @@ namespace {
                 else if (defendedSquares & blockSq)
                     k += 4;
 
+                // Reduce bonus for doubled pawns that have a passed pawn in front of them.
+                if (k > 0 && (forward_file_bb(Us, s) & b))
+                    k -= 6;
+
                 bonus += make_score(k * w, k * w);
             }
         } // rank > RANK_3
