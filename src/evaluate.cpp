@@ -153,6 +153,13 @@ namespace {
   constexpr Score TrappedRook        = S( 47,  4);
   constexpr Score WeakQueen          = S( 49, 15);
   constexpr Score WeakUnopposedPawn  = S( 12, 23);
+  int cKingAttacksCount = 69;
+  int cKingRingWeak = 185;
+  int cAttackedByN = -100;
+  int cKingBlockersUnsafeChecks = 150;
+  int cNoEnemyQueen = -873;
+  int constant = -30;
+  TUNE(cKingAttacksCount, cKingRingWeak, cAttackedByN, cKingBlockersUnsafeChecks, cNoEnemyQueen, constant);
 
 #undef S
 
@@ -390,6 +397,7 @@ namespace {
     constexpr Color    Them = (Us == WHITE ? BLACK : WHITE);
     constexpr Bitboard Camp = (Us == WHITE ? AllSquares ^ Rank6BB ^ Rank7BB ^ Rank8BB
                                            : AllSquares ^ Rank1BB ^ Rank2BB ^ Rank3BB);
+    constexpr Direction Up = (Us == WHITE ? NORTH : SOUTH);
 
     Bitboard weak, b1, b2, safe, unsafeChecks = 0;
     Bitboard rookChecks, queenChecks, bishopChecks, knightChecks;
@@ -403,6 +411,7 @@ namespace {
     weak =  attackedBy[Them][ALL_PIECES]
           & ~attackedBy2[Us]
           & (~attackedBy[Us][ALL_PIECES] | attackedBy[Us][KING] | attackedBy[Us][QUEEN]);
+    weak &= ~(pos.pieces(Them, PAWN) & shift<Up>(pos.pieces(Us, KING)));
 
     // Analyse the safe enemy's checks which are possible on next move
     safe  = ~pos.pieces(Them);
@@ -460,17 +469,16 @@ namespace {
     b2 = b1 & attackedBy2[Them];
 
     int kingFlankAttacks = popcount(b1) + popcount(b2);
-
     kingDanger +=        kingAttackersCount[Them] * kingAttackersWeight[Them]
-                 +  69 * kingAttacksCount[Them]
-                 + 185 * popcount(kingRing[Us] & weak)
-                 - 100 * bool(attackedBy[Us][KNIGHT] & attackedBy[Us][KING])
-                 + 150 * popcount(pos.blockers_for_king(Us) | unsafeChecks)
-                 - 873 * !pos.count<QUEEN>(Them)
+                 + cKingAttacksCount * kingAttacksCount[Them]
+                 + cKingRingWeak * popcount(kingRing[Us] & weak)
+                 + cAttackedByN * bool(attackedBy[Us][KNIGHT] & attackedBy[Us][KING])
+                 + cKingBlockersUnsafeChecks * popcount(pos.blockers_for_king(Us) | unsafeChecks)
+                 + cNoEnemyQueen * !pos.count<QUEEN>(Them)
                  -   6 * mg_value(score) / 8
                  +       mg_value(mobility[Them] - mobility[Us])
                  +   5 * kingFlankAttacks * kingFlankAttacks / 16
-                 -   25;
+                 +   constant;
 
     // Transform the kingDanger units into a Score, and subtract it from the evaluation
     if (kingDanger > 0)
