@@ -198,6 +198,10 @@ namespace {
     // and h6.
     Bitboard kingRing[COLOR_NB];
 
+    // verticalSlider[color] are the squares attacked by a rook or queen of the
+    // given color, along a file rather than a rank or diagonal.
+    Bitboard verticalSlider[COLOR_NB];
+
     // kingAttackersCount[color] is the number of pieces of the given color
     // which attack a square in the kingRing of the enemy king.
     int kingAttackersCount[COLOR_NB];
@@ -228,6 +232,8 @@ namespace {
     constexpr Bitboard LowRanks = (Us == WHITE ? Rank2BB | Rank3BB: Rank7BB | Rank6BB);
 
     const Square ksq = pos.square<KING>(Us);
+
+    verticalSlider[Us] = 0;
 
     // Find our pawns that are blocked or on the first two ranks
     Bitboard b = pos.pieces(Us, PAWN) & (shift<Down>(pos.pieces()) | LowRanks);
@@ -300,6 +306,9 @@ namespace {
         int mob = popcount(b & mobilityArea[Us]);
 
         mobility[Us] += MobilityBonus[Pt - 2][mob];
+
+        if (Pt == ROOK || Pt == QUEEN)
+            verticalSlider[Us] |= b & file_bb(s);
 
         if (Pt == BISHOP || Pt == KNIGHT)
         {
@@ -564,7 +573,7 @@ namespace {
     b |= shift<Up>(b & TRank3BB) & ~pos.pieces();
 
     // Keep only the squares which are relatively safe
-    b &= ~attackedBy[Them][PAWN] & safe;
+    b &= ~attackedBy[Them][PAWN] & (safe | shift<Up>(verticalSlider[Us] & pos.pieces(Us, PAWN)));;
 
     // Bonus for safe pawn threats on the next move
     b = pawn_attacks_bb<Us>(b) & pos.pieces(Them);
