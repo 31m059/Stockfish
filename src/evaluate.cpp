@@ -198,7 +198,7 @@ namespace {
     // and h6.
     Bitboard kingRing[COLOR_NB];
 
-    // verticalSlider[color] are the squares attacked by a rook or queen of the
+    // verticalSlider[color] are the squares attacked by a rook of the
     // given color, along a file rather than a rank or diagonal.
     Bitboard verticalSlider[COLOR_NB];
 
@@ -307,9 +307,6 @@ namespace {
 
         mobility[Us] += MobilityBonus[Pt - 2][mob];
 
-        if (Pt == ROOK || Pt == QUEEN)
-            verticalSlider[Us] |= b & file_bb(s);
-
         if (Pt == BISHOP || Pt == KNIGHT)
         {
             // Bonus if piece is on an outpost square or can reach one
@@ -360,6 +357,8 @@ namespace {
 
         if (Pt == ROOK)
         {
+            verticalSlider[Us] |= b & file_bb(s);
+
             // Bonus for aligning rook with enemy pawns on the same rank/file
             if (relative_rank(Us, s) >= RANK_5)
                 score += RookOnPawn * popcount(pos.pieces(Them, PAWN) & PseudoAttacks[ROOK][s]);
