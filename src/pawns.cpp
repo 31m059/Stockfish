@@ -238,6 +238,7 @@ Score Entry::do_king_safety(const Position& pos) {
   kingSquares[Us] = ksq;
   castlingRights[Us] = pos.castling_rights(Us);
   int minKingPawnDistance = 0;
+  int minKingPawnDistance_final = 0;
 
   Bitboard pawns = pos.pieces(Us, PAWN);
 
@@ -267,9 +268,12 @@ Score Entry::do_king_safety(const Position& pos) {
   }
 
   if (pawns)
-      while (!(DistanceRingBB[final_ksq][++minKingPawnDistance] & pawns)) {}
+  {
+      while (!(DistanceRingBB[ksq][++minKingPawnDistance] & pawns)) {}
+      while (!(DistanceRingBB[final_ksq][++minKingPawnDistance_final] & pawns)) {}
+  }
 
-  return make_score(bonus, -16 * minKingPawnDistance);
+  return make_score(bonus, -16 * (minKingPawnDistance + minKingPawnDistance_final) / 2);
 }
 
 // Explicit template instantiation
