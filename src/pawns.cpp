@@ -223,6 +223,16 @@ Value Entry::evaluate_shelter(const Position& pos, Square ksq) {
       safety -= (ourRank && (ourRank == theirRank - 1)) ? 66 * (theirRank == RANK_3)
                                                         : UnblockedStorm[d][theirRank];
   }
+  
+  Bitboard fawnAttacks = pawn_attacks_bb<Them>(theirPawns) & DistanceRingBB[ksq][1] & (Us == WHITE ? RANK_2 : RANK_7);
+  if (   fawnAttacks
+      && rank_of(ksq) == (Us == WHITE ? RANK_1 : RANK_8)
+      && (file_of(ksq) <= FILE_C || file_of(ksq) >= FILE_F))
+      {
+          Direction toTheMiddle = (file_of(ksq) >= FILE_E ? WEST : EAST);
+          if (evaluate_shelter<Us>(pos, ksq+toTheMiddle) < safety)
+              safety -= 30;
+      }
 
   return safety;
 }
