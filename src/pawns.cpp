@@ -128,7 +128,7 @@ namespace {
         }
 
         // Score this pawn
-        bool pseudofawn = support && opposed && (FileABB | FileHBB) & s;
+        bool pseudofawn = support && !(stoppers & adjacent_files_bb(f)) && (FileABB | FileHBB) & s;
         if (support | phalanx)
             score += Connected[opposed][bool(phalanx) || pseudofawn][popcount(support)][relative_rank(Us, s)];
 
