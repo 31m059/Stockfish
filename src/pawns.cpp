@@ -36,8 +36,8 @@ namespace {
   constexpr Score Doubled  = S(11, 56);
   constexpr Score Isolated = S( 5, 15);
 
-  // Connected pawn bonus by opposed, phalanx, #support and rank
-  Score Connected[2][2][3][RANK_NB];
+  // Connected pawn bonus by opposed, phalanx, edge file, #support and rank
+  Score Connected[2][2][2][3][RANK_NB];
 
   // Strength of pawn shelter for our king by [distance from edge][rank].
   // RANK_1 = 0 is used for files where we have no pawn, or pawn is behind our king.
@@ -90,6 +90,7 @@ namespace {
         assert(pos.piece_on(s) == make_piece(Us, PAWN));
 
         File f = file_of(s);
+        bool edge = f == FILE_A || f == FILE_H;
 
         e->semiopenFiles[Us]   &= ~(1 << f);
         e->pawnAttacksSpan[Us] |= pawn_attack_span(Us, s);
@@ -129,7 +130,7 @@ namespace {
 
         // Score this pawn
         if (support | phalanx)
-            score += Connected[opposed][bool(phalanx)][popcount(support)][relative_rank(Us, s)];
+            score += Connected[opposed][bool(phalanx)][edge][popcount(support)][relative_rank(Us, s)];
 
         else if (!neighbours)
             score -= Isolated, e->weakUnopposed[Us] += !opposed;
@@ -158,13 +159,14 @@ void init() {
 
   for (int opposed = 0; opposed <= 1; ++opposed)
       for (int phalanx = 0; phalanx <= 1; ++phalanx)
-          for (int support = 0; support <= 2; ++support)
-              for (Rank r = RANK_2; r < RANK_8; ++r)
+          for (int edge = 0; edge <= 1; ++edge)
+              for (int support = 0; support <= 2; ++support)
+                  for (Rank r = RANK_2; r < RANK_8; ++r)
   {
       int v = 17 * support;
-      v += (Seed[r] + (phalanx ? (Seed[r + 1] - Seed[r]) / 2 : 0)) >> opposed;
+      v += (Seed[r] + (phalanx || (edge && support > 0) ? (Seed[r + 1] - Seed[r]) / 2 : 0)) >> opposed;
 
-      Connected[opposed][phalanx][support][r] = make_score(v, v * (r - 2) / 4);
+      Connected[opposed][phalanx][edge][support][r] = make_score(v, v * (r - 2) / 4);
   }
 }
 
