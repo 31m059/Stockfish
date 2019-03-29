@@ -460,7 +460,7 @@ namespace {
     b2 = b1 & attackedBy2[Them];
 
     int kingFlankAttacks = popcount(b1) + popcount(b2);
-    int linearFlankAttacks = (pos.pieces(Them, ROOK) ? popcount(pe->semiopenFiles[Them] & KingFlank[file_of(ksq)]) : 0);
+    int linearFlankAttacks = (pos.count<ROOK>(Them) > 1 ? popcount(pe->semiopenFiles[Them] & KingFlank[file_of(ksq)]) : 0);
 
     kingDanger +=        kingAttackersCount[Them] * kingAttackersWeight[Them]
                  +  69 * kingAttacksCount[Them]
