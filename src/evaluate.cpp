@@ -669,6 +669,10 @@ namespace {
                 else if (defendedSquares & blockSq)
                     k += 4;
 
+                // Quadratic bonus if other passed pawns are nearby
+                int passCnt = popcount(pe->passed_pawns(Us) & pos.attacks_from<KING>(s));
+                k += 2 * passCnt * passCnt;
+
                 bonus += make_score(k * w, k * w);
             }
         } // rank > RANK_3
