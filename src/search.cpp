@@ -1022,7 +1022,7 @@ moves_loop: // When in check, search starts from here
                   r += 2 * ONE_PLY;
 
               if (   move == ss->killers[0]
-                  && pos.advanced_pawn_push(move)
+                  && pos.non_pawn_material(us) > RookValueMg + 2 * KnightValueMg
                   && passed_pawn_span(us, to_sq(move)) & pos.pieces(~us, KING))
                   r -= ONE_PLY;
 
