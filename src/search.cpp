@@ -932,7 +932,9 @@ moves_loop: // When in check, search starts from here
       // Passed pawn extension
       else if (   move == ss->killers[0]
                && pos.advanced_pawn_push(move)
-               && (pos.pawn_passed(us, to_sq(move)) || (passed_pawn_span(us, to_sq(move)) & pos.pieces(~us, KING))))
+               && (pos.pawn_passed(us, to_sq(move)) || 
+               (   passed_pawn_span(us, to_sq(move)) & pos.pieces(~us, KING)
+                && pos.non_pawn_material(us) > RookValueMg + 2 * KnightValueMg)))
           extension = ONE_PLY;
 
       // Calculate new depth for this move
