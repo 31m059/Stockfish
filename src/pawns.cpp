@@ -110,7 +110,7 @@ namespace {
         // full attack info to evaluate them. Include also not passed pawns
         // which could become passed after one or two pawn pushes when are
         // not attacked more times than defended.
-        int lp, ph;
+        int lp;
         if (   !(stoppers ^ lever ^ leverPush)
             && (support || !more_than_one(lever))
             && popcount(phalanx | supporting) >= (lp = popcount(leverPush)))

@@ -613,10 +613,11 @@ namespace {
       return std::min(distance(pos.square<KING>(c), s), 5);
     };
 
-    Bitboard b, bb, squaresToQueen, defendedSquares, unsafeSquares;
+    Bitboard b, bb, squaresToQueen, defendedSquares, unsafeSquares, subpassers;
     Score score = SCORE_ZERO;
 
     b = pe->passed_pawns(Us);
+    subpassers = pe->subcandidate_passers(Us);
 
     while (b)
     {
@@ -675,9 +676,9 @@ namespace {
 
         // Scale down bonus for candidate passers which need more than one
         // pawn push to become passed, or have a pawn in front of them.
-        if (   !pos.pawn_passed(Us, s + Up)
-            || (pos.pieces(PAWN) & forward_file_bb(Us, s)))
-            bonus = bonus / (pe->subcandidate_passers(Us) & s ? 4 : 2);
+        if (   (!pos.pawn_passed(Us, s + Up) || (pos.pieces(PAWN) & forward_file_bb(Us, s)))
+            && (!(subpassers & s) || more_than_one(subpassers)))
+            bonus = bonus / 2;
 
         score += bonus + PassedFile[file_of(s)];
     }
