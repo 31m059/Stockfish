@@ -110,12 +110,13 @@ namespace {
         // full attack info to evaluate them. Include also not passed pawns
         // which could become passed after one or two pawn pushes when are
         // not attacked more times than defended.
+        int lp, ph;
         if (   !(stoppers ^ lever ^ leverPush)
             && (support || !more_than_one(lever))
-            && popcount(phalanx | supporting) >= popcount(leverPush))
+            && popcount(phalanx | supporting) >= (lp = popcount(leverPush)))
         {
             e->passedPawns[Us] |= s;
-            if (popcount(phalanx) < popcount(leverPush))
+            if (popcount(phalanx) < lp)
                 e->subcandidatePassers[Us] |= s;
         }
 
