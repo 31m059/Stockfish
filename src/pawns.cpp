@@ -66,7 +66,7 @@ namespace {
     constexpr Color     Them = (Us == WHITE ? BLACK : WHITE);
     constexpr Direction Up   = (Us == WHITE ? NORTH : SOUTH);
 
-    Bitboard b, neighbours, stoppers, doubled, support, phalanx;
+    Bitboard b, neighbours, stoppers, doubled, support, supporting, phalanx;
     Bitboard lever, leverPush;
     Square s;
     bool opposed, backward;
@@ -76,7 +76,7 @@ namespace {
     Bitboard ourPawns   = pos.pieces(  Us, PAWN);
     Bitboard theirPawns = pos.pieces(Them, PAWN);
 
-    e->passedPawns[Us] = e->pawnAttacksSpan[Us] = e->weakUnopposed[Us] = 0;
+    e->passedPawns[Us] = e->pawnAttacksSpan[Us] = e->weakUnopposed[Us] = e->subcandidatePassers[Us] = 0;
     e->kingSquares[Us]   = SQ_NONE;
     e->pawnAttacks[Us]   = pawn_attacks_bb<Us>(ourPawns);
 
@@ -99,6 +99,7 @@ namespace {
         neighbours = ourPawns   & adjacent_files_bb(f);
         phalanx    = neighbours & rank_bb(s);
         support    = neighbours & rank_bb(s - Up);
+        supporting = neighbours & rank_bb(s + Up);
 
         // A pawn is backward when it is behind all pawns of the same color
         // on the adjacent files and cannot be safely advanced.
@@ -111,8 +112,12 @@ namespace {
         // not attacked more times than defended.
         if (   !(stoppers ^ lever ^ leverPush)
             && (support || !more_than_one(lever))
-            && popcount(phalanx) >= popcount(leverPush))
+            && popcount(phalanx | supporting) >= popcount(leverPush))
+        {
             e->passedPawns[Us] |= s;
+            if (popcount(phalanx) < popcount(leverPush))
+                e->subcandidatePassers[Us] |= s;
+        }
 
         else if (stoppers == square_bb(s + Up) && r >= RANK_5)
         {
