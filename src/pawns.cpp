@@ -115,8 +115,9 @@ namespace {
             if (!(stoppers ^ lever ^ leverPush))
                 e->passedPawns[Us] |= s;
 
-            if (stoppers && !more_than_one(stoppers))
-                e->passStoppers[Them] |= stoppers;
+            Bitboard weakStoppers = stoppers & ~pawn_attacks_bb<Them>(theirPawns);
+            if (weakStoppers && !more_than_one(weakStoppers))
+                e->passStoppers[Them] |= weakStoppers;
         }
 
         else if (stoppers == square_bb(s + Up) && r >= RANK_5)
