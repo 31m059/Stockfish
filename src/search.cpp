@@ -934,7 +934,8 @@ moves_loop: // When in check, search starts from here
                && pos.pawn_passed(us, to_sq(move)))
           extension = ONE_PLY;
 
-      else if (pos.pieces(PAWN) & to_sq(move))
+      else if (   move == ss->killers[0]
+               && pos.pieces(PAWN) & to_sq(move))
       {
           Pawns::Entry* pe = Pawns::probe(pos);
           if (pe->pass_stoppers(~us) & to_sq(move))

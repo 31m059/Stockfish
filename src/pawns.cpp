@@ -114,7 +114,8 @@ namespace {
         {
             if (!(stoppers ^ lever ^ leverPush))
                 e->passedPawns[Us] |= s;
-            else if (stoppers && !more_than_one(stoppers))
+
+            if (stoppers && !more_than_one(stoppers))
                 e->passStoppers[Them] |= stoppers;
         }
 
