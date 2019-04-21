@@ -105,7 +105,9 @@ namespace {
         backward =  !(ourPawns & pawn_attack_span(Them, s + Up))
                   && (stoppers & (leverPush | (s + Up)));
 
-        if (r > RANK_3 && !more_than_one(stoppers))
+        Bitboard weakStoppers = stoppers & ~pawn_attacks_bb<Them>(theirPawns);
+        if (   stoppers == weakStoppers
+            && !more_than_one(weakStoppers))
             e->passStoppers[Them] |= stoppers;
 
         // Passed pawns will be properly scored in evaluation because we need
