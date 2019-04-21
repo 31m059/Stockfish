@@ -462,8 +462,8 @@ namespace {
     b2 = b1 & attackedBy2[Them];
 
     int kingFlankAttacks = popcount(b1) + popcount(b2);
-    
-    int rankDanger = 4 * relative_rank(Us, ksq) * relative_rank(Us, ksq);
+
+    int rankDanger = 2 * relative_rank(Us, ksq) * relative_rank(Us, ksq);
 
     kingDanger +=        kingAttackersCount[Them] * kingAttackersWeight[Them]
                  +  69 * kingAttacksCount[Them]
@@ -475,7 +475,8 @@ namespace {
                  +       mg_value(mobility[Them] - mobility[Us])
                  +   5 * kingFlankAttacks * kingFlankAttacks / 16
                  +   rankDanger
-                 -   25;
+                 -   15;
+
     // Transform the kingDanger units into a Score, and subtract it from the evaluation
     if (kingDanger > 100)
         score -= make_score(kingDanger * kingDanger / 4096, (kingDanger - rankDanger) / 16);
