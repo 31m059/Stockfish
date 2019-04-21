@@ -463,7 +463,7 @@ namespace {
 
     int kingFlankAttacks = popcount(b1) + popcount(b2);
     
-    int rankDanger = 4 * relative_rank(Us, ksq) * relative_rank(Us, ksq);
+    int rankDanger = 8 * relative_rank(Us, ksq) * relative_rank(Us, ksq);
 
     kingDanger +=        kingAttackersCount[Them] * kingAttackersWeight[Them]
                  +  69 * kingAttacksCount[Them]
