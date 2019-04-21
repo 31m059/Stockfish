@@ -105,7 +105,7 @@ namespace {
         backward =  !(ourPawns & pawn_attack_span(Them, s + Up))
                   && (stoppers & (leverPush | (s + Up)));
 
-        if (stoppers && !more_than_one(stoppers))
+        if (r > RANK_3 && !more_than_one(stoppers))
             e->passStoppers[Them] |= stoppers;
 
         // Passed pawns will be properly scored in evaluation because we need
