@@ -105,20 +105,17 @@ namespace {
         backward =  !(ourPawns & pawn_attack_span(Them, s + Up))
                   && (stoppers & (leverPush | (s + Up)));
 
+        if (stoppers && !more_than_one(stoppers))
+            e->passStoppers[Them] |= stoppers;
+
         // Passed pawns will be properly scored in evaluation because we need
         // full attack info to evaluate them. Include also not passed pawns
         // which could become passed after one or two pawn pushes when are
         // not attacked more times than defended.
-        if (   (support || !more_than_one(lever))
+        if (   !(stoppers ^ lever ^ leverPush)
+            && (support || !more_than_one(lever))
             && popcount(phalanx) >= popcount(leverPush))
-        {
-            if (!(stoppers ^ lever ^ leverPush))
-                e->passedPawns[Us] |= s;
-
-            Bitboard weakStoppers = stoppers & ~pawn_attacks_bb<Them>(theirPawns);
-            if (weakStoppers && !more_than_one(weakStoppers))
-                e->passStoppers[Them] |= weakStoppers;
-        }
+            e->passedPawns[Us] |= s;
 
         else if (stoppers == square_bb(s + Up) && r >= RANK_5)
         {
