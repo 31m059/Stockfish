@@ -397,6 +397,7 @@ namespace {
     Bitboard rookChecks, queenChecks, bishopChecks, knightChecks;
     int kingDanger = 0;
     const Square ksq = pos.square<KING>(Us);
+    const Bitboard flank = KingFlank[file_of(ksq)];
 
     // Init the score with king shelter and enemy pawns storm
     Score score = pe->king_safety<Us>(pos);
@@ -458,7 +459,7 @@ namespace {
 
     // Find the squares that opponent attacks in our king flank, and the squares
     // which are attacked twice in that flank.
-    b1 = attackedBy[Them][ALL_PIECES] & KingFlank[file_of(ksq)] & Camp;
+    b1 = attackedBy[Them][ALL_PIECES] & flank & Camp;
     b2 = b1 & attackedBy2[Them];
 
     int kingFlankAttacks = popcount(b1) + popcount(b2);
@@ -467,7 +468,7 @@ namespace {
                  +  69 * kingAttacksCount[Them]
                  + 185 * popcount(kingRing[Us] & weak)
                  - 100 * bool(attackedBy[Us][KNIGHT] & attackedBy[Us][KING])
-                 + 100 * more_than_one(pos.pieces(Them, KNIGHT) & KingFlank[file_of(ksq)])
+                 +  50 * (!(pos.pieces(Us, KNIGHT) & flank) && more_than_one(pos.pieces(Them, KNIGHT) & flank))
                  + 150 * popcount(pos.blockers_for_king(Us) | unsafeChecks)
                  - 873 * !pos.count<QUEEN>(Them)
                  -   6 * mg_value(score) / 8
@@ -480,7 +481,7 @@ namespace {
         score -= make_score(kingDanger * kingDanger / 4096, kingDanger / 16);
 
     // Penalty when our king is on a pawnless flank
-    if (!(pos.pieces(PAWN) & KingFlank[file_of(ksq)]))
+    if (!(pos.pieces(PAWN) & flank))
         score -= PawnlessFlank;
 
     // Penalty if king flank is under attack, potentially moving toward the king
