@@ -310,9 +310,9 @@ namespace {
             bb = OutpostRanks & ~pe->pawn_attacks_span(Them);
             if (bb & s)
                 score += Outpost * (Pt == KNIGHT ? 4 : 2)
-                                 * (attackedBy[Us][PAWN] & s ? 2
-                                 : PawnAttacks[Them][s] & ~pos.pieces() & shift<Up>(pos.pieces(Us, PAWN)) ? 2
-                                 : 1);
+                                 * (attackedBy[Us][PAWN] & s ? 8
+                                 : PawnAttacks[Them][s] & ~pos.pieces() & shift<Up>(pos.pieces(Us, PAWN)) ? 5
+                                 : 4) / 4;
 
             else if (bb &= b & ~pos.pieces(Us))
                 score += Outpost * (Pt == KNIGHT ? 2 : 1)
