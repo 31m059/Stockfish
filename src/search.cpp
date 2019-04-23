@@ -938,9 +938,9 @@ moves_loop: // When in check, search starts from here
       // Extension for locking the pawn structure
       else if (   type_of(movedPiece) == PAWN
                && type_of(move) != PROMOTION
-               && pos.non_pawn_material() > 3 * RookValueMg + 3 * KnightValueMg
                && pos.pieces(~us, PAWN) & (to_sq(move) + Up)
-               && !(pos.pieces(~us, PAWN) & pawn_attack_span(us, to_sq(move))))
+               && !(pos.pieces(~us, PAWN) & pawn_attack_span( us, to_sq(move)     ))
+               && !(pos.pieces( us, PAWN) & pawn_attack_span(~us, to_sq(move) + Up)))
           extension = ONE_PLY;
 
       // Calculate new depth for this move
