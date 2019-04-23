@@ -883,7 +883,7 @@ moves_loop: // When in check, search starts from here
       captureOrPromotion = pos.capture_or_promotion(move);
       movedPiece = pos.moved_piece(move);
       givesCheck = pos.gives_check(move);
-      Direction Up = us == WHITE ? NORTH : SOUTH;
+      const Direction Up = (us == WHITE ? NORTH : SOUTH);
 
       // Step 13. Extensions (~70 Elo)
 
@@ -937,8 +937,9 @@ moves_loop: // When in check, search starts from here
 
       // Extension for locking the pawn structure
       else if (   type_of(movedPiece) == PAWN
+               && type_of(move) != PROMOTION
                && pos.pieces(~us, PAWN) & (to_sq(move) + Up)
-               && !(pos.pieces(~us, PAWN) & adjacent_files_bb(file_of(to_sq(move))) & forward_ranks_bb(us, to_sq(move))))
+               && !(pos.pieces(~us, PAWN) & pawn_attack_span(us, to_sq(move))))
           extension = ONE_PLY;
 
       // Calculate new depth for this move
