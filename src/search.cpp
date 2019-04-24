@@ -920,9 +920,12 @@ moves_loop: // When in check, search starts from here
       }
 
       // Check extension (~2 Elo)
-      else if (    givesCheck
-               && (pos.blockers_for_king(~us) & from_sq(move) || pos.see_ge(move)))
+      else if (   givesCheck
+               && pos.see_ge(move))
           extension = ONE_PLY;
+      else if (   givesCheck
+               && pos.blockers_for_king(~us) & from_sq(move))
+          extension = (pos.advanced_pawn_push(move) ? 2 : 1) * ONE_PLY;
 
       // Castling extension
       else if (type_of(move) == CASTLING)
