@@ -933,6 +933,13 @@ moves_loop: // When in check, search starts from here
                && pos.advanced_pawn_push(move)
                && pos.pawn_passed(us, to_sq(move)))
           extension = ONE_PLY;
+          
+      // Rook connection extension
+      else if (   move == ss->killers[0]
+               && pos.count<ROOK>(us) == 2
+               && between_bb(lsb(pos.pieces(us, ROOK)), msb(pos.pieces(us, ROOK))) & from_sq(move)
+               && !(between_bb(lsb(pos.pieces(us, ROOK)), msb(pos.pieces(us, ROOK))) & to_sq(move)))
+           extension = ONE_PLY;
 
       // Calculate new depth for this move
       newDepth = depth - ONE_PLY + extension;
