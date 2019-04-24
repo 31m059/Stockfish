@@ -936,6 +936,7 @@ moves_loop: // When in check, search starts from here
           
       // Rook connection extension
       else if (   move == ss->killers[0]
+               && type_of(movedPiece) != KING
                && pos.count<ROOK>(us) == 2
                &&   between_bb(lsb(pos.pieces(us, ROOK)), msb(pos.pieces(us, ROOK))) & (us == WHITE ? Rank1BB : Rank8BB) & from_sq(move)
                && !(between_bb(lsb(pos.pieces(us, ROOK)), msb(pos.pieces(us, ROOK))) & (us == WHITE ? Rank1BB : Rank8BB) & to_sq(move)))
