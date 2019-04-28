@@ -673,7 +673,7 @@ namespace {
                 // Greater multiplier when neighboring passers
                 if (   PseudoAttacks[KING][s] & adjacent_files_bb(file_of(s)) & pe->passed_pawns(Us)
                     && pos.pawn_passed(Us, s))
-                    w = w * 5 / 4;
+                    w *= 2;
 
                 bonus += make_score(k * w, k * w);
             }
