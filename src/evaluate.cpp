@@ -669,10 +669,10 @@ namespace {
 
                 else if (defendedSquares & blockSq)
                     k += 4;
-                
+
                 // Greater multiplier when neighboring passers
-                if (PseudoAttacks[KING][s] & adjacent_files_bb(file_of(s)) & pe->passed_pawns(Us))
-                    w = w * 3 / 2;
+                if (more_than_one(PseudoAttacks[KING][s] & adjacent_files_bb(file_of(s)) & pe->passed_pawns(Us)))
+                    w *= 2;
 
                 bonus += make_score(k * w, k * w);
             }
