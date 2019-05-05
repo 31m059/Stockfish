@@ -93,7 +93,7 @@ namespace {
         Rank r = relative_rank(Us, s);
 
         if (r >= advance - 1)
-            advBonus[advance - r] += r * r / 2;
+            advBonus[advance - r] += r * r / (r == advance ? 2 : 4);
 
         e->pawnAttacksSpan[Us] |= pawn_attack_span(Us, s);
 
