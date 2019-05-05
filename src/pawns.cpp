@@ -81,6 +81,9 @@ namespace {
     e->kingSquares[Us]   = SQ_NONE;
     e->pawnAttacks[Us]   = pawn_attacks_bb<Us>(ourPawns);
 
+    int advance = ourPawns ? relative_rank(Us, frontmost_sq(Us, ourPawns)) : 0;
+    int advBonus[2] = {0, 0};
+
     // Loop through all pawns of the current color and score each pawn
     while ((s = *pl++) != SQ_NONE)
     {
@@ -88,6 +91,9 @@ namespace {
 
         File f = file_of(s);
         Rank r = relative_rank(Us, s);
+
+        if (r >= advance - 1)
+            advBonus[advance - r] += r * r / 2;
 
         e->pawnAttacksSpan[Us] |= pawn_attack_span(Us, s);
 
@@ -139,6 +145,8 @@ namespace {
         if (doubled && !support)
             score -= Doubled;
     }
+    
+    score += make_score( std::max(advBonus[0], advBonus[1]), 0);
 
     return score;
   }
