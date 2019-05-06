@@ -564,13 +564,17 @@ namespace {
     // Find squares where our pawns can push on the next move
     // Exclude pawns that are defending otherwise-hanging pieces.
     Bitboard pawns = pos.pieces(Us, PAWN);
-    b = 0;
+    Bitboard hangingAttackers = 0;
     while (pawns) {
         Square s = pop_lsb(&pawns);
-        if (!(PawnAttacks[Us][s] & pos.pieces(Us) & ~attackedBy2[Us] & attackedBy[Them][ALL_PIECES]))
-            b |= s;
+        b = PawnAttacks[Us][s] & pos.pieces(Us) & ~attackedBy2[Us] & attackedBy[Them][ALL_PIECES];
+
+        while (b) {
+            Square s2 = pop_lsb(&b);
+            hangingAttackers |= attacks_bb<ROOK>(s2, pos.pieces()) & pos.pieces(Them, ROOK, QUEEN) & forward_file_bb(Us, s2);
+        }
     }
-    b  = shift<Up>(b) & ~pos.pieces();
+    b  = shift<Up>(pos.pieces(Us, PAWN)) & ~pos.pieces();
     b |= shift<Up>(b & TRank3BB) & ~pos.pieces();
 
     // Keep only the squares which are relatively safe
@@ -578,7 +582,7 @@ namespace {
 
     // Bonus for safe pawn threats on the next move
     b = pawn_attacks_bb<Us>(b) & pos.pieces(Them);
-    score += ThreatByPawnPush * popcount(b);
+    score += ThreatByPawnPush * popcount(b & ~hangingAttackers);
 
     // Our safe or protected pawns
     b = pos.pieces(Us, PAWN) & safe;
