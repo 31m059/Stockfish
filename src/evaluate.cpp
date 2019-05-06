@@ -562,7 +562,15 @@ namespace {
         score += WeakUnopposedPawn * pe->weak_unopposed(Them);
 
     // Find squares where our pawns can push on the next move
-    b  = shift<Up>(pos.pieces(Us, PAWN)) & ~pos.pieces();
+    // Exclude pawns that are defending otherwise-hanging pieces.
+    Bitboard pawns = pos.pieces(Us, PAWN);
+    b = 0;
+    while (pawns) {
+        Square s = pop_lsb(&pawns);
+        if (!(PawnAttacks[Us][s] & pos.pieces(Us) & ~attackedBy2[Us] & attackedBy[Them][ALL_PIECES]))
+            b |= s;
+    }
+    b  = shift<Up>(b) & ~pos.pieces();
     b |= shift<Up>(b & TRank3BB) & ~pos.pieces();
 
     // Keep only the squares which are relatively safe
