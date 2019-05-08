@@ -576,7 +576,7 @@ namespace {
     b1 = pawn_attacks_bb<Us>(b1) & pos.pieces(Them);
     b2 = pawn_attacks_bb<Us>(b2) & pos.pieces(Them);
     score += ThreatByPawnPush * popcount(b1);
-    score += ThreatByPawnPush * popcount(b2) * 3 / 4;
+    score += ThreatByPawnPush * popcount(b2) * 5 / 4;
 
     // Our safe or protected pawns
     b = pos.pieces(Us, PAWN) & safe;
