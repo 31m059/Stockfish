@@ -562,15 +562,21 @@ namespace {
         score += WeakUnopposedPawn * pe->weak_unopposed(Them);
 
     // Find squares where our pawns can push on the next move
-    b  = shift<Up>(pos.pieces(Us, PAWN)) & ~pos.pieces();
-    b |= shift<Up>(b & TRank3BB) & ~pos.pieces();
+    Bitboard b1, b2;
+    b1  = shift<Up>(pos.pieces(Us, PAWN) & ~kingRing[Us]) & ~pos.pieces();
+    b2  = shift<Up>(pos.pieces(Us, PAWN) &  kingRing[Us]) & ~pos.pieces();
+    b1 |= shift<Up>(b1 & TRank3BB) & ~pos.pieces();
+    b2 |= shift<Up>(b2 & TRank3BB) & ~pos.pieces();
 
     // Keep only the squares which are relatively safe
-    b &= ~attackedBy[Them][PAWN] & safe;
+    b1 &= ~attackedBy[Them][PAWN] & safe;
+    b2 &= ~attackedBy[Them][PAWN] & safe;
 
     // Bonus for safe pawn threats on the next move
-    b = pawn_attacks_bb<Us>(b) & pos.pieces(Them);
-    score += ThreatByPawnPush * popcount(b);
+    b1 = pawn_attacks_bb<Us>(b1) & pos.pieces(Them);
+    b2 = pawn_attacks_bb<Us>(b2) & pos.pieces(Them);
+    score += ThreatByPawnPush * popcount(b1);
+    score += ThreatByPawnPush * popcount(b2) / 2;
 
     // Our safe or protected pawns
     b = pos.pieces(Us, PAWN) & safe;
