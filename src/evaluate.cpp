@@ -464,13 +464,12 @@ namespace {
     
     // No penalty for weak sqaures if they're only pawn attacks
     Bitboard b = kingRing[Us] & weak & ~attackedBy[Us][PAWN];
-    if (   b
-      && !(b & (attackedBy[Them][KNIGHT] | attackedBy[Them][BISHOP] | attackedBy[Them][ROOK] | attackedBy[Them][QUEEN])))
-        weak = 0;
+    bool justKP = (   b
+                 && !(b & (attackedBy[Them][KNIGHT] | attackedBy[Them][BISHOP] | attackedBy[Them][ROOK] | attackedBy[Them][QUEEN])));
 
     kingDanger +=        kingAttackersCount[Them] * kingAttackersWeight[Them]
                  +  69 * kingAttacksCount[Them]
-                 + 185 * popcount(kingRing[Us] & weak)
+                 + 185 * popcount(kingRing[Us] & weak) / (justKP ? 2 : 1)
                  - 100 * bool(attackedBy[Us][KNIGHT] & attackedBy[Us][KING])
                  -  35 * bool(attackedBy[Us][BISHOP] & attackedBy[Us][KING])
                  + 150 * popcount(pos.blockers_for_king(Us) | unsafeChecks)
