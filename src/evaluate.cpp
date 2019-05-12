@@ -461,6 +461,12 @@ namespace {
     b2 = b1 & attackedBy2[Them];
 
     int kingFlankAttacks = popcount(b1) + popcount(b2);
+    
+    // No penalty for weak sqaures if they're only pawn attacks
+    Bitboard b = kingRing[Us] & weak & ~attackedBy[Us][PAWN];
+    if (   b
+      && !(b & (attackedBy[Them][KNIGHT] | attackedBy[Them][BISHOP] | attackedBy[Them][ROOK] | attackedBy[Them][QUEEN])))
+        weak = 0;
 
     kingDanger +=        kingAttackersCount[Them] * kingAttackersWeight[Them]
                  +  69 * kingAttacksCount[Them]
