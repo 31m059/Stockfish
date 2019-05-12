@@ -627,11 +627,11 @@ namespace {
         int r = relative_rank(Us, s);
 
         Score bonus = PassedRank[r];
+        Square blockSq = s + Up;
 
         if (r > RANK_3)
         {
             int w = (r-2) * (r-2) + 2;
-            Square blockSq = s + Up;
 
             // Adjust bonus based on the king's proximity
             bonus += make_score(0, (  king_proximity(Them, blockSq) * 5
@@ -677,7 +677,7 @@ namespace {
         // pawn push to become passed, or have a pawn in front of them.
         if (   !pos.pawn_passed(Us, s + Up)
             || (pos.pieces(PAWN) & forward_file_bb(Us, s)))
-            bonus = bonus / 2;
+            bonus = (attackedBy2[Them] & ~(attackedBy2[Us] | attackedBy[Us][PAWN]) & s && !pos.empty(blockSq) ? make_score(0,0) : bonus / 2);
 
         score += bonus + PassedFile[file_of(s)];
     }
