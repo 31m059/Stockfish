@@ -677,7 +677,7 @@ namespace {
         // pawn push to become passed, or have a pawn in front of them.
         if (   !pos.pawn_passed(Us, s + Up)
             || (pos.pieces(PAWN) & forward_file_bb(Us, s)))
-            bonus = (attackedBy2[Them] & ~(attackedBy2[Us] | attackedBy[Us][PAWN]) & s && !pos.empty(blockSq) ? make_score(0,0) : bonus / 2);
+            bonus = bonus / (attackedBy2[Them] & ~(attackedBy2[Us] | attackedBy[Us][PAWN]) & s && !pos.empty(blockSq) ? 4 : 2);
 
         score += bonus + PassedFile[file_of(s)];
     }
