@@ -660,8 +660,8 @@ namespace {
                 // If there aren't any enemy attacks, assign a big bonus. Otherwise
                 // assign a smaller bonus if the block square isn't attacked.
                 int k =  !unsafeSquares ? 20
-                       : (unsafeSquares == squaresToQueen && bb & pos.pieces(Us) & ~attackedBy2[Them] & (attackedBy[Us][ROOK] | attackedBy[Us][QUEEN])) ? 12
                        : !(unsafeSquares & blockSq) ? 9
+                       : (unsafeSquares == squaresToQueen && bb & pos.pieces(Us) & ~attackedBy2[Them] & (attackedBy[Us][ROOK] | attackedBy[Us][QUEEN])) ? 4
                        : 0;
 
                 // If the path to the queen is fully defended, assign a big bonus.
