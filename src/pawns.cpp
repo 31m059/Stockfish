@@ -117,7 +117,7 @@ namespace {
 
         else if (stoppers == square_bb(s + Up) && r >= RANK_5)
         {
-            b = shift<Up>(support) & ~theirPawns;
+            b = (shift<Up>(support) & ~theirPawns) | phalanx;
             while (b)
                 if (!more_than_one(theirPawns & PawnAttacks[Us][pop_lsb(&b)]))
                     e->passedPawns[Us] |= s;
