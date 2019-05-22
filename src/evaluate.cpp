@@ -642,7 +642,7 @@ namespace {
                 bonus -= make_score(0, king_proximity(Us, blockSq + Up) * w);
 
             // If the pawn is free to advance, then increase the bonus
-            if (pos.empty(blockSq))
+            if (pos.empty(blockSq) || pe->sacrifice_passers(Us) & s)
             {
                 // If there is a rook or queen attacking/defending the pawn from behind,
                 // consider all the squaresToQueen. Otherwise consider only the squares
@@ -675,8 +675,8 @@ namespace {
 
         // Scale down bonus for candidate passers which need more than one
         // pawn push to become passed, or have a pawn in front of them.
-        if (   (!pos.pawn_passed(Us, s + Up) || (pos.pieces(PAWN) & forward_file_bb(Us, s)))
-            && !(pe->sacrifice_passers(Us) & s))
+        if (   !pos.pawn_passed(Us, s + Up)
+            || (pos.pieces(PAWN) & forward_file_bb(Us, s)))
             bonus = bonus / 2;
 
         score += bonus + PassedFile[file_of(s)];
