@@ -77,7 +77,7 @@ namespace {
     Bitboard ourPawns   = pos.pieces(  Us, PAWN);
     Bitboard theirPawns = pos.pieces(Them, PAWN);
 
-    e->passedPawns[Us] = e->pawnAttacksSpan[Us] = e->weakUnopposed[Us] = 0;
+    e->passedPawns[Us] = e->pawnAttacksSpan[Us] = e->weakUnopposed[Us] = e->sacPassers[Us] = 0;
     e->kingSquares[Us]   = SQ_NONE;
     e->pawnAttacks[Us]   = pawn_attacks_bb<Us>(ourPawns);
 
@@ -121,9 +121,13 @@ namespace {
             while (b)
             {
                 Square sacSquare = pop_lsb(&b);
-                if (  !more_than_one(theirPawns & PawnAttacks[  Us][sacSquare])
-                    ||                 ourPawns & PawnAttacks[Them][sacSquare])
+                if (  !more_than_one(theirPawns & PawnAttacks[  Us][sacSquare]))
                     e->passedPawns[Us] |= s;
+                else if (              ourPawns & PawnAttacks[Them][sacSquare])
+                {
+                    e->passedPawns[Us] |= s;
+                    e->sacPassers[Us] |= s;
+                }
             }
         }
 
