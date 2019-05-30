@@ -82,9 +82,9 @@ namespace {
 
   // Penalties for enemy's safe checks
   constexpr int QueenSafeCheck  = 780;
-  constexpr int RookSafeCheck   = 1080;
-  constexpr int BishopSafeCheck = 635;
-  constexpr int KnightSafeCheck = 790;
+  constexpr int RookSafeCheck   = 1081;
+  constexpr int BishopSafeCheck = 637;
+  constexpr int KnightSafeCheck = 788;
 
 #define S(mg, eg) make_score(mg, eg)
 
