@@ -32,9 +32,9 @@ namespace {
   #define S(mg, eg) make_score(mg, eg)
 
   // Pawn penalties
-  constexpr Score Backward = S(13, 20);
-  constexpr Score Doubled  = S(10, 63);
-  constexpr Score Isolated = S( 6, 18);
+  constexpr Score Backward = S(12, 25);
+  constexpr Score Doubled  = S(15, 58);
+  constexpr Score Isolated = S( 5, 20);
 
   // Connected pawn bonus
   constexpr int Connected[RANK_NB] = { 0, 7, 8, 12, 29, 48, 86 };
