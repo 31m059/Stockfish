@@ -133,6 +133,7 @@ namespace {
   };
 
   // Assorted bonuses and penalties
+  constexpr Score BishopConnectivity = S(  0,-16);
   constexpr Score BishopPawns        = S(  3,  7);
   constexpr Score CorneredBishop     = S( 50, 50);
   constexpr Score FlankAttacks       = S(  8,  0);
@@ -548,6 +549,15 @@ namespace {
         b =  ~attackedBy[Them][ALL_PIECES]
            | (nonPawnEnemies & attackedBy2[Us]);
         score += Hanging * popcount(weak & b);
+        
+        b = pos.pieces(Them) & ~attackedBy2[Them] & attackedBy[Them][BISHOP];
+
+        if (more_than_one(b & DarkSquares))
+            score += BishopConnectivity * popcount(b &  DarkSquares);
+
+        if (more_than_one(b & ~DarkSquares))
+            score += BishopConnectivity * popcount(b & ~DarkSquares);
+        
     }
 
     // Bonus for restricting their piece moves
