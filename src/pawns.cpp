@@ -101,12 +101,12 @@ namespace {
         phalanx    = neighbours & rank_bb(s);
         support    = neighbours & rank_bb(s - Up);
 
-        if (!stoppers || neighbours & pawn_attack_span(Them, s+Up))
+        if (!opposed || neighbours & pawn_attack_span(Them, s+Up))
             e->pushablePawnAttacksSpan[Us] |= pawn_attack_span(Us, s);
         else
         {
             Square s2 = s;
-            Bitboard stopping = (theirPawns | pawn_attacks_bb<Them>(theirPawns)) & forward_file_bb(Us, s);
+            Bitboard stopping = theirPawns & forward_file_bb(Us, s);
             do {
                 e->pushablePawnAttacksSpan[Us] |= PawnAttacks[Us][s2];
                 s2 = s2 + Up;
