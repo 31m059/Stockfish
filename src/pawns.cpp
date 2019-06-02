@@ -101,7 +101,7 @@ namespace {
         phalanx    = neighbours & rank_bb(s);
         support    = neighbours & rank_bb(s - Up);
 
-        if (!opposed || neighbours & pawn_attack_span(Them, s+Up))
+        if (!opposed || neighbours & pawn_attack_span(Them, frontmost_sq(Them, theirPawns & forward_file_bb(Us, s))))
             e->pushablePawnAttacksSpan[Us] |= pawn_attack_span(Us, s);
         else
         {
