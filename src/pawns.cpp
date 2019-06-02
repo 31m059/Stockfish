@@ -77,7 +77,7 @@ namespace {
     Bitboard ourPawns   = pos.pieces(  Us, PAWN);
     Bitboard theirPawns = pos.pieces(Them, PAWN);
 
-    e->passedPawns[Us] = e->pawnAttacksSpan[Us] = e->weakUnopposed[Us] = 0;
+    e->passedPawns[Us] = e->pawnAttacksSpan[Us] = e->pushablePawnAttacksSpan[Us] = e->weakUnopposed[Us] = 0;
     e->kingSquares[Us]   = SQ_NONE;
     e->pawnAttacks[Us]   = pawn_attacks_bb<Us>(ourPawns);
 
@@ -100,6 +100,19 @@ namespace {
         neighbours = ourPawns   & adjacent_files_bb(f);
         phalanx    = neighbours & rank_bb(s);
         support    = neighbours & rank_bb(s - Up);
+
+        if (!stoppers || neighbours & pawn_attack_span(Them, s+Up))
+            e->pushablePawnAttacksSpan[Us] |= pawn_attack_span(Us, s);
+        else
+        {
+            Square s2 = s;
+            Bitboard stopping = (theirPawns | pawn_attacks_bb<Them>(theirPawns)) & forward_file_bb(Us, s);
+            do {
+                e->pushablePawnAttacksSpan[Us] |= PawnAttacks[Us][s2];
+                s2 = s2 + Up;
+            }
+            while (!(stopping & s2));
+        }
 
         // A pawn is backward when it is behind all pawns of the same color
         // on the adjacent files and cannot be safely advanced.
