@@ -184,7 +184,7 @@ void Entry::evaluate_shelter(const Position& pos, Square ksq, Score& shelter) {
   Bitboard ourPawns = b & pos.pieces(Us);
   Bitboard theirPawns = b & pos.pieces(Them);
 
-  Value bonus[] = { (shift<Down>(theirPawns) & BlockSquares & ksq) ? Value(374) : Value(5),
+  Value bonus[] = { (shift<Down>(theirPawns) & BlockSquares & ksq) ? Value(373) : Value(2),
                     VALUE_ZERO };
 
   File center = clamp(file_of(ksq), FILE_B, FILE_G);
@@ -200,7 +200,7 @@ void Entry::evaluate_shelter(const Position& pos, Square ksq, Score& shelter) {
       bonus[MG] += ShelterStrength[d][ourRank];
 
       if (ourRank && (ourRank == theirRank - 1))
-          bonus[MG] -= 82 * (theirRank == RANK_3), bonus[EG] -= 82 * (theirRank == RANK_3);
+          bonus[MG] -= 83 * (theirRank == RANK_3), bonus[EG] -= 75 * (theirRank == RANK_3);
       else
           bonus[MG] -= UnblockedStorm[d][theirRank];
   }
