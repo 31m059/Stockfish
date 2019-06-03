@@ -141,7 +141,7 @@ namespace {
   constexpr Score KnightOnQueen      = S( 16, 12);
   constexpr Score LongDiagonalBishop = S( 45,  0);
   constexpr Score MinorBehindPawn    = S( 18,  3);
-  constexpr Score Outpost            = S(  8,  6);
+  constexpr Score Outpost            = S(  9,  3);
   constexpr Score PawnlessFlank      = S( 17, 95);
   constexpr Score RestrictedPiece    = S(  7,  7);
   constexpr Score RookOnPawn         = S( 10, 32);
@@ -593,6 +593,11 @@ namespace {
 
         score += SliderOnQueen * popcount(b & safe & attackedBy2[Us]);
     }
+    
+    // bonus for safe pieces
+    Bitboard noPawns = pos.pieces(Us) ^ pos.pieces(Us, PAWN);
+    int safePieces = popcount(noPawns & ~pe->pushable_pawn_attacks_span(Them));
+    score += make_score(-1, 9) * safePieces;
 
     if (T)
         Trace::add(THREAT, Us, score);
