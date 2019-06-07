@@ -665,6 +665,9 @@ namespace {
                 if (defendedSquares & blockSq)
                     k += 5;
 
+                else
+                    k += popcount(defendedSquares & attackedBy[Us][ALL_PIECES]);
+
                 bonus += make_score(k * w, k * w);
             }
         } // r > RANK_3
