@@ -140,7 +140,7 @@ namespace {
   constexpr Score KingProtector      = S(  7,  8);
   constexpr Score KnightOnQueen      = S( 16, 12);
   constexpr Score LongDiagonalBishop = S( 45,  0);
-  constexpr Score MinorBehindPawn    = S( 18,  3);
+  constexpr Score MinorBehindPawn    = S( 15,  4);
   constexpr Score Outpost            = S( 36, 12);
   constexpr Score PawnlessFlank      = S( 17, 95);
   constexpr Score RestrictedPiece    = S(  7,  7);
