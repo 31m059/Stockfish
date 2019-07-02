@@ -664,11 +664,16 @@ namespace {
         } // r > RANK_3
 
         bool blockingRook = false;
-        Bitboard bb = pos.pieces(Us, ROOK) & forward_file_bb(Us, s);
-        while (bb)
+
+        if (r >= RANK_5)
         {
-            Square rookSquare = pop_lsb(&bb);
-            blockingRook |= !(attacks_bb<ROOK>(rookSquare, pos.pieces()) & attacks_bb<ROOK>(pos.square<KING>(Them), pos.pieces()));
+            Bitboard bb = pos.pieces(Us, ROOK) & forward_file_bb(Us, s);
+
+            while (bb)
+            {
+                Square rookSquare = pop_lsb(&bb);
+                blockingRook |= !(attacks_bb<ROOK>(rookSquare, pos.pieces()) & attacks_bb<ROOK>(pos.square<KING>(Them), pos.pieces()));
+            }
         }
 
         // Scale down bonus for candidate passers which need more than one
