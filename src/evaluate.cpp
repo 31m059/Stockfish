@@ -665,7 +665,7 @@ namespace {
 
         bool blockingRook = false;
 
-        if (r >= RANK_5)
+        if (attackedBy[Them][ALL_PIECES] & s && (attackedBy[Them][ALL_PIECES] | pos.pieces()) & blockSq)
         {
             bb = pos.pieces(Us, ROOK) & forward_file_bb(Us, s);
 
