@@ -623,7 +623,7 @@ namespace {
 
         if (r > RANK_3)
         {
-            int w = (r-2) * (r-2) + 2;            
+            int w = (r-2) * (r-2) + 2;
 
             // Adjust bonus based on the king's proximity
             bonus += make_score(0, (  king_proximity(Them, blockSq) * 5
@@ -665,15 +665,14 @@ namespace {
 
         bool blockingRook = false;
 
-        Bitboard weak = (attackedBy[Them][ALL_PIECES] & ~attackedBy2[Us]) | attackedBy2[Them];
-        if (weak & s && (weak | pos.pieces()) & blockSq)
+        if (r >= RANK_5)
         {
             bb = pos.pieces(Us, ROOK) & forward_file_bb(Us, s);
 
             while (bb)
             {
                 Square rookSquare = pop_lsb(&bb);
-                blockingRook |= !(attacks_bb<ROOK>(rookSquare, pos.pieces()) & attacks_bb<ROOK>(pos.square<KING>(Them), pos.pieces()));
+                blockingRook |= !(rank_bb(rookSquare) & attacks_bb<ROOK>(rookSquare, pos.pieces()) & attacks_bb<ROOK>(pos.square<KING>(Them), pos.pieces()));
             }
         }
 
