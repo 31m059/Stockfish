@@ -665,7 +665,8 @@ namespace {
 
         bool blockingRook = false;
 
-        if (attackedBy[Them][ALL_PIECES] & s && (attackedBy[Them][ALL_PIECES] | pos.pieces()) & blockSq)
+        Bitboard weak = (attackedBy[Them][ALL_PIECES] & ~attackedBy2[Us]) | attackedBy2[Them];
+        if (weak & s && (weak | pos.pieces()) & blockSq)
         {
             bb = pos.pieces(Us, ROOK) & forward_file_bb(Us, s);
 
