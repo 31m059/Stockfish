@@ -663,9 +663,18 @@ namespace {
             }
         } // r > RANK_3
 
+        bool blockingRook = false;
+        Bitboard bb = pos.pieces(Us, ROOK) & forward_file_bb(Us, s);
+        while (bb)
+        {
+            Square rookSquare = pop_lsb(&bb);
+            blockingRook |= !(attacks_bb<ROOK>(rookSquare, pos.pieces()) & attacks_bb<ROOK>(pos.square<KING>(Them), pos.pieces()));
+        }
+
         // Scale down bonus for candidate passers which need more than one
         // pawn push to become passed, or have a pawn in front of them.
-        if (   !pos.pawn_passed(Us, s + Up)
+        if (   blockingRook
+            || !pos.pawn_passed(Us, s + Up)
             || (pos.pieces(PAWN) & forward_file_bb(Us, s)))
             bonus = bonus / 2;
 
