@@ -617,13 +617,13 @@ namespace {
         assert(!(pos.pieces(Them, PAWN) & forward_file_bb(Us, s + Up)));
 
         int r = relative_rank(Us, s);
+        Square blockSq = s + Up;
 
         Score bonus = PassedRank[r];
 
         if (r > RANK_3)
         {
-            int w = (r-2) * (r-2) + 2;
-            Square blockSq = s + Up;
+            int w = (r-2) * (r-2) + 2;            
 
             // Adjust bonus based on the king's proximity
             bonus += make_score(0, (  king_proximity(Them, blockSq) * 5
@@ -665,9 +665,9 @@ namespace {
 
         bool blockingRook = false;
 
-        if (r >= RANK_5)
+        if (attackedBy[Them][ALL_PIECES] & s && (attackedBy[Them][ALL_PIECES] | pos.pieces()) & blockSq)
         {
-            Bitboard bb = pos.pieces(Us, ROOK) & forward_file_bb(Us, s);
+            bb = pos.pieces(Us, ROOK) & forward_file_bb(Us, s);
 
             while (bb)
             {
