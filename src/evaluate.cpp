@@ -665,16 +665,8 @@ namespace {
 
         bool blockingRook = false;
 
-        if (r >= RANK_6)
-        {
-            bb = pos.pieces(Us, ROOK) & forward_file_bb(Us, s);
-
-            while (bb)
-            {
-                Square rookSquare = pop_lsb(&bb);
-                blockingRook |= !(rank_bb(rookSquare) & attacks_bb<ROOK>(rookSquare, pos.pieces()) & attacks_bb<ROOK>(pos.square<KING>(Them), pos.pieces()));
-            }
-        }
+        if (r == RANK_7 && pos.pieces(Us, ROOK) & blockSq)
+            blockingRook = !(attacks_bb<ROOK>(blockSq, pos.pieces()) & attacks_bb<ROOK>(pos.square<KING>(Them), pos.pieces()) & ~pos.pieces(Us));
 
         // Scale down bonus for candidate passers which need more than one
         // pawn push to become passed, or have a pawn in front of them.
