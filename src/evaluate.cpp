@@ -667,7 +667,8 @@ namespace {
                     Bitboard defense = attackedBy[Them][ALL_PIECES] & squaresToQueen;
                     if (   defense && !more_than_one(defense)
                         && !(attackedBy2[Them] & squaresToQueen)
-                        && !(pos.pieces(Them) & squaresToQueen))
+                        && !(pos.pieces(Them) & squaresToQueen)
+                        && !(attackedBy[Them][PAWN] & squaresToQueen))
                     {
                         Square def = lsb(defense);
                         Square defender = attackedBy[Them][KNIGHT] & def ? lsb(pos.attacks_from<KNIGHT>(def) & pos.pieces(Them, KNIGHT                  ) & ~pos.blockers_for_king(Them)) :
