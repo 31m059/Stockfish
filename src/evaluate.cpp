@@ -677,7 +677,7 @@ namespace {
                                              square_bb(pos.square<KING>(Them));
                         defenders &= ~pos.blockers_for_king(Them);
                         
-                        if (defenders)
+                        if (defenders && defenders != pos.pieces(Them, KING))
                         {
                             Square defender = lsb(defenders);
                                               
