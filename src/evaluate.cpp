@@ -682,6 +682,9 @@ namespace {
                         Square defender = lsb(defenders);
                                           
                         PieceType defType = type_of(pos.piece_on(defender));
+                        if (defType == KING)
+                            continue;
+
                         Bitboard badMoves = defType == KNIGHT ? pos.attacks_from<KNIGHT>(defender) :
                                             defType == BISHOP ? pos.attacks_from<BISHOP>(defender) :
                                             defType == ROOK   ? pos.attacks_from<ROOK  >(defender) :
