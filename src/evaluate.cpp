@@ -662,7 +662,7 @@ namespace {
                 bonus += make_score(k * w, k * w);
 
                 // Bonus for passed pawn restricting opponent's pieces
-                if (r > RANK_5)
+                if (r > RANK_5 && pos.pawn_passed(Us, s))
                 {
                     Bitboard defense = attackedBy[Them][ALL_PIECES] & squaresToQueen;
                     if (   defense && !more_than_one(defense)
