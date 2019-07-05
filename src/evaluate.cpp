@@ -687,7 +687,6 @@ namespace {
                                                                 pos.attacks_from<KING  >(defender) ;
                         badMoves &= ~(square_bb(blockSq) | pos.pieces(Them) | square_bb(s));
 
-                        int rp = 0;
                         while (badMoves)
                         {
                             Square landingSquare = pop_lsb(&badMoves);
@@ -697,12 +696,7 @@ namespace {
                                                  defType == QUEEN  ? pos.attacks_from<QUEEN >(landingSquare) :
                                                                      pos.attacks_from<KING  >(landingSquare) ;
                             if (!(nextMoves & blockSq))
-                            {
-                                score += RestrictedPiece;
-                                rp++;
-                            }
-                            
-                            if (rp > 2) break;
+                                score += make_score(2, 2);
 
                         }
                     }
