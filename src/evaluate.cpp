@@ -660,6 +660,51 @@ namespace {
                     k += 5;
 
                 bonus += make_score(k * w, k * w);
+
+                // Bonus for passed pawn restricting opponent's pieces
+                if (r > RANK_5 && pos.pawn_passed(Us, s))
+                {
+                    Bitboard defense = attackedBy[Them][ALL_PIECES] & squaresToQueen;
+                    if (   defense && !more_than_one(defense)
+                        && !(attackedBy2[Them] & squaresToQueen)
+                        && !(pos.pieces(Them) & squaresToQueen))
+                    {
+                        Square def = lsb(defense);
+                        Bitboard defenders = attackedBy[Them][KNIGHT] & def ? pos.attacks_from<KNIGHT>(def) & pos.pieces(Them, KNIGHT) :
+                                             attackedBy[Them][BISHOP] & def ? pos.attacks_from<BISHOP>(def) & pos.pieces(Them, BISHOP) :
+                                             attackedBy[Them][ROOK  ] & def ? pos.attacks_from<ROOK  >(def) & pos.pieces(Them, ROOK  ) :
+                                             attackedBy[Them][QUEEN ] & def ? pos.attacks_from<QUEEN >(def) & pos.pieces(Them, QUEEN ) :
+                                             square_bb(pos.square<KING>(Them));
+                        defenders &= ~pos.blockers_for_king(Them);
+                        
+                        if (defenders)
+                        {
+                            Square defender = lsb(defenders);
+                                              
+                            PieceType defType = type_of(pos.piece_on(defender));
+
+                            Bitboard badMoves = defType == KNIGHT ? pos.attacks_from<KNIGHT>(defender) :
+                                                defType == BISHOP ? pos.attacks_from<BISHOP>(defender) :
+                                                defType == ROOK   ? pos.attacks_from<ROOK  >(defender) :
+                                                defType == QUEEN  ? pos.attacks_from<QUEEN >(defender) :
+                                                                    pos.attacks_from<KING  >(defender) ;
+                            badMoves &= ~(squaresToQueen | pos.pieces(Them) | square_bb(s));
+
+                            while (badMoves)
+                            {
+                                Square landingSquare = pop_lsb(&badMoves);
+                                Bitboard nextMoves = defType == KNIGHT ? pos.attacks_from<KNIGHT>(landingSquare) :
+                                                     defType == BISHOP ? pos.attacks_from<BISHOP>(landingSquare) :
+                                                     defType == ROOK   ? pos.attacks_from<ROOK  >(landingSquare) :
+                                                     defType == QUEEN  ? pos.attacks_from<QUEEN >(landingSquare) :
+                                                                         pos.attacks_from<KING  >(landingSquare) ;
+                                if (!(nextMoves & squaresToQueen))
+                                    score += RestrictedPiece;
+
+                            }
+                        }
+                    }
+                }
             }
         } // r > RANK_3
 
