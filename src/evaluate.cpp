@@ -690,11 +690,11 @@ namespace {
                         while (badMoves)
                         {
                             Square landingSquare = pop_lsb(&badMoves);
-                            Bitboard nextMoves = defType == KNIGHT ? pos.attacks_from<KNIGHT>(landingSquare) :
-                                                 defType == BISHOP ? pos.attacks_from<BISHOP>(landingSquare) :
-                                                 defType == ROOK   ? pos.attacks_from<ROOK  >(landingSquare) :
-                                                 defType == QUEEN  ? pos.attacks_from<QUEEN >(landingSquare) :
-                                                                     pos.attacks_from<KING  >(landingSquare) ;
+                            Bitboard nextMoves = defType == KNIGHT ? PseudoAttacks[KNIGHT][landingSquare] :
+                                                 defType == BISHOP ? PseudoAttacks[BISHOP][landingSquare] :
+                                                 defType == ROOK   ? PseudoAttacks[ROOK  ][landingSquare] :
+                                                 defType == QUEEN  ? PseudoAttacks[QUEEN ][landingSquare] :
+                                                                     PseudoAttacks[KING  ][landingSquare] ;
                             if (!(nextMoves & blockSq))
                                 score += RestrictedPiece;
 
