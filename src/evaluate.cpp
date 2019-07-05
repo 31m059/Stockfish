@@ -667,15 +667,19 @@ namespace {
                     Bitboard defense = attackedBy[Them][ALL_PIECES] & squaresToQueen;
                     if (   defense && !more_than_one(defense)
                         && !(attackedBy2[Them] & squaresToQueen)
-                        && !(pos.pieces(Them) & squaresToQueen)
-                        && !(attackedBy[Them][PAWN] & squaresToQueen))
+                        && !(pos.pieces(Them) & squaresToQueen))
                     {
                         Square def = lsb(defense);
-                        Square defender = attackedBy[Them][KNIGHT] & def ? lsb(pos.attacks_from<KNIGHT>(def) & pos.pieces(Them, KNIGHT                  ) & ~pos.blockers_for_king(Them)) :
-                                          attackedBy[Them][BISHOP] & def ? lsb(pos.attacks_from<BISHOP>(def) & pos.pieces(Them, BISHOP) & ~pos.blockers_for_king(Them)) :
-                                          attackedBy[Them][ROOK  ] & def ? lsb(pos.attacks_from<ROOK  >(def) & pos.pieces(Them, ROOK  ) & ~pos.blockers_for_king(Them)) :
-                                          attackedBy[Them][QUEEN ] & def ? lsb(pos.attacks_from<QUEEN >(def) & pos.pieces(Them, QUEEN ) & ~pos.blockers_for_king(Them)) :
-                                          pos.square<KING>(Them);
+                        Bitboard defenders = attackedBy[Them][KNIGHT] & def ? pos.attacks_from<KNIGHT>(def) & pos.pieces(Them, KNIGHT) :
+                                             attackedBy[Them][BISHOP] & def ? pos.attacks_from<BISHOP>(def) & pos.pieces(Them, BISHOP) :
+                                             attackedBy[Them][ROOK  ] & def ? pos.attacks_from<ROOK  >(def) & pos.pieces(Them, ROOK  ) :
+                                             attackedBy[Them][QUEEN ] & def ? pos.attacks_from<QUEEN >(def) & pos.pieces(Them, QUEEN ) :
+                                             square_bb(pos.square<KING>(Them));
+                        defenders &= ~pos.blockers_for_king(Them);
+                        
+                        if (!defenders)
+                            continue;
+                        Square defender = lsb(defenders);
                                           
                         PieceType defType = type_of(pos.piece_on(defender));
                         Bitboard badMoves = defType == KNIGHT ? pos.attacks_from<KNIGHT>(defender) :
