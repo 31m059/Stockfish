@@ -133,7 +133,7 @@ namespace {
   };
 
   // Assorted bonuses and penalties
-  constexpr Score AttacksOnSpaceArea = S(  4,  0);
+  constexpr Score AttacksOnSpaceArea = S(  8,  0);
   constexpr Score BishopPawns        = S(  3,  7);
   constexpr Score CorneredBishop     = S( 50, 50);
   constexpr Score FlankAttacks       = S(  7,  0);
