@@ -695,8 +695,8 @@ namespace {
                                                  defType == ROOK   ? pos.attacks_from<ROOK  >(landingSquare) :
                                                  defType == QUEEN  ? pos.attacks_from<QUEEN >(landingSquare) :
                                                                      pos.attacks_from<KING  >(landingSquare) ;
-                            if (!(nextMoves & blockSq))
-                                score += make_score(2, 2);
+                            if (nextMoves & blockSq)
+                                score -= make_score(2, 2);
 
                         }
                     }
