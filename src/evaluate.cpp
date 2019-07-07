@@ -647,7 +647,8 @@ namespace {
                 if (!(pos.pieces(Them) & bb))
                     unsafeSquares &= attackedBy[Them][ALL_PIECES] | pos.pieces(Them);
 
-                bool knightOnly =   attackedBy[Them][KNIGHT] & squaresToQueen
+                bool knightOnly =   r > RANK_5
+                                 && attackedBy[Them][KNIGHT] & squaresToQueen
                                  && !more_than_one(attackedBy[Them][ALL_PIECES] & squaresToQueen)
                                  && !((pos.pieces(Them) | attackedBy2[Them]) & squaresToQueen);
 
@@ -657,7 +658,7 @@ namespace {
                 int k = !unsafeSquares                    ? 35 :
                         !(unsafeSquares & squaresToQueen) ? 20 :
                         !(unsafeSquares & blockSq)        ?  9 :
-                        knightOnly                        ?  5 :
+                        knightOnly                        ?  9 :
                                                              0 ;
 
                 // Assign a larger bonus if the block square is defended.
