@@ -648,7 +648,7 @@ namespace {
                     unsafeSquares &= attackedBy[Them][ALL_PIECES] | pos.pieces(Them);
 
                 bool knightOnly =   attackedBy[Them][KNIGHT] & squaresToQueen
-                                 && !more_than_one(attackedBy[Them][ALL_PIECES] & squaresToQueen)
+                                 && ((attackedBy[Them][ALL_PIECES] & squaresToQueen) == (attackedBy[Them][KNIGHT] & squaresToQueen))
                                  && !((pos.pieces(Them) | attackedBy2[Them]) & squaresToQueen);
 
                 // If there are no enemy attacks on passed pawn span, assign a big bonus.
