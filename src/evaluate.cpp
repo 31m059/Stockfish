@@ -659,7 +659,7 @@ namespace {
                 if (defendedSquares & blockSq)
                     k += 5;
 
-                bonus += make_score(k * w, std::max(k - 10 * more_than_one(attackedBy[Them][KING] & squaresToQueen), 0) * w);
+                bonus += make_score(k * w, k * w / (more_than_one(attackedBy[Them][KING] & squaresToQueen) ? 2 : 1));
             }
         } // r > RANK_3
 
