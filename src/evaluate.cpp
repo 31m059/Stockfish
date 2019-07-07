@@ -647,8 +647,7 @@ namespace {
                 if (!(pos.pieces(Them) & bb))
                     unsafeSquares &= attackedBy[Them][ALL_PIECES] | pos.pieces(Them);
 
-                bool knightOnly =   r > RANK_5
-                                 && attackedBy[Them][KNIGHT] & squaresToQueen
+                bool knightOnly =   attackedBy[Them][KNIGHT] & squaresToQueen
                                  && !more_than_one(attackedBy[Them][ALL_PIECES] & squaresToQueen)
                                  && !((pos.pieces(Them) | attackedBy2[Them]) & squaresToQueen);
 
