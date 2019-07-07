@@ -647,12 +647,17 @@ namespace {
                 if (!(pos.pieces(Them) & bb))
                     unsafeSquares &= attackedBy[Them][ALL_PIECES] | pos.pieces(Them);
 
+                bool knightOnly =   attackedBy[Them][KNIGHT] & squaresToQueen
+                                 && !more_than_one(attackedBy[Them][ALL_PIECES] & squaresToQueen)
+                                 && !((pos.pieces(Them) | attackedBy2[Them]) & squaresToQueen);
+
                 // If there are no enemy attacks on passed pawn span, assign a big bonus.
                 // Otherwise assign a smaller bonus if the path to queen is not attacked
                 // and even smaller bonus if it is attacked but block square is not.
                 int k = !unsafeSquares                    ? 35 :
                         !(unsafeSquares & squaresToQueen) ? 20 :
                         !(unsafeSquares & blockSq)        ?  9 :
+                        knightOnly                        ?  5 :
                                                              0 ;
 
                 // Assign a larger bonus if the block square is defended.
