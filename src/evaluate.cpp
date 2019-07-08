@@ -660,7 +660,7 @@ namespace {
                     k += 5;
 
                 if (more_than_one(attackedBy[Them][KING] & squaresToQueen))
-                    k -= 10;
+                    k = std::max(k - 5, 0);
 
                 bonus += make_score(k * w, k * w);
             }
