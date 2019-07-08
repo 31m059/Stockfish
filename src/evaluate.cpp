@@ -659,7 +659,7 @@ namespace {
                 if (defendedSquares & blockSq)
                     k += 5;
 
-                if (more_than_one(attackedBy[Them][KING] & squaresToQueen))
+                else if (more_than_one(attackedBy[Them][KING] & squaresToQueen))
                     k -= 5;
 
                 bonus += make_score(k * w, k * w);
