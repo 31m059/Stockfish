@@ -95,6 +95,7 @@ namespace {
         assert(pos.piece_on(s) == make_piece(Us, PAWN));
 
         Rank r = relative_rank(Us, s);
+        File f = file_of(s);
 
         e->pawnAttacksSpan[Us] |= pawn_attack_span(Us, s);
 
@@ -141,7 +142,13 @@ namespace {
             score -= Isolated + WeakUnopposed * int(!opposed);
 
         else if (backward)
-            score -= Backward + WeakUnopposed * int(!opposed);
+        {
+            score -= WeakUnopposed * int(!opposed);
+            if (f == FILE_A || f == FILE_H)
+                score -= Backward - make_score(0, 2 * r);
+            else
+                score -= Backward;
+        }
 
         if (doubled && !support)
             score -= Doubled;
