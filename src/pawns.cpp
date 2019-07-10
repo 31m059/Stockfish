@@ -145,7 +145,7 @@ namespace {
         {
             score -= WeakUnopposed * int(!opposed);
             if (f == FILE_A || f == FILE_H)
-                score -= Backward - make_score(0, 2 * r);
+                score -= Backward - make_score(0, r);
             else
                 score -= Backward;
         }
