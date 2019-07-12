@@ -152,7 +152,7 @@ namespace {
     while (b)
     {
         s = pop_lsb(&b);
-        score -= make_score(0, 14 * relative_rank(Them, s));
+        score -= make_score(0, 14 * (relative_rank(Us, s) + 1));
     }
 
     return score;
