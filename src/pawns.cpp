@@ -36,7 +36,7 @@ namespace {
   constexpr Score Doubled       = S(11, 56);
   constexpr Score Isolated      = S( 5, 15);
   constexpr Score WeakUnopposed = S(13, 27);
-  constexpr Score Attacked2Unsupported = S(38, 56);
+  constexpr Score Attacked2Unsupported = S(0, 56);
 
   // Connected pawn bonus
   constexpr int Connected[RANK_NB] = { 0, 7, 8, 12, 29, 48, 86 };
@@ -69,8 +69,9 @@ namespace {
 
     constexpr Color     Them = (Us == WHITE ? BLACK : WHITE);
     constexpr Direction Up   = (Us == WHITE ? NORTH : SOUTH);
+    constexpr Bitboard rank6 = (Us == WHITE ? Rank6BB : Rank3BB);
 
-    Bitboard b, neighbours, stoppers, doubled, support, phalanx;
+    Bitboard b, neighbours, stoppers, doubled, support, supporting, phalanx;
     Bitboard lever, leverPush;
     Square s;
     bool opposed, backward;
@@ -102,6 +103,7 @@ namespace {
         neighbours = ourPawns   & adjacent_files_bb(s);
         phalanx    = neighbours & rank_bb(s);
         support    = neighbours & rank_bb(s - Up);
+        supporting = neighbours & rank_bb(s + Up);
 
         // A pawn is backward when it is behind all pawns of the same color on
         // the adjacent files and cannot safely advance. Phalanx and isolated
@@ -137,7 +139,7 @@ namespace {
         else if (!neighbours)
             score -= Isolated + WeakUnopposed * int(!opposed);
 
-        else if (backward)
+        else if (backward && !(supporting & rank6))
             score -= Backward + WeakUnopposed * int(!opposed);
 
         if (doubled && !support)
