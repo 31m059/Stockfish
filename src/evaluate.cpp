@@ -133,7 +133,7 @@ namespace {
   };
 
   // Assorted bonuses and penalties
-  constexpr Score AttacksOnSpaceArea = S(  3,  0);
+  constexpr Score AttacksOnSpaceArea = S(  4,  0);
   constexpr Score BishopPawns        = S(  3,  7);
   constexpr Score CorneredBishop     = S( 50, 50);
   constexpr Score FlankAttacks       = S(  8,  0);
@@ -710,8 +710,8 @@ namespace {
     Score score = make_score(bonus * weight * weight / 16, 0);
 
     Bitboard b1 = attackedBy[Them][ALL_PIECES] & behind & safe;
-    Bitboard b2 = attackedBy2[Them]            & behind & safe;
-    score -= AttacksOnSpaceArea * (popcount(b1) + popcount(b2));
+    Bitboard b2 = b1 & attackedBy2[Them];
+    score -= AttacksOnSpaceArea * (popcount(b1) + 2 * popcount(b2));
 
     if (T)
         Trace::add(SPACE, Us, score);
