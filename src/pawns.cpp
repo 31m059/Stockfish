@@ -220,6 +220,13 @@ void Entry::evaluate_shelter(const Position& pos, Square ksq, Score& shelter) {
 
 template<Color Us>
 Score Entry::do_king_safety(const Position& pos) {
+    
+  constexpr Color Them = (Us == WHITE ? BLACK : WHITE);
+    
+  constexpr Bitboard CastleKSideStoppers =  (FileEBB | FileFBB | FileGBB | FileHBB)
+                                          & (Us == WHITE ? Rank2BB : Rank7BB);
+  constexpr Bitboard CastleQSideStoppers =  (FileBBB | FileCBB | FileDBB | FileEBB)
+                                          & (Us == WHITE ? Rank2BB : Rank7BB);                                        
 
   Square ksq = pos.square<KING>(Us);
   kingSquares[Us] = ksq;
@@ -238,10 +245,10 @@ Score Entry::do_king_safety(const Position& pos) {
   evaluate_shelter<Us>(pos, ksq, shelter);
 
   // If we can castle use the bonus after the castling if it is bigger
-  if (pos.can_castle(Us | KING_SIDE))
+  if (pos.can_castle(Us | KING_SIDE) && !(pos.pieces(Them, PAWN) & CastleKSideStoppers))
       evaluate_shelter<Us>(pos, relative_square(Us, SQ_G1), shelter);
 
-  if (pos.can_castle(Us | QUEEN_SIDE))
+  if (pos.can_castle(Us | QUEEN_SIDE) && !(pos.pieces(Them, PAWN) & CastleQSideStoppers))
       evaluate_shelter<Us>(pos, relative_square(Us, SQ_C1), shelter);
 
   return shelter - make_score(VALUE_ZERO, 16 * minPawnDist);
