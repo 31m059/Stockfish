@@ -709,7 +709,9 @@ namespace {
     int weight = pos.count<ALL_PIECES>(Us) - 1;
     Score score = make_score(bonus * weight * weight / 16, 0);
 
-    score -= AttacksOnSpaceArea * popcount(attackedBy[Them][ALL_PIECES] & behind & safe);
+    Bitboard b1 = attackedBy[Them][ALL_PIECES] & behind & safe;
+    Bitboard b2 = attackedBy2[Them]            & behind & safe;
+    score -= AttacksOnSpaceArea * (popcount(b1) + popcount(b2));
 
     if (T)
         Trace::add(SPACE, Us, score);
