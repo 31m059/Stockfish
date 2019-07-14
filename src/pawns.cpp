@@ -69,6 +69,7 @@ namespace {
 
     constexpr Color     Them = (Us == WHITE ? BLACK : WHITE);
     constexpr Direction Up   = (Us == WHITE ? NORTH : SOUTH);
+    constexpr Direction Down = (Us == WHITE ? SOUTH : NORTH);
     constexpr Bitboard rank6 = (Us == WHITE ? Rank6BB : Rank3BB);
 
     Bitboard b, neighbours, stoppers, doubled, support, supporting, phalanx;
@@ -103,7 +104,7 @@ namespace {
         neighbours = ourPawns   & adjacent_files_bb(s);
         phalanx    = neighbours & rank_bb(s);
         support    = neighbours & rank_bb(s - Up);
-        supporting = neighbours & rank_bb(s + Up);
+        supporting = neighbours & rank_bb(s + Up) & shift<Down>(theirPawns);
 
         // A pawn is backward when it is behind all pawns of the same color on
         // the adjacent files and cannot safely advance. Phalanx and isolated
