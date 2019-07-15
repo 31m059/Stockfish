@@ -794,7 +794,8 @@ namespace {
         &&  ss->staticEval >= beta - 36 * depth / ONE_PLY + 225
         && !excludedMove
         &&  pos.non_pawn_material(us)
-        && !more_than_one(pos.pieces(~us, PAWN) & (us == WHITE ? Rank2BB : Rank7BB))
+        && (  !(pos.pieces(~us, PAWN) & (us == WHITE ? Rank2BB : Rank7BB))
+            || (pos.pieces(us, PAWN)  & (us == WHITE ? Rank7BB : Rank2BB)))
         && (ss->ply >= thisThread->nmpMinPly || us != thisThread->nmpColor))
     {
         assert(eval - beta >= 0);
