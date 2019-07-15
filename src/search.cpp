@@ -794,7 +794,9 @@ namespace {
         &&  ss->staticEval >= beta - 36 * depth / ONE_PLY + 225
         && !excludedMove
         &&  pos.non_pawn_material(us)
-        && !more_than_one(pos.blockers_for_king(us) & pos.pieces(us))
+        && !(   (pos.blockers_for_king(us) & pos.pieces(us, KNIGHT))
+             || (pos.blockers_for_king(us) & pos.pieces(us, BISHOP) && pos.pinners(~us) & pos.pieces(ROOK))
+             || (pos.blockers_for_king(us) & pos.pieces(us, ROOK  ) && pos.pinners(~us) & pos.pieces(BISHOP)))
         && (ss->ply >= thisThread->nmpMinPly || us != thisThread->nmpColor))
     {
         assert(eval - beta >= 0);
