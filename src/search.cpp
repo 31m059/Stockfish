@@ -794,6 +794,7 @@ namespace {
         &&  ss->staticEval >= beta - 36 * depth / ONE_PLY + 225
         && !excludedMove
         &&  pos.non_pawn_material(us)
+        && distance(pos.square<KING>(us), pos.square<KING>(~us)) > 2
         && (ss->ply >= thisThread->nmpMinPly || us != thisThread->nmpColor))
     {
         assert(eval - beta >= 0);
