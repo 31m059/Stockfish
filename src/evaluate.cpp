@@ -711,7 +711,8 @@ namespace {
 
     Bitboard b1 = attackedBy[Them][ALL_PIECES] & behind & safe;
     Bitboard b2 = b1 & attackedBy2[Them];
-    score -= AttacksOnSpaceArea * (popcount(b1) + 2 * popcount(b2));
+    int pb2 = popcount(b2);
+    score -= AttacksOnSpaceArea * (popcount(b1) + pb2 * pb2);
 
     if (T)
         Trace::add(SPACE, Us, score);
