@@ -664,7 +664,7 @@ namespace {
         // pawn push to become passed, or have a pawn in front of them.
         if (   !pos.pawn_passed(Us, s + Up)
             || (pos.pieces(Them, PAWN) & (s + Up)))
-            bonus = bonus / 2;
+            bonus = bonus * 2 / 5;
 
         score += bonus + PassedFile[file_of(s)];
     }
