@@ -598,6 +598,8 @@ namespace {
     bestValue = -VALUE_INFINITE;
     maxValue = VALUE_INFINITE;
 
+    Bitboard pawnBlockers = (us == WHITE ? shift<SOUTH>(pos.pieces(~us)) : shift<NORTH>(pos.pieces(~us)));
+
     // Check for the available remaining time
     if (thisThread == Threads.main())
         static_cast<MainThread*>(thisThread)->check_time();
@@ -794,7 +796,9 @@ namespace {
         &&  ss->staticEval >= beta - 36 * depth / ONE_PLY + 225
         && !excludedMove
         &&  pos.non_pawn_material(us)
-        && (ss->ply >= thisThread->nmpMinPly || us != thisThread->nmpColor))
+        && (ss->ply >= thisThread->nmpMinPly || us != thisThread->nmpColor)
+        && (   more_than_one(pos.pieces(us) ^ pos.pieces(us, PAWN, KING))
+            || pos.pieces(us, PAWN) & ~pawnBlockers))
     {
         assert(eval - beta >= 0);
 
