@@ -659,7 +659,7 @@ namespace {
                 Bitboard targets = PawnAttacks[Us][s] & pe->passed_pawns(Them);
                 if (   targets
                     && pos.pawn_passed(Us, lsb(targets)))
-                    k += 10;
+                    k += 5;
 
                 bonus += make_score(k * w, k * w);
             }
