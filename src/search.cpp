@@ -795,9 +795,9 @@ namespace {
         && !excludedMove
         && (ss->ply >= thisThread->nmpMinPly || us != thisThread->nmpColor)
         && (pos.non_pawn_material(us)
-        || !(pos.pieces(us, PAWN) &
-            (us == WHITE ? shift<SOUTH>(pos.pieces(~us) | pawn_attacks_bb<BLACK>(pos.pieces(~us, PAWN))) :
-                           shift<NORTH>(pos.pieces(~us) | pawn_attacks_bb<WHITE>(pos.pieces(~us, PAWN)))))))
+        || (pos.pieces(us, PAWN) && !(pos.pieces(us, PAWN) &
+           (us == WHITE ? shift<SOUTH>(pos.pieces(~us) | pawn_attacks_bb<BLACK>(pos.pieces(~us, PAWN))) :
+                          shift<NORTH>(pos.pieces(~us) | pawn_attacks_bb<WHITE>(pos.pieces(~us, PAWN))))))))
     {
         assert(eval - beta >= 0);
 
