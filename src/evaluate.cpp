@@ -538,10 +538,9 @@ namespace {
                 score += ThreatByRank * (int)relative_rank(Them, s);
         }
 
-        b = weak & attackedBy[Us][KING];
-        if (pos.side_to_move() != Us)
-            b &= ~(pe->passedPawns[Them] & forward_ranks_bb(Us, pos.square<KING>(Us)));
-        if (b)
+        if (    weak & attackedBy[Us][KING]
+            & ~(pe->passedPawns[Them] & forward_ranks_bb(Us, pos.square<KING>(Us))
+            &  (Us == WHITE ? Rank2BB | Rank3BB | Rank4BB : Rank5BB | Rank6BB | Rank7BB)))
             score += ThreatByKing;
 
         b =  ~attackedBy[Them][ALL_PIECES]
