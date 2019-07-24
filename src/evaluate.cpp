@@ -147,7 +147,7 @@ namespace {
   constexpr Score RestrictedPiece    = S(  7,  7);
   constexpr Score RookOnPawn         = S( 10, 32);
   constexpr Score SliderOnQueen      = S( 59, 18);
-  constexpr Score ThreatByKing       = S( 24, 79);
+  constexpr Score ThreatByKing       = S( 24, 89);
   constexpr Score ThreatByPawnPush   = S( 48, 39);
   constexpr Score ThreatByRank       = S( 13,  0);
   constexpr Score ThreatBySafePawn   = S(173, 94);
@@ -538,7 +538,7 @@ namespace {
                 score += ThreatByRank * (int)relative_rank(Them, s);
         }
 
-        if (weak & attackedBy[Us][KING] & ~(pe->passedPawns[Them] & forward_ranks_bb(Us, pos.square<KING>(Us))))
+        if (weak & attackedBy[Us][KING] & ~(pe->passedPawns[Them] & attackedBy[Them][KING] & forward_ranks_bb(Us, pos.square<KING>(Us))))
             score += ThreatByKing;
 
         b =  ~attackedBy[Them][ALL_PIECES]
