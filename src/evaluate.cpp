@@ -532,7 +532,7 @@ namespace {
                 score += ThreatByRank * (int)relative_rank(Them, s);
         }
 
-        if (weak & attackedBy[Us][KING])
+        if (weak & attackedBy[Us][KING] & ~pe->passedPawns[Them])
             score += ThreatByKing;
 
         b =  ~attackedBy[Them][ALL_PIECES]
