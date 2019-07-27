@@ -624,7 +624,7 @@ namespace {
             // Adjust bonus based on the king's proximity
             bool advancedOnFile =   file_of(s) == file_of(ksqThem)
                                  && r > relative_rank(Us, ksqThem);
-            bonus += make_score(0, (  king_proximity(Them, blockSq) * (5 + advancedOnFile)
+            bonus += make_score(0, (  king_proximity(Them, blockSq) * (5 - !advancedOnFile)
                                     - king_proximity(Us,   blockSq) * 2) * w);
 
             // If blockSq is not the queening square then consider also a second push
