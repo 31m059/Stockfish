@@ -650,6 +650,11 @@ namespace {
                 // Assign a larger bonus if the block square is defended
                 if ((pos.pieces(Us) & bb) || (attackedBy[Us][ALL_PIECES] & blockSq))
                     k += 5;
+                
+                if (   r > RANK_5
+                    && PseudoAttacks[KING][s] & pe->passed_pawns(Us)
+                    && PseudoAttacks[KING][s] & pos.pieces(Us, BISHOP, KNIGHT))
+                    k += 10;
 
                 bonus += make_score(k * w, k * w);
             }
