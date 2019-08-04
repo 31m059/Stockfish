@@ -651,6 +651,12 @@ namespace {
                 if ((pos.pieces(Us) & bb) || (attackedBy[Us][ALL_PIECES] & blockSq))
                     k += 5;
 
+                Bitboard targets = PawnAttacks[Us][s] & pe->passed_pawns(Them);
+                if (   targets
+                    && pos.pawn_passed(Us, lsb(targets))
+                    && ~attackedBy[Them][ALL_PIECES] & lsb(targets))
+                    k += 20;
+
                 bonus += make_score(k * w, k * w);
             }
         } // r > RANK_3
