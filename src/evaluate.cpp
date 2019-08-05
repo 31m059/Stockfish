@@ -655,7 +655,7 @@ namespace {
                 if (   targets
                     && pos.pawn_passed(Us, lsb(targets))
                     && ~attackedBy[Them][ALL_PIECES] & lsb(targets))
-                    k += 20;
+                    k += 10;
 
                 bonus += make_score(k * w, k * w);
             }
