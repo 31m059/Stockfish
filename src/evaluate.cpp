@@ -116,10 +116,12 @@ namespace {
   constexpr Score ThreatByMinor[PIECE_TYPE_NB] = {
     S(0, 0), S(0, 31), S(39, 42), S(57, 44), S(68, 112), S(62, 120)
   };
+  constexpr Score ThreatByMinorBlockedPawn = S(0, 10);
 
   constexpr Score ThreatByRook[PIECE_TYPE_NB] = {
     S(0, 0), S(0, 24), S(38, 71), S(38, 61), S(0, 38), S(51, 38)
   };
+  constexpr Score ThreatByRookBlockedPawn  = S(0, 0);
 
   // PassedRank[Rank] contains a bonus according to the rank of a passed pawn
   constexpr Score PassedRank[RANK_NB] = {
@@ -519,6 +521,8 @@ namespace {
         {
             Square s = pop_lsb(&b);
             score += ThreatByMinor[type_of(pos.piece_on(s))];
+            if (pos.pieces(PAWN) & shift<Up>(pos.pieces()) & s)
+                score += ThreatByMinorBlockedPawn;
             if (type_of(pos.piece_on(s)) != PAWN)
                 score += ThreatByRank * (int)relative_rank(Them, s);
         }
@@ -528,6 +532,8 @@ namespace {
         {
             Square s = pop_lsb(&b);
             score += ThreatByRook[type_of(pos.piece_on(s))];
+            if (pos.pieces(PAWN) & shift<Up>(pos.pieces()) & s)
+                score += ThreatByRookBlockedPawn;
             if (type_of(pos.piece_on(s)) != PAWN)
                 score += ThreatByRank * (int)relative_rank(Them, s);
         }
