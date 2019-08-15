@@ -121,7 +121,7 @@ namespace {
   constexpr Score ThreatByRook[PIECE_TYPE_NB] = {
     S(0, 0), S(0, 24), S(38, 71), S(38, 61), S(0, 38), S(51, 38)
   };
-  constexpr Score ThreatByRookBlockedPawn  = S(0, 20);
+  constexpr Score ThreatByRookBlockedPawn  = S(0, 40);
 
   // PassedRank[Rank] contains a bonus according to the rank of a passed pawn
   constexpr Score PassedRank[RANK_NB] = {
