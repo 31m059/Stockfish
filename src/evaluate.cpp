@@ -468,8 +468,7 @@ namespace {
     // Penalty when our king is on a pawnless flank
     Bitboard b = pos.pieces(PAWN) & KingFlank[file_of(ksq)];
     if (   !b
-        || (   distance<Rank>(ksq, frontmost_sq(Us,   b)) > 4
-            && distance<Rank>(ksq, frontmost_sq(Them, b)) > 4))
+        || (!more_than_one(b) && distance<Rank>(ksq, lsb(b)) > 3))
         score -= PawnlessFlank;
 
     // Penalty if king flank is under attack, potentially moving toward the king
