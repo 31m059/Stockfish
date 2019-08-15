@@ -466,7 +466,9 @@ namespace {
         score -= make_score(kingDanger * kingDanger / 4096, kingDanger / 16);
 
     // Penalty when our king is on a pawnless flank
-    if (!(pos.pieces(PAWN) & KingFlank[file_of(ksq)]))
+    Bitboard b = pos.pieces(PAWN) & KingFlank[file_of(ksq)];
+    if (   !b
+        || (!more_than_one(b) && distance<Rank>(ksq, lsb(b)) > 4))
         score -= PawnlessFlank;
 
     // Penalty if king flank is under attack, potentially moving toward the king
