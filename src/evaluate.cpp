@@ -465,8 +465,8 @@ namespace {
     if (kingDanger > 100)
         score -= make_score(kingDanger * kingDanger / 4096, kingDanger / 16);
 
-    // Penalty when our king is on a pawnless flank
-    if (!(pos.pieces(PAWN) & KingFlank[file_of(ksq)]))
+    // Penalty when our king is on a flank with one pawn or fewer
+    if (!more_than_one(pos.pieces(PAWN) & KingFlank[file_of(ksq)]))
         score -= PawnlessFlank;
 
     // Penalty if king flank is under attack, potentially moving toward the king
