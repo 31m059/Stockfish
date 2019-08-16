@@ -798,6 +798,7 @@ namespace {
     if (   !PvNode
         && (ss-1)->currentMove != MOVE_NULL
         && (ss-1)->statScore < 22661
+        && !(ss-1)->ext
         &&  eval >= beta
         &&  ss->staticEval >= beta - 33 * depth / ONE_PLY + 299
         && !excludedMove
@@ -942,6 +943,7 @@ moves_loop: // When in check, search starts from here
       captureOrPromotion = pos.capture_or_promotion(move);
       movedPiece = pos.moved_piece(move);
       givesCheck = pos.gives_check(move);
+      ss->ext = false;
 
       // Step 13. Extensions (~70 Elo)
 
@@ -969,6 +971,7 @@ moves_loop: // When in check, search starts from here
           if (value < singularBeta)
           {
               extension = ONE_PLY;
+              ss->ext = true;
               singularLMR++;
 
               if (value < singularBeta - std::min(4 * depth / ONE_PLY, 36))
