@@ -563,7 +563,7 @@ namespace {
 
     constexpr bool PvNode = NT == PV;
     const bool rootNode = PvNode && ss->ply == 0;
-    constexpr Bitboard Rim = FileABB | FileHBB | Rank1BB | Rank8BB;
+    constexpr Bitboard Rim = (FileABB | FileBBB) | (FileGBB | FileHBB) | (Rank1BB | Rank2BB) | (Rank7BB | Rank8BB);
 
     // Check if we have an upcoming move which draws by repetition, or
     // if the opponent had an alternative move earlier to this position.
