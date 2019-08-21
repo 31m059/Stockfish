@@ -563,6 +563,7 @@ namespace {
 
     constexpr bool PvNode = NT == PV;
     const bool rootNode = PvNode && ss->ply == 0;
+    constexpr Bitboard Rim = FileABB | FileHBB | Rank1BB | Rank8BB;
 
     // Check if we have an upcoming move which draws by repetition, or
     // if the opponent had an alternative move earlier to this position.
@@ -802,7 +803,8 @@ namespace {
         &&  ss->staticEval >= beta - 33 * depth / ONE_PLY + 299
         && !excludedMove
         &&  pos.non_pawn_material(us)
-        && (ss->ply >= thisThread->nmpMinPly || us != thisThread->nmpColor))
+        && (ss->ply >= thisThread->nmpMinPly || us != thisThread->nmpColor)
+        && ( (pos.pieces(us) ^ pos.pieces(us, KING, PAWN)) & ~(pos.pieces(KNIGHT) & Rim) ))
     {
         assert(eval - beta >= 0);
 
