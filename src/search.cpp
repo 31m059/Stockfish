@@ -1017,7 +1017,8 @@ moves_loop: // When in check, search starts from here
       // Step 14. Pruning at shallow depth (~170 Elo)
       if (  !rootNode
           && pos.non_pawn_material(us)
-          && bestValue > VALUE_MATED_IN_MAX_PLY)
+          && bestValue > VALUE_MATED_IN_MAX_PLY
+          && (!captureOrPromotion || pos.non_pawn_material(~us) != PieceValue[MG][pos.piece_on(to_sq(move))]))
       {
           // Skip quiet moves if movecount exceeds our FutilityMoveCount threshold
           moveCountPruning = moveCount >= futility_move_count(improving, depth / ONE_PLY);
@@ -1051,7 +1052,6 @@ moves_loop: // When in check, search starts from here
                   continue;
           }
           else if (  (!givesCheck || !extension)
-                   && pos.non_pawn_material() != PieceValue[MG][pos.piece_on(to_sq(move))]
                    && !pos.see_ge(move, Value(-199) * (depth / ONE_PLY))) // (~20 Elo)
                   continue;
       }
