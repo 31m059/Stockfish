@@ -1012,7 +1012,8 @@ moves_loop: // When in check, search starts from here
           extension = ONE_PLY;
 
       // Extension for exiting queen endgame
-      else if (   type_of(movedPiece) == QUEEN
+      else if (   eval < 0
+               && type_of(movedPiece) == QUEEN
                && PieceValue[MG][pos.piece_on(to_sq(move))] == QueenValueMg
                && pos.non_pawn_material(us)  <= QueenValueMg + RookValueMg
                && pos.non_pawn_material(~us) <= QueenValueMg + RookValueMg)
