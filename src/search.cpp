@@ -1139,12 +1139,12 @@ moves_loop: // When in check, search starts from here
               // Decrease/increase reduction for moves with a good/bad history (~30 Elo)
               r -= ss->statScore / 16384 * ONE_PLY;
           }
-          else if (   eval < VALUE_DRAW
+          else if (   eval > VALUE_DRAW
                    && type_of(movedPiece) == QUEEN
                    && PieceValue[MG][pos.piece_on(to_sq(move))] == QueenValueMg
                    && pos.non_pawn_material(us)  <= QueenValueMg + RookValueMg
                    && pos.non_pawn_material(~us) <= QueenValueMg + RookValueMg)
-                  r += ONE_PLY;
+                  r -= ONE_PLY;
 
           Depth d = clamp(newDepth - r, ONE_PLY, newDepth);
 
