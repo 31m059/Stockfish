@@ -998,6 +998,11 @@ moves_loop: // When in check, search starts from here
       else if (type_of(move) == CASTLING)
           extension = ONE_PLY;
 
+      // Extension for simplifying to endgame
+      else if (   PieceValue[MG][pos.piece_on(to_sq(move))] > PawnValueMg
+               && PieceValue[MG][pos.piece_on(to_sq(move))] == pos.non_pawn_material(~us))
+          extension = ONE_PLY;
+
       // Shuffle extension
       else if (   PvNode
                && pos.rule50_count() > 18
@@ -1098,11 +1103,6 @@ moves_loop: // When in check, search starts from here
 
           // Decrease reduction if move has been singularly extended
           r -= singularLMR * ONE_PLY;
-
-          // Increase reduction for simplification to endgame
-          if (   PieceValue[MG][pos.piece_on(to_sq(move))] > PawnValueMg
-              && PieceValue[MG][pos.piece_on(to_sq(move))] == pos.non_pawn_material(~us))
-              r += ONE_PLY;
 
           if (!captureOrPromotion)
           {
