@@ -1011,6 +1011,13 @@ moves_loop: // When in check, search starts from here
                && pos.pawn_passed(us, to_sq(move)))
           extension = ONE_PLY;
 
+      // Extension for exiting queen endgame
+      else if (   type_of(movedPiece) == QUEEN
+               && PieceValue[MG][pos.piece_on(to_sq(move))] == QueenValueMg
+               && pos.non_pawn_material(us)  <= QueenValueMg + RookValueMg
+               && pos.non_pawn_material(~us) <= QueenValueMg + RookValueMg)
+          extension = ONE_PLY;
+
       // Calculate new depth for this move
       newDepth = depth - ONE_PLY + extension;
 
