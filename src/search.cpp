@@ -1051,7 +1051,7 @@ moves_loop: // When in check, search starts from here
                   continue;
           }
           else if (  (!givesCheck || !extension)
-                   && !(alpha > VALUE_DRAW && pos.non_pawn_material(~us) == PieceValue[MG][pos.piece_on(to_sq(move))])
+                   && !(beta < VALUE_DRAW && pos.non_pawn_material(~us) == PieceValue[MG][pos.piece_on(to_sq(move))])
                    && !pos.see_ge(move, Value(-199) * (depth / ONE_PLY))) // (~20 Elo)
                   continue;
       }
