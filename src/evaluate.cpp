@@ -526,7 +526,7 @@ namespace {
                 score += ThreatByRank * (int)relative_rank(Them, s);
         }
         if (pos.pieces(Them, QUEEN) & attackedBy[Us][ROOK] & ~b)
-            score += ThreatByRook[QUEEN] / 4;
+            score -= ThreatByRook[QUEEN] / 4;
 
         if (weak & attackedBy[Us][KING])
             score += ThreatByKing;
