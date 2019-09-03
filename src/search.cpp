@@ -1140,6 +1140,7 @@ moves_loop: // When in check, search starts from here
               r -= ss->statScore / 16384 * ONE_PLY;
           }
           else if (   pos.capture(move)
+                   && type_of(movedPiece) == PAWN
                    && PseudoAttacks[KING][pos.square<KING>(~us)] & to_sq(move))
                r -= ONE_PLY;
 
