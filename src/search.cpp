@@ -1139,6 +1139,9 @@ moves_loop: // When in check, search starts from here
               // Decrease/increase reduction for moves with a good/bad history (~30 Elo)
               r -= ss->statScore / 16384 * ONE_PLY;
           }
+          else if (   pos.capture(move)
+                   && PseudoAttacks[KING][pos.square<KING>(~us)] & to_sq(move))
+               r -= ONE_PLY;
 
           Depth d = clamp(newDepth - r, ONE_PLY, newDepth);
 
