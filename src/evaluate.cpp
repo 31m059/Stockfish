@@ -655,7 +655,7 @@ namespace {
         // pawn push to become passed, or have a pawn in front of them.
         if (   !pos.pawn_passed(Us, s + Up)
             || (pos.pieces(PAWN) & (s + Up)))
-            bonus = bonus / 3;
+            bonus = bonus * 2 / 3;
 
         score += bonus - PassedFile * std::min(f, ~f);
     }
