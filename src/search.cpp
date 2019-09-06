@@ -82,7 +82,7 @@ namespace {
   // History and stats update bonus, based on depth
   int stat_bonus(Depth depth) {
     int d = depth / ONE_PLY;
-    return d > 17 ? -8 : 22 * d * d + 151 * d - 140;
+    return d > 17 ? 0 : d * d * d + 236 * d - 204;
   }
 
   // Add a small random component to draw evaluations to avoid 3fold-blindness
@@ -1051,7 +1051,7 @@ moves_loop: // When in check, search starts from here
                   continue;
           }
           else if (  (!givesCheck || !extension)
-                   && !pos.see_ge(move, Value(-199) * (depth / ONE_PLY))) // (~20 Elo)
+                   && !pos.see_ge(move, Value(-PawnValueEg) * (depth / ONE_PLY))) // (~20 Elo)
                   continue;
       }
 
