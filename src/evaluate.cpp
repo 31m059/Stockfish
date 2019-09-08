@@ -462,8 +462,8 @@ namespace {
                  -   7;
 
     // Transform the kingDanger units into a Score, and subtract it from the evaluation
-    if (kingDanger > 1280)
-        score -= make_score(kingDanger * 5 / 8 - 400, kingDanger / 16);
+    if (kingDanger > 1600)
+        score -= make_score(kingDanger * 25 / 32 - 625, kingDanger / 16);
     else if (kingDanger > 100)
         score -= make_score(kingDanger * kingDanger / 4096, kingDanger / 16);
     
