@@ -809,7 +809,7 @@ namespace {
     
     Score kd = king<   WHITE>() - king<   BLACK>();
     int mg = int(mg_value(kd));
-    kd = make_score( std::max(std::min(mg, 2500), -2500), eg_value(kd));
+    kd = make_score( std::max(std::min(mg, 2000), -2000), eg_value(kd));
 
     score +=  kd
             + threats<WHITE>() - threats<BLACK>()
