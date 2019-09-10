@@ -831,8 +831,10 @@ namespace {
         Trace::add(TOTAL, score);
     }
 
-    return  (pos.side_to_move() == WHITE ? v : -v) // Side to move point of view
-           + Eval::Tempo;
+    v = (pos.side_to_move() == WHITE ? v : -v) // Side to move point of view
+       + Eval::Tempo;
+    // Round to nearest even value
+    return v + (v % 2);
   }
 
 } // namespace
