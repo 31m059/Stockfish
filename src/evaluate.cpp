@@ -347,8 +347,8 @@ namespace {
             if (relative_rank(Us, s) >= RANK_5)
                 score += RookOnPawn * popcount(pos.pieces(Them, PAWN) & PseudoAttacks[ROOK][s]);
 
-            // Bonus for rook on same file as their queen
-            if (file_bb(s) & pos.pieces(Them, QUEEN))
+            // Bonus for rook attacking their queen
+            if (b & pos.pieces(Them, QUEEN))
                 score += RookOnQueenFile;
 
             // Bonus for rook on an open or semi-open file
