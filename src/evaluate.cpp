@@ -324,7 +324,7 @@ namespace {
                 while (blocked)
                 {
                     Square block = pop_lsb(&blocked);
-                    score -= make_score(relative_rank(Them, block) / 4, relative_rank(Them, block) / 2);
+                    score -= make_score(relative_rank(Them, block) / 2, relative_rank(Them, block));
                 }
 
                 // Bonus for bishop on a long diagonal which can "see" both center squares
