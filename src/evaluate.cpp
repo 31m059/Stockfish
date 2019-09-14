@@ -317,7 +317,7 @@ namespace {
                 // Penalty according to number of pawns on the same color square as the
                 // bishop, bigger when the center files are blocked with pawns.
                 Bitboard dblAttackByPawn = pawn_double_attacks_bb<Them>(pos.pieces(Them, PAWN));
-                Bitboard blocked = pos.pieces(Us, PAWN) & shift<Down>(pos.pieces() | (dblAttackByPawn & ~pe->pawn_attacks_span(Us)));
+                Bitboard blocked = pos.pieces(Us, PAWN) & shift<Down>(pos.pieces() | (dblAttackByPawn & ~pe->pawn_attacks_span(Us) & ~attackedBy[Us][ALL_PIECES]));
 
                 score -= BishopPawns * pos.pawns_on_same_color_squares(Us, s)
                                      * (1 + popcount(blocked & CenterFiles));
@@ -812,9 +812,9 @@ namespace {
 
     // Pieces should be evaluated first (populate attack tables)
     score +=  pieces<WHITE, KNIGHT>() - pieces<BLACK, KNIGHT>()
-            + pieces<WHITE, BISHOP>() - pieces<BLACK, BISHOP>()
             + pieces<WHITE, ROOK  >() - pieces<BLACK, ROOK  >()
             + pieces<WHITE, QUEEN >() - pieces<BLACK, QUEEN >();
+    score +=  pieces<WHITE, BISHOP>() - pieces<BLACK, BISHOP>();
 
     score += mobility[WHITE] - mobility[BLACK];
 
