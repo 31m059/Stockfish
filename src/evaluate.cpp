@@ -118,7 +118,7 @@ namespace {
   };
 
   constexpr Score ThreatByRook[PIECE_TYPE_NB] = {
-    S(0, 0), S(0, 24), S(38, 71), S(38, 61), S(0, 38), S(51, 38)
+    S(0, 0), S(0, 24), S(38, 71), S(38, 61), S(0, 38), S(47, 38)
   };
 
   // PassedRank[Rank] contains a bonus according to the rank of a passed pawn
@@ -140,7 +140,7 @@ namespace {
   constexpr Score PawnlessFlank      = S( 17, 95);
   constexpr Score RestrictedPiece    = S(  7,  7);
   constexpr Score RookOnPawn         = S( 10, 32);
-  constexpr Score RookOnQueenFile    = S( 11,  4);
+  constexpr Score RookOnQueenFile    = S( 11,  5);
   constexpr Score SliderOnQueen      = S( 59, 18);
   constexpr Score ThreatByKing       = S( 24, 89);
   constexpr Score ThreatByPawnPush   = S( 48, 39);
@@ -457,14 +457,14 @@ namespace {
                  +  69 * kingAttacksCount[Them]
                  + 185 * popcount(kingRing[Us] & weak)
                  - 100 * bool(attackedBy[Us][KNIGHT] & attackedBy[Us][KING])
-                 -  35 * bool(attackedBy[Us][BISHOP] & attackedBy[Us][KING])
+                 - 100 * bool(attackedBy[Us][BISHOP] & attackedBy[Us][KING])
                  + 148 * popcount(unsafeChecks)
                  +  98 * popcount(pos.blockers_for_king(Us))
                  - 873 * !pos.count<QUEEN>(Them)
                  -   6 * mg_value(score) / 8
                  +       mg_value(mobility[Them] - mobility[Us])
                  +   5 * kingFlankAttacks * kingFlankAttacks / 16
-                 -   7;
+                 +  14;
 
     // Transform the kingDanger units into a Score, and subtract it from the evaluation
     if (kingDanger > 100)
