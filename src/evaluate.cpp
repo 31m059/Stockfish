@@ -735,13 +735,13 @@ namespace {
 
     int isolated = 0;
     Bitboard b = pos.pieces(strongSide, PAWN);
-    while (b) 
+    while (b)
     {
         Square s = pop_lsb(&b);
         if (!(pos.pieces(strongSide, PAWN) & adjacent_files_bb(s)))
             isolated++;
     }
-    
+
     // Compute the initiative bonus for the attacking side
     int complexity =   9 * pe->passed_count()
                     + 11 * pos.count<PAWN>()
@@ -749,9 +749,8 @@ namespace {
                     + 18 * pawnsOnBothFlanks
                     + 49 * !pos.non_pawn_material()
                     - 36 * almostUnwinnable
-                    -  5 * isolated
-                    - 99 ;
-    
+                    - isolated
+                    -103 ;
 
     // Now apply the bonus: note that we find the attacking side by extracting the
     // sign of the midgame or endgame values, and that we carefully cap the bonus
