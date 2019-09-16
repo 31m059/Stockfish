@@ -750,7 +750,7 @@ namespace {
                     + 49 * !pos.non_pawn_material()
                     - 36 * almostUnwinnable
                     -  5 * isolated
-                    -103 ;
+                    - 99 ;
     
 
     // Now apply the bonus: note that we find the attacking side by extracting the
