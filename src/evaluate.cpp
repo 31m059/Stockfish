@@ -765,15 +765,15 @@ namespace {
     // If scale is not already specific, scale down the endgame via general heuristics
     if (sf == SCALE_FACTOR_NORMAL)
     {
+        
+        bool nonrooks = pos.pieces(KNIGHT) || pos.pieces(BISHOP) || pos.pieces(QUEEN);
         if (   pos.opposite_bishops()
             && pos.non_pawn_material() == 2 * BishopValueMg)
             sf = 16 + 4 * pe->passed_count();
         else
-            sf = std::min(sf, 36 + (pos.opposite_bishops() ? 2 : 7) * pos.count<PAWN>(strongSide)
-                                 - 8 * !(pos.pieces(KNIGHT, BISHOP) | pos.pieces(QUEEN)));
+            sf = std::min(sf, 36 + (!nonrooks ? 1 : pos.opposite_bishops() ? 2 : 7) * pos.count<PAWN>(strongSide));
 
         sf = std::max(0, sf - (pos.rule50_count() - 12) / 4  );
-        //dbg_mean_of(sf);
     }
 
     return ScaleFactor(sf);
