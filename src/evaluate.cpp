@@ -732,6 +732,7 @@ namespace {
                            &&  outflanking < 0
                            && !pawnsOnBothFlanks;
 
+    Color strongSide = (eg >= 0 ? WHITE : BLACK);
     // Compute the initiative bonus for the attacking side
     int complexity =   9 * pe->passed_count()
                     + 11 * pos.count<PAWN>()
@@ -739,6 +740,7 @@ namespace {
                     + 18 * pawnsOnBothFlanks
                     + 49 * !pos.non_pawn_material()
                     - 36 * almostUnwinnable
+                    + 10 * (popcount(attackedBy[strongSide][ALL_PIECES]) > popcount(attackedBy[~strongSide][ALL_PIECES]))
                     -103 ;
 
     // Now apply the bonus: note that we find the attacking side by extracting the
