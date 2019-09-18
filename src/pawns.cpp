@@ -83,7 +83,7 @@ namespace {
 
     Bitboard doubleAttackThem = pawn_double_attacks_bb<Them>(theirPawns);
 
-    e->passedPawns[Us] = e->pawnAttacksSpan[Us] = 0;
+    e->isolated[Us] = e->passedPawns[Us] = e->pawnAttacksSpan[Us] = 0;
     e->kingSquares[Us] = SQ_NONE;
     e->pawnAttacks[Us] = pawn_attacks_bb<Us>(ourPawns);
 
@@ -137,7 +137,10 @@ namespace {
         }
 
         else if (!neighbours)
+        {
             score -= Isolated + WeakUnopposed * !opposed;
+            e->isolated[Us] |= s;
+        }
 
         else if (backward)
             score -= Backward + WeakUnopposed * !opposed;

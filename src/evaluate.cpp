@@ -130,6 +130,7 @@ namespace {
   constexpr Score BishopPawns        = S(  3,  7);
   constexpr Score CorneredBishop     = S( 50, 50);
   constexpr Score FlankAttacks       = S(  8,  0);
+  constexpr Score IsolatedSupport    = S(  5, 15);
   constexpr Score Hanging            = S( 69, 36);
   constexpr Score KingProtector      = S(  7,  8);
   constexpr Score KnightOnQueen      = S( 16, 12);
@@ -324,6 +325,10 @@ namespace {
                 // Bonus for bishop on a long diagonal which can "see" both center squares
                 if (more_than_one(attacks_bb<BISHOP>(s, pos.pieces(PAWN)) & Center))
                     score += LongDiagonalBishop;
+
+                // Cancel out Isolated penalty if pawn-supported
+                if (PawnAttacks[Them][s] & pe->isolated_pawns(Us))
+                    score += IsolatedSupport / 2;
             }
 
             // An important Chess960 pattern: A cornered bishop blocked by a friendly
