@@ -328,7 +328,7 @@ namespace {
 
                 // Cancel out Isolated penalty if pawn-supported
                 if (PawnAttacks[Them][s] & pe->isolated_pawns(Us))
-                    score += IsolatedSupport / 2;
+                    score += IsolatedSupport;
             }
 
             // An important Chess960 pattern: A cornered bishop blocked by a friendly
