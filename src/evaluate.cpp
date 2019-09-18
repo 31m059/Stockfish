@@ -326,9 +326,9 @@ namespace {
                 if (more_than_one(attacks_bb<BISHOP>(s, pos.pieces(PAWN)) & Center))
                     score += LongDiagonalBishop;
 
-                // Additional backward penalty if pawn-supported
+                // Cancel out backward penalty if pawn-supported
                 if (PawnAttacks[Them][s] & pe->backward_pawns(Us))
-                    score -= BackwardSupport;
+                    score += BackwardSupport / 2;
             }
 
             // An important Chess960 pattern: A cornered bishop blocked by a friendly
