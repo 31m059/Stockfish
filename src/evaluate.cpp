@@ -470,8 +470,8 @@ namespace {
     Bitboard neighbors;
     if (kingDanger > 100)
         score -= make_score(kingDanger * kingDanger / 4096, kingDanger / 16);
-    else if (kingDanger < -200 && more_than_one( neighbors = (pos.pieces(Us) ^ pos.pieces(Us, PAWN)) & attackedBy[Us][KING] ))
-        score -= make_score(20, 20) * (popcount(neighbors) - 1);
+    else if (kingDanger < -100 && more_than_one( neighbors = (pos.pieces(Us) ^ pos.pieces(Us, PAWN)) & attackedBy[Us][KING] ))
+        score -= make_score(10, 10) * (popcount(neighbors) - 1);
 
     // Penalty when our king is on a pawnless flank
     if (!(pos.pieces(PAWN) & KingFlank[file_of(ksq)]))
