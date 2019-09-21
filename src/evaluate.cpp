@@ -445,6 +445,16 @@ namespace {
         kingDanger += KnightSafeCheck;
     else
         unsafeChecks |= knightChecks;
+    
+    // Queen safe checks through one piece
+    b1 = attacks_bb<ROOK  >(ksq, (pos.pieces() ^ pos.pieces(Us, QUEEN)) & (~attackedBy[Them][QUEEN] | pos.pieces(PAWN)));
+    b2 = attacks_bb<BISHOP>(ksq, (pos.pieces() ^ pos.pieces(Us, QUEEN)) & (~attackedBy[Them][QUEEN] | pos.pieces(PAWN)));
+    queenChecks = (b1 | b2)
+                 & safe
+                 & ~attackedBy[Us][QUEEN]
+                 & ~(queenChecks | bishopChecks | rookChecks | knightChecks);
+    if (queenChecks)
+        kingDanger += QueenSafeCheck / 4;
 
     // Find the squares that opponent attacks in our king flank, and the squares
     // which are attacked twice in that flank.
