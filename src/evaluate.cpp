@@ -471,7 +471,7 @@ namespace {
                  -   6 * mg_value(score) / 8
                  +       mg_value(mobility[Them] - mobility[Us])
                  +   5 * kingFlankAttacks * kingFlankAttacks / 16
-                 +  25 * trappedRook[Us]
+                 +  25 * trappedRook[Us] * (1 + !pos.castling_rights(Us))
                  -   7;
 
     // Transform the kingDanger units into a Score, and subtract it from the evaluation
