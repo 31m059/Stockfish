@@ -189,6 +189,9 @@ namespace {
     // kingRing[color] are the squares adjacent to the king plus some other
     // very near squares, depending on king position.
     Bitboard kingRing[COLOR_NB];
+    
+    // trappedRook[color] is true if and only if that color has a TrappedRook penalty.
+    bool trappedRook[COLOR_NB];
 
     // kingAttackersCount[color] is the number of pieces of the given color
     // which attack a square in the kingRing of the enemy king.
@@ -249,6 +252,7 @@ namespace {
 
     kingAttackersCount[Them] = popcount(kingRing[Us] & pe->pawn_attacks(Them));
     kingAttacksCount[Them] = kingAttackersWeight[Them] = 0;
+    trappedRook[Us] = false;
 
     // Remove from kingRing[] the squares defended by two pawns
     kingRing[Us] &= ~dblAttackByPawn;
@@ -360,7 +364,10 @@ namespace {
             {
                 File kf = file_of(pos.square<KING>(Us));
                 if ((kf < FILE_E) == (file_of(s) < kf))
+                {
                     score -= TrappedRook * (1 + !pos.castling_rights(Us));
+                    trappedRook[Us] = true;
+                }
             }
         }
 
@@ -464,6 +471,7 @@ namespace {
                  -   6 * mg_value(score) / 8
                  +       mg_value(mobility[Them] - mobility[Us])
                  +   5 * kingFlankAttacks * kingFlankAttacks / 16
+                 +  50 * trappedRook[Us]
                  -   7;
 
     // Transform the kingDanger units into a Score, and subtract it from the evaluation
