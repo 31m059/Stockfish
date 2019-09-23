@@ -555,7 +555,8 @@ namespace {
     while (b)
     {
         Square s = pop_lsb(&b);
-        if (!(file_bb(s) & pos.pieces(Us, ROOK, QUEEN) && file_bb(s) & pos.pieces(Them, ROOK, QUEEN)))
+        Bitboard bb = attacks_bb<ROOK>(s, pos.pieces()) & file_bb(s) & pos.pieces(ROOK, QUEEN);
+        if (!(bb & pos.pieces(Us) && bb & pos.pieces(Them)))
             score += ThreatBySafePawn;
     }
 
