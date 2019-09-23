@@ -552,7 +552,12 @@ namespace {
     // Bonus for attacking enemy pieces with our relatively safe pawns
     b = pos.pieces(Us, PAWN) & safe;
     b = pawn_attacks_bb<Us>(b) & nonPawnEnemies;
-    score += ThreatBySafePawn * popcount(b);
+    while (b)
+    {
+        Square s = pop_lsb(&b);
+        if (!(file_bb(s) & pos.pieces(Us, ROOK, QUEEN) && file_bb(s) & pos.pieces(Them, ROOK, QUEEN)))
+            score += ThreatBySafePawn;
+    }
 
     // Find squares where our pawns can push on the next move
     b  = shift<Up>(pos.pieces(Us, PAWN)) & ~pos.pieces();
