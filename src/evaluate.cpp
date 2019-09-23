@@ -556,8 +556,8 @@ namespace {
     {
         Square s = pop_lsb(&b);
         Bitboard bb = attacks_bb<ROOK>(s, pos.pieces()) & file_bb(s) & pos.pieces(ROOK, QUEEN);
-        if (!(bb & pos.pieces(Us) && bb & pos.pieces(Them)))
-            score += ThreatBySafePawn;
+        bool possiblePin = bb & pos.pieces(Us) && bb & pos.pieces(Them);
+        score += ThreatBySafePawn / (1 + possiblePin);
     }
 
     // Find squares where our pawns can push on the next move
