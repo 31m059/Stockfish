@@ -35,6 +35,8 @@ namespace PSQT {
 // type on a given square a (middlegame, endgame) score pair is assigned. Table
 // is defined for files A..D and white side: it is symmetric for black side and
 // second half of the files.
+const int A = 1;
+const int B = 3;
 constexpr Score Bonus[][RANK_NB][int(FILE_NB) / 2] = {
   { },
   { },
@@ -63,10 +65,10 @@ constexpr Score Bonus[][RANK_NB][int(FILE_NB) / 2] = {
    { S(-18,-10), S(-10,-7), S(-5,  1), S( 9, 0) },
    { S(-21, 10), S( -7,-4), S( 3,  2), S( 7,-2) },
    { S(-13, -5), S( -5, 2), S(-4, -8), S(-6, 8) },
-   { S(-24, -8), S(-12, 5), S(-1,  4), S( 6,-9) },
-   { S(-24,  3), S( -4,-2), S( 4,-10), S(10, 7) },
-   { S( -8,  1), S(  6, 2), S(10, 17), S(12,-8) },
-   { S(-22, 12), S(-24,-6), S(-6, 13), S( 4, 7) }
+   { S(-24+A, -8+B), S(-12+A, 5+B), S(-1+A,  4+B), S( 6+A,-9+B) },
+   { S(-24+A,  3+B), S( -4+A,-2+B), S( 4+A,-10+B), S(10+A, 7+B) },
+   { S( -8+A,  1+B), S(  6+A, 2+B), S(10+A, 17+B), S(12+A,-8+B) },
+   { S(-22+A, 12+B), S(-24+A,-6+B), S(-6+A, 13+B), S( 4+A, 7+B) }
   },
   { // Queen
    { S( 3,-69), S(-5,-57), S(-5,-47), S( 4,-26) },
