@@ -998,9 +998,8 @@ moves_loop: // When in check, search starts from here
           extension = ONE_PLY;
 
       // Castling extension
-      else if (   type_of(move) == CASTLING
-               && !more_than_one(CenterFiles & pos.pieces(WHITE, PAWN) & shift<SOUTH>(pos.pieces(BLACK, PAWN))))
-          extension = ONE_PLY;
+      else if (type_of(move) == CASTLING)
+          extension = (more_than_one(CenterFiles & pos.pieces(WHITE, PAWN) & shift<SOUTH>(pos.pieces(BLACK, PAWN))) ? 2 : 1) * ONE_PLY;
 
       // Shuffle extension
       else if (   PvNode
