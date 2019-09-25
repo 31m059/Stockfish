@@ -998,7 +998,8 @@ moves_loop: // When in check, search starts from here
           extension = ONE_PLY;
 
       // Castling extension
-      else if (type_of(move) == CASTLING)
+      else if (   type_of(move) == CASTLING
+               && !more_than_one(CenterFiles & pos.pieces(WHITE, PAWN) & shift<SOUTH>(pos.pieces(BLACK, PAWN))))
           extension = ONE_PLY;
 
       // Shuffle extension
