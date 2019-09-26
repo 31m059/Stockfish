@@ -315,10 +315,6 @@ namespace {
             // Penalty if the piece is far from the king
             score -= KingProtector * distance(s, pos.square<KING>(Us));
 
-            bb =  b & StormRanks & KingFlank[file_of(pos.square<KING>(Them))]
-                & pos.pieces(Us, PAWN) & shift<Down>(~pos.pieces() | attackedBy[Us][PAWN]);
-            score += StormSupport * popcount(bb);
-
             if (Pt == BISHOP)
             {
                 // Penalty according to number of pawns on the same color square as the
@@ -331,6 +327,12 @@ namespace {
                 // Bonus for bishop on a long diagonal which can "see" both center squares
                 if (more_than_one(attacks_bb<BISHOP>(s, pos.pieces(PAWN)) & Center))
                     score += LongDiagonalBishop;
+            }
+            else // Pt == KNIGHT
+            {
+                bb =  b & StormRanks & KingFlank[file_of(pos.square<KING>(Them))]
+                & pos.pieces(Us, PAWN) & shift<Down>(~pos.pieces() | attackedBy[Us][PAWN]);
+                score += StormSupport * popcount(bb);
             }
 
             // An important Chess960 pattern: A cornered bishop blocked by a friendly
