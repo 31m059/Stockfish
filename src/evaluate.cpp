@@ -331,7 +331,7 @@ namespace {
             else // Pt == KNIGHT
             {
                 bb =  b & StormRanks & KingFlank[file_of(pos.square<KING>(Them))]
-                & pos.pieces(Us, PAWN) & shift<Down>(~pos.pieces() | attackedBy[Us][PAWN]);
+                & pos.pieces(Us, PAWN) & ~shift<Down>(pos.pieces());
                 score += StormSupport * popcount(bb);
             }
 
