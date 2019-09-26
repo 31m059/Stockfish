@@ -312,18 +312,18 @@ namespace {
             // Knight and Bishop bonus for being right behind a pawn
             if (shift<Down>(pos.pieces(PAWN)) & s)
                 score += MinorBehindPawn;
-            
-            bb =  b & ~pos.pieces()
-                    & shift<Up>(  StormRanks 
-                                & KingFlank[file_of(pos.square<KING>(Them))]
-                                & pos.pieces(Us, PAWN));
-            score += StormSupport * popcount(bb);
 
             // Penalty if the piece is far from the king
             score -= KingProtector * distance(s, pos.square<KING>(Us));
 
             if (Pt == BISHOP)
             {
+                bb =  b & ~pos.pieces()
+                    & shift<Up>(  StormRanks 
+                                & KingFlank[file_of(pos.square<KING>(Them))]
+                                & pos.pieces(Us, PAWN));
+                score += StormSupport * popcount(bb);
+                
                 // Penalty according to number of pawns on the same color square as the
                 // bishop, bigger when the center files are blocked with pawns.
                 Bitboard blocked = pos.pieces(Us, PAWN) & shift<Down>(pos.pieces());
