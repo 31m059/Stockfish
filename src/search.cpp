@@ -999,7 +999,7 @@ moves_loop: // When in check, search starts from here
 
       // Castling extension
       else if (type_of(move) == CASTLING)
-          extension = (file_bb(to_sq(move)) & pos.pieces(us, PAWN) ? 1 : 2) * ONE_PLY;
+          extension = (file_bb(to_sq(move)) & pos.pieces(us, PAWN) ? 1 : 3) * ONE_PLY;
 
       // Shuffle extension
       else if (   PvNode
