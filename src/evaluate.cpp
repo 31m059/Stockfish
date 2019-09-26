@@ -142,7 +142,7 @@ namespace {
   constexpr Score RookOnPawn         = S( 10, 32);
   constexpr Score RookOnQueenFile    = S( 11,  4);
   constexpr Score SliderOnQueen      = S( 59, 18);
-  constexpr Score StormSupport       = S( 10, 10);
+  constexpr Score StormSupport       = S( 10,  0);
   constexpr Score ThreatByKing       = S( 24, 89);
   constexpr Score ThreatByPawnPush   = S( 48, 39);
   constexpr Score ThreatByRank       = S( 13,  0);
@@ -315,15 +315,15 @@ namespace {
 
             // Penalty if the piece is far from the king
             score -= KingProtector * distance(s, pos.square<KING>(Us));
-
-            if (Pt == BISHOP)
-            {
-                bb =  b & ~pos.pieces()
+            
+            bb =  b & ~pos.pieces()
                     & shift<Up>(  StormRanks 
                                 & KingFlank[file_of(pos.square<KING>(Them))]
                                 & pos.pieces(Us, PAWN));
-                score += StormSupport * popcount(bb);
-                
+            score += StormSupport * popcount(bb);
+
+            if (Pt == BISHOP)
+            {                
                 // Penalty according to number of pawns on the same color square as the
                 // bishop, bigger when the center files are blocked with pawns.
                 Bitboard blocked = pos.pieces(Us, PAWN) & shift<Down>(pos.pieces());
