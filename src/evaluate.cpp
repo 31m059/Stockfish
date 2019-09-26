@@ -261,6 +261,7 @@ namespace {
   Score Evaluation<T>::pieces() {
 
     constexpr Color     Them = (Us == WHITE ? BLACK : WHITE);
+    constexpr Direction Up   = (Us == WHITE ? NORTH : SOUTH);
     constexpr Direction Down = (Us == WHITE ? SOUTH : NORTH);
     constexpr Bitboard OutpostRanks = (Us == WHITE ? Rank4BB | Rank5BB | Rank6BB
                                                    : Rank5BB | Rank4BB | Rank3BB);
@@ -330,8 +331,10 @@ namespace {
             }
             else // Pt == KNIGHT
             {
-                bb =  b & StormRanks & KingFlank[file_of(pos.square<KING>(Them))]
-                & pos.pieces(Us, PAWN) & ~shift<Down>(pos.pieces());
+                bb =  b & ~pos.pieces()
+                        & shift<Up>(  StormRanks 
+                                    & KingFlank[file_of(pos.square<KING>(Them))]
+                                    & pos.pieces(Us, PAWN));
                 score += StormSupport * popcount(bb);
             }
 
