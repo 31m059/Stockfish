@@ -142,7 +142,7 @@ namespace {
   constexpr Score RookOnPawn         = S( 10, 32);
   constexpr Score RookOnQueenFile    = S( 11,  4);
   constexpr Score SliderOnQueen      = S( 59, 18);
-  constexpr Score StormSupport       = S( 10, 10);
+  constexpr Score StormSupport       = S( 20, 20);
   constexpr Score ThreatByKing       = S( 24, 89);
   constexpr Score ThreatByPawnPush   = S( 48, 39);
   constexpr Score ThreatByRank       = S( 13,  0);
