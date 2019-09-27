@@ -992,9 +992,8 @@ moves_loop: // When in check, search starts from here
               return singularBeta;
       }
 
-      // Check extension (~2 Elo)
-      else if (    givesCheck
-               && (pos.is_discovery_check_on_king(~us, move) || pos.see_ge(move)))
+      // Castling extension
+      else if (type_of(move) == CASTLING)
           extension = ONE_PLY;
 
       // Shuffle extension
@@ -1009,9 +1008,10 @@ moves_loop: // When in check, search starts from here
                && pos.advanced_pawn_push(move)
                && pos.pawn_passed(us, to_sq(move)))
           extension = ONE_PLY;
-          
-      // Castling extension
-      if (type_of(move) == CASTLING)
+
+      // Check extension (~2 Elo)
+      if (    givesCheck
+          && (pos.is_discovery_check_on_king(~us, move) || pos.see_ge(move)))
           extension = ONE_PLY;
 
       // Calculate new depth for this move
