@@ -1012,7 +1012,7 @@ moves_loop: // When in check, search starts from here
           
       // Castling extension
       if (type_of(move) == CASTLING)
-          extension = ONE_PLY;
+          extension = (file_bb(to_sq(move)) & pos.pieces(us, PAWN) ? 1 : 2) * ONE_PLY;
 
       // Calculate new depth for this move
       newDepth = depth - ONE_PLY + extension;
