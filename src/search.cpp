@@ -994,7 +994,8 @@ moves_loop: // When in check, search starts from here
 
       // Check extension (~2 Elo)
       else if (    givesCheck
-               && (pos.is_discovery_check_on_king(~us, move) || pos.see_ge(move)))
+               && (  (pos.is_discovery_check_on_king(~us, move) && !(PseudoAttacks[KING][pos.square<KING>(~us)] & to_sq(move)))
+                   || pos.see_ge(move)))
           extension = ONE_PLY;
 
       // Shuffle extension
