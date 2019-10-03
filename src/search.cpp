@@ -1004,7 +1004,7 @@ moves_loop: // When in check, search starts from here
           extension = ONE_PLY;
 
       // Passed pawn extension
-      else if (   depth >= 6 * ONE_PLY
+      else if (   depth < 6 * ONE_PLY
                && pos.advanced_pawn_push(move)
                && pos.pawn_passed(us, to_sq(move)))
           extension = ONE_PLY;
