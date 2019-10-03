@@ -672,8 +672,8 @@ namespace {
     constexpr Color Them     = (Us == WHITE ? BLACK : WHITE);
     constexpr Direction Down = (Us == WHITE ? SOUTH : NORTH);
     constexpr Bitboard SpaceMask =
-      Us == WHITE ? CenterFiles & (Rank2BB | Rank3BB | Rank4BB)
-                  : CenterFiles & (Rank7BB | Rank6BB | Rank5BB);
+      Us == WHITE ? CenterFiles & (Rank2BB | Rank3BB | Rank4BB) & ~(Rank2BB & (FileCBB | FileFBB))
+                  : CenterFiles & (Rank7BB | Rank6BB | Rank5BB) & ~(Rank7BB & (FileCBB | FileFBB));
 
     // Find the available squares for our pieces inside the area defined by SpaceMask
     Bitboard safe =   SpaceMask
