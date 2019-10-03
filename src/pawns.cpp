@@ -115,7 +115,7 @@ namespace {
         if (phalanx || !backward)
         {
             Bitboard span = pawn_attack_span(Us, s);
-            if (opposed && (theirPawns & span || !more_than_one(neighbours)))
+            if (opposed && (theirPawns & span || !neighbours))
                 e->pawnAttacksSpan[Us] |= span &
                                           ~pawn_attack_span(Us, frontmost_sq(Them, opposed));
             else
