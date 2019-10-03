@@ -112,13 +112,14 @@ namespace {
 
         // Span of backward pawns and span behind opposing pawns are not included
         // in the pawnAttacksSpan bitboard.
-        if (!backward || phalanx)
+        if (phalanx || !backward)
         {
-            if (opposed)
-                e->pawnAttacksSpan[Us] |=  pawn_attack_span(Us, s) &
+            Bitboard span = pawn_attack_span(Us, s);
+            if (opposed && (theirPawns & span || !more_than_one(neighbours)))
+                e->pawnAttacksSpan[Us] |= span &
                                           ~pawn_attack_span(Us, frontmost_sq(Them, opposed));
             else
-                e->pawnAttacksSpan[Us] |= pawn_attack_span(Us, s);
+                e->pawnAttacksSpan[Us] |= span;
         }
 
         // A pawn is passed if one of the three following conditions is true:
