@@ -1011,6 +1011,7 @@ moves_loop: // When in check, search starts from here
        
       // Extension for interfering with castling
       else if (type_of(movedPiece) != KING && type_of(movedPiece) != PAWN
+               && depth <= 2 * ONE_PLY
                && pos.castling_rights(~us))
       {
           CastlingRights kside = (us == WHITE ? BLACK_OO  : WHITE_OO );
