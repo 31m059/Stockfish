@@ -1018,19 +1018,14 @@ moves_loop: // When in check, search starts from here
           Square rookK = (us == WHITE ? SQ_H1 : SQ_H8);
           Square rookQ = (us == WHITE ? SQ_A1 : SQ_A8);
           Square ksq   = (us == WHITE ? SQ_E1 : SQ_E8);
-            
-          Bitboard b =     type_of(movedPiece) == BISHOP ? attacks_bb<BISHOP>(to_sq(move), pos.pieces() ^ pos.pieces(QUEEN))
-                         : type_of(movedPiece) ==   ROOK ? attacks_bb<  ROOK>(to_sq(move), pos.pieces() ^ pos.pieces(QUEEN) ^ pos.pieces(us, ROOK))
-                         : type_of(movedPiece) ==  QUEEN ? pos.attacks_from<QUEEN>(to_sq(move))
-                         : pos.attacks_from<KNIGHT>(to_sq(move));
 
           if (        pos.can_castle(kside)
                   && !pos.castling_impeded(kside)
-                  && b & between_bb(ksq, rookK))
+                  && PseudoAttacks[type_of(movedPiece)][to_sq(move)] & between_bb(ksq, rookK))
                extension = ONE_PLY;
           else if (    pos.can_castle(qside)
                    && !pos.castling_impeded(qside)
-                   && b & between_bb(ksq, rookQ))
+                   && PseudoAttacks[type_of(movedPiece)][to_sq(move)] & between_bb(ksq, rookQ))
                extension = ONE_PLY;
       }
 
