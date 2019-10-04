@@ -380,6 +380,7 @@ namespace {
     constexpr Color    Them = (Us == WHITE ? BLACK : WHITE);
     constexpr Bitboard Camp = (Us == WHITE ? AllSquares ^ Rank6BB ^ Rank7BB ^ Rank8BB
                                            : AllSquares ^ Rank1BB ^ Rank2BB ^ Rank3BB);
+    constexpr Direction Up  = (Us == WHITE ? NORTH : SOUTH);
 
     Bitboard weak, b1, b2, safe, unsafeChecks = 0;
     Bitboard rookChecks, queenChecks, bishopChecks, knightChecks;
@@ -458,6 +459,7 @@ namespace {
                  -   6 * mg_value(score) / 8
                  +       mg_value(mobility[Them] - mobility[Us])
                  +   5 * kingFlankAttacks * kingFlankAttacks / 16
+                 +  50 * popcount(pos.pieces(Them, PAWN) & KingFlank[file_of(ksq)] & shift<Up>(pos.pieces(Us, PAWN)) & ~pe->pawn_attacks_span(Us))
                  -   7;
 
     // Transform the kingDanger units into a Score, and subtract it from the evaluation
