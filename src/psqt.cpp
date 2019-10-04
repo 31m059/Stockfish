@@ -27,8 +27,8 @@ Value PieceValue[PHASE_NB][PIECE_NB] = {
   { VALUE_ZERO, PawnValueEg, KnightValueEg, BishopValueEg, RookValueEg, QueenValueEg }
 };
 
-const int A = -5;
-const int B = -5;
+const int A = -10;
+const int B = -10;
 
 namespace PSQT {
 
