@@ -1008,6 +1008,31 @@ moves_loop: // When in check, search starts from here
                && pos.advanced_pawn_push(move)
                && pos.pawn_passed(us, to_sq(move)))
           extension = ONE_PLY;
+       
+      // Extension for interfering with castling
+      else if (type_of(movedPiece) != KING && type_of(movedPiece) != PAWN
+               && pos.castling_rights(~us))
+      {
+          CastlingRights kside = (us == WHITE ? BLACK_OO  : WHITE_OO );
+          CastlingRights qside = (us == WHITE ? BLACK_OOO : WHITE_OOO);
+          Square rookK = (us == WHITE ? SQ_H1 : SQ_H8);
+          Square rookQ = (us == WHITE ? SQ_A1 : SQ_A8);
+          Square ksq   = (us == WHITE ? SQ_E1 : SQ_E8);
+            
+          Bitboard b =     type_of(movedPiece) == BISHOP ? attacks_bb<BISHOP>(to_sq(move), pos.pieces() ^ pos.pieces(QUEEN))
+                         : type_of(movedPiece) ==   ROOK ? attacks_bb<  ROOK>(to_sq(move), pos.pieces() ^ pos.pieces(QUEEN) ^ pos.pieces(us, ROOK))
+                         : type_of(movedPiece) ==  QUEEN ? pos.attacks_from<QUEEN>(to_sq(move))
+                         : pos.attacks_from<KNIGHT>(to_sq(move));
+
+          if (        pos.can_castle(kside)
+                  && !pos.castling_impeded(kside)
+                  && b & between_bb(ksq, rookK))
+               extension = ONE_PLY;
+          else if (    pos.can_castle(qside)
+                   && !pos.castling_impeded(qside)
+                   && b & between_bb(ksq, rookQ))
+               extension = ONE_PLY;
+      }
 
       // Castling extension
       if (type_of(move) == CASTLING)
