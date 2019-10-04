@@ -27,6 +27,9 @@ Value PieceValue[PHASE_NB][PIECE_NB] = {
   { VALUE_ZERO, PawnValueEg, KnightValueEg, BishopValueEg, RookValueEg, QueenValueEg }
 };
 
+const int A = -5;
+const int B = -5;
+
 namespace PSQT {
 
 #define S(mg, eg) make_score(mg, eg)
@@ -49,7 +52,7 @@ constexpr Score Bonus[][RANK_NB][int(FILE_NB) / 2] = {
    { S(-200, -98), S(-80,-89), S(-53,-53), S(-32,-16) }
   },
   { // Bishop
-   { S(-44,-63), S( -4,-30), S(-11,-35), S(-28, -8) },
+   { S(-44+A,-63+B), S( -4,-30), S(-11,-35), S(-28, -8) },
    { S(-18,-38), S(  7,-13), S( 14,-14), S(  3,  0) },
    { S( -8,-18), S( 24,  0), S( -3, -7), S( 15, 13) },
    { S(  1,-26), S(  8, -3), S( 26,  1), S( 37, 16) },
