@@ -323,7 +323,7 @@ namespace {
                 bb = attacks_bb<BISHOP>(s, pos.pieces(PAWN));
                 Bitboard Diagonals = LineBB[SQ_A1][SQ_H8] | LineBB[SQ_H1][SQ_A8];
                 if (    more_than_one(bb & Center)
-                    && !more_than_one(bb & Diagonals & attackedBy[Them][PAWN]) )
+                    &&  more_than_one(bb & Diagonals & ~attackedBy[Them][PAWN]) )
                     score += LongDiagonalBishop;
             }
 
