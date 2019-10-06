@@ -248,8 +248,8 @@ namespace {
     // Remove from kingRing[] the squares defended by two pawns
     kingRing[Us] &= ~dblAttackByPawn;
 
-    kingAttackersCount[Them] = popcount(kingRing[Us] & pe->pawn_attacks(Them));
-    kingAttacksCount[Them] = kingAttackersWeight[Them] = 0;
+    kingAttackersCount[Them] = kingAttacksCount[Them] = popcount(kingRing[Us] & pe->pawn_attacks(Them));
+    kingAttackersWeight[Them] = 0;
   }
 
 
