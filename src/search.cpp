@@ -1110,6 +1110,11 @@ moves_loop: // When in check, search starts from here
               if (cutNode)
                   r += 2;
 
+              // Decrease reduction when maneuvering but not repeating
+              if (   from_sq(move) ==   to_sq((ss-2)->currentMove)
+                  &&   to_sq(move) != from_sq((ss-2)->currentMove))
+                  r--;
+
               // Decrease reduction for moves that escape a capture. Filter out
               // castling moves, because they are coded as "king captures rook" and
               // hence break make_move(). (~5 Elo)
