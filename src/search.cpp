@@ -1115,7 +1115,8 @@ moves_loop: // When in check, search starts from here
                   && from_sq((ss-2)->currentMove) ==   to_sq((ss-4)->currentMove)
                   && from_sq((ss-2)->currentMove) !=   to_sq(move)
                   && from_sq((ss-4)->currentMove) !=   to_sq(move)
-                  && from_sq((ss-4)->currentMove) !=   to_sq((ss-2)->currentMove))
+                  && from_sq((ss-4)->currentMove) !=   to_sq((ss-2)->currentMove)
+                  && !aligned(to_sq(move), to_sq((ss-2)->currentMove), to_sq((ss-4)->currentMove)))
                   r--;
 
               // Decrease reduction for moves that escape a capture. Filter out
