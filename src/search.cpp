@@ -1011,6 +1011,7 @@ moves_loop: // When in check, search starts from here
           
       // Extension for maneuvering but not repeating
       else if (   depth < 3
+               && type_of(movedPiece) != PAWN && type_of(movedPiece) != KING
                && from_sq(move)                ==   to_sq((ss-2)->currentMove)
                && from_sq((ss-2)->currentMove) ==   to_sq((ss-4)->currentMove)
                && from_sq((ss-2)->currentMove) !=   to_sq(move)
