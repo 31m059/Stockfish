@@ -259,8 +259,8 @@ namespace {
 
     constexpr Color     Them = (Us == WHITE ? BLACK : WHITE);
     constexpr Direction Down = (Us == WHITE ? SOUTH : NORTH);
-    constexpr Bitboard OutpostRanks = (Us == WHITE ? Rank4BB | Rank5BB | (Rank6BB & ~(FileABB | FileHBB))
-                                                   : Rank5BB | Rank4BB | (Rank3BB & ~(FileABB | FileHBB)));
+    constexpr Bitboard OutpostRanks = (Us == WHITE ? (Rank4BB | Rank5BB | Rank6BB) & ~(FileABB | FileHBB)
+                                                   : (Rank5BB | Rank4BB | Rank3BB) & ~(FileABB | FileHBB));
     const Square* pl = pos.squares<Pt>(Us);
 
     Bitboard b, bb;
