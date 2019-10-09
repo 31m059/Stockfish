@@ -1008,6 +1008,16 @@ moves_loop: // When in check, search starts from here
                && pos.advanced_pawn_push(move)
                && pos.pawn_passed(us, to_sq(move)))
           extension = 1;
+          
+      // Extension for maneuvering but not repeating
+      else if (   depth < 3
+               && from_sq(move)                ==   to_sq((ss-2)->currentMove)
+               && from_sq((ss-2)->currentMove) ==   to_sq((ss-4)->currentMove)
+               && from_sq((ss-2)->currentMove) !=   to_sq(move)
+               && from_sq((ss-4)->currentMove) !=   to_sq(move)
+               && from_sq((ss-4)->currentMove) !=   to_sq((ss-2)->currentMove)
+               && !aligned(to_sq(move), to_sq((ss-2)->currentMove), to_sq((ss-4)->currentMove)))
+           extension = 1;
 
       // Castling extension
       if (type_of(move) == CASTLING)
