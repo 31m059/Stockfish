@@ -528,7 +528,7 @@ namespace {
        & ~stronglyProtected
        &  attackedBy[Us][ALL_PIECES];
 
-    score += RestrictedPiece * (popcount(b) + popcount(b & nonPawnEnemies));
+    score += RestrictedPiece * (popcount(b) + popcount(b & weak));
 
     // Protected or unattacked squares
     safe = ~attackedBy[Them][ALL_PIECES] | attackedBy[Us][ALL_PIECES];
