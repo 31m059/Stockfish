@@ -381,7 +381,7 @@ namespace {
     constexpr Bitboard Camp = (Us == WHITE ? AllSquares ^ Rank6BB ^ Rank7BB ^ Rank8BB
                                            : AllSquares ^ Rank1BB ^ Rank2BB ^ Rank3BB);
 
-    Bitboard weak, b1, b2, safe, unsafeChecks = 0;
+    Bitboard weak, b1, b2, b3, safe, unsafeChecks = 0;
     Bitboard rookChecks, queenChecks, bishopChecks, knightChecks;
     int kingDanger = 0;
     const Square ksq = pos.square<KING>(Us);
@@ -400,6 +400,7 @@ namespace {
 
     b1 = attacks_bb<ROOK  >(ksq, pos.pieces() ^ pos.pieces(Us, QUEEN));
     b2 = attacks_bb<BISHOP>(ksq, pos.pieces() ^ pos.pieces(Us, QUEEN));
+    b3 = attacks_bb<BISHOP>(ksq, pos.pieces()) | attacks_bb<BISHOP>(ksq, pos.pieces());
 
     // Enemy rooks checks
     rookChecks = b1 & safe & attackedBy[Them][ROOK];
@@ -411,7 +412,7 @@ namespace {
 
     // Enemy queen safe checks: we count them only if they are from squares from
     // which we can't give a rook check, because rook checks are more valuable.
-    queenChecks =  (b1 | b2)
+    queenChecks =  b3
                  & attackedBy[Them][QUEEN]
                  & safe
                  & ~attackedBy[Us][QUEEN]
