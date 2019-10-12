@@ -400,7 +400,11 @@ namespace {
 
     b1 = attacks_bb<ROOK  >(ksq, pos.pieces() ^ pos.pieces(Us, QUEEN));
     b2 = attacks_bb<BISHOP>(ksq, pos.pieces() ^ pos.pieces(Us, QUEEN));
-    b3 = attacks_bb<BISHOP>(ksq, pos.pieces()) | attacks_bb<BISHOP>(ksq, pos.pieces());
+
+    if (pos.count<QUEEN>(Us) == 1 && LineBB[pos.square<QUEEN>(Us)][ksq])
+        b3 = attacks_bb<BISHOP>(ksq, pos.pieces()) | attacks_bb<BISHOP>(ksq, pos.pieces());
+    else
+        b3 = b1 | b2;
 
     // Enemy rooks checks
     rookChecks = b1 & safe & attackedBy[Them][ROOK];
