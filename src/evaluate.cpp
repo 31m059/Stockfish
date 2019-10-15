@@ -216,7 +216,7 @@ namespace {
     constexpr Direction Up   = (Us == WHITE ? NORTH : SOUTH);
     constexpr Direction Down = (Us == WHITE ? SOUTH : NORTH);
     constexpr Bitboard LowRanks = (Us == WHITE ? Rank2BB | Rank3BB : Rank7BB | Rank6BB);
-    constexpr Bitboard LowRanksExtended = (Us == WHITE ? Rank2BB | Rank3BB | Rank4BB : Rank7BB | Rank6BB | Rank5BB);
+    constexpr Bitboard LowRanksExtended = (Us == WHITE ? Rank3BB | Rank4BB : Rank6BB | Rank5BB);
 
     const Square ksq = pos.square<KING>(Us);
 
