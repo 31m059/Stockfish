@@ -496,7 +496,7 @@ namespace {
     constexpr Direction Up       = (Us == WHITE ? NORTH   : SOUTH);
     constexpr Bitboard  TRank3BB = (Us == WHITE ? Rank3BB : Rank6BB);
 
-    Bitboard b, weak, defended, skewerThreats, nonPawnEnemies, stronglyProtected, safe;
+    Bitboard b, bb, weak, defended, skewerThreats, nonPawnEnemies, stronglyProtected, safe;
     Score score = SCORE_ZERO;
 
     // Non-pawn enemies
@@ -519,9 +519,14 @@ namespace {
     // Bonus according to the kind of attacking pieces
     if (defended | weak | skewerThreats)
     {
-        b = ((defended | weak) & (attackedBy[Us][KNIGHT] | attackedBy[Us][BISHOP])) | skewerThreats;
+        b = bb = (defended | weak) & (attackedBy[Us][KNIGHT] | attackedBy[Us][BISHOP]);
         while (b)
             score += ThreatByMinor[type_of(pos.piece_on(pop_lsb(&b)))];
+        
+        // Half ThreatByMinor for skewer threats
+        b = skewerThreats & ~bb;
+        while (b)
+            score += ThreatByMinor[type_of(pos.piece_on(pop_lsb(&b)))] / 2;
 
         b = weak & attackedBy[Us][ROOK];
         while (b)
