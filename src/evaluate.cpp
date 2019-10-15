@@ -188,6 +188,10 @@ namespace {
     // very near squares, depending on king position.
     Bitboard kingRing[COLOR_NB];
 
+    // skewerAttacks[color] are the squares attacked by a bishop of the given color,
+    // through rooks of the opposite color.
+    Bitboard skewerAttacks[COLOR_NB];
+
     // kingAttackersCount[color] is the number of pieces of the given color
     // which attack a square in the kingRing of the enemy king.
     int kingAttackersCount[COLOR_NB];
@@ -250,6 +254,8 @@ namespace {
 
     // Remove from kingRing[] the squares defended by two pawns
     kingRing[Us] &= ~dblAttackByPawn;
+
+    skewerAttacks[Us] = 0;
   }
 
 
@@ -322,6 +328,9 @@ namespace {
                 // Bonus for bishop on a long diagonal which can "see" both center squares
                 if (more_than_one(attacks_bb<BISHOP>(s, pos.pieces(PAWN)) & Center))
                     score += LongDiagonalBishop;
+
+                if (b & pos.pieces(Them, ROOK))
+                    skewerAttacks[Us] |= attacks_bb<BISHOP>(s, pos.pieces() ^ pos.pieces(QUEEN) ^ pos.pieces(Them, ROOK)) & ~b;
             }
 
             // An important Chess960 pattern: A cornered bishop blocked by a friendly
@@ -487,7 +496,7 @@ namespace {
     constexpr Direction Up       = (Us == WHITE ? NORTH   : SOUTH);
     constexpr Bitboard  TRank3BB = (Us == WHITE ? Rank3BB : Rank6BB);
 
-    Bitboard b, weak, defended, nonPawnEnemies, stronglyProtected, safe;
+    Bitboard b, weak, defended, skewerThreats, nonPawnEnemies, stronglyProtected, safe;
     Score score = SCORE_ZERO;
 
     // Non-pawn enemies
@@ -504,10 +513,13 @@ namespace {
     // Enemies not strongly protected and under our attack
     weak = pos.pieces(Them) & ~stronglyProtected & attackedBy[Us][ALL_PIECES];
 
+    // Enemy rooks and queens attacked through enemy rooks
+    skewerThreats = skewerAttacks[Us] & pos.pieces(Them, ROOK, QUEEN);
+
     // Bonus according to the kind of attacking pieces
-    if (defended | weak)
+    if (defended | weak | skewerThreats)
     {
-        b = (defended | weak) & (attackedBy[Us][KNIGHT] | attackedBy[Us][BISHOP]);
+        b = ((defended | weak) & (attackedBy[Us][KNIGHT] | attackedBy[Us][BISHOP])) | skewerThreats;
         while (b)
             score += ThreatByMinor[type_of(pos.piece_on(pop_lsb(&b)))];
 
