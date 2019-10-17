@@ -631,6 +631,7 @@ namespace {
                         !(unsafeSquares & squaresToQueen) ? 20 :
                         !(unsafeSquares & blockSq)        ?  9 :
                                                              0 ;
+                k = std::max(0, k - popcount(pos.pieces(Them) & passed_pawn_span(Us, s)));
 
                 // Assign a larger bonus if the block square is defended
                 if ((pos.pieces(Us) & bb) || (attackedBy[Us][ALL_PIECES] & blockSq))
