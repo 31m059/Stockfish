@@ -534,12 +534,13 @@ namespace {
     safe = ~attackedBy[Them][ALL_PIECES] | attackedBy[Us][ALL_PIECES];
 
     // Bonus for attacking enemy pieces with our relatively safe pawns
-    b = pos.pieces(Us, PAWN) & safe & ~file_bb(pos.square<KING>(Us));
+    Bitboard kf = file_bb(pos.square<KING>(Us));
+    b = pos.pieces(Us, PAWN) & safe & ~(pos.pieces(Them, ROOK, QUEEN) ? kf : 0);
     b = pawn_attacks_bb<Us>(b) & nonPawnEnemies;
     score += ThreatBySafePawn * popcount(b);
 
     // Find squares where our pawns can push on the next move
-    b  = shift<Up>(pos.pieces(Us, PAWN) & ~file_bb(pos.square<KING>(Us))) & ~pos.pieces();
+    b  = shift<Up>(pos.pieces(Us, PAWN) & ~(pos.pieces(Them, ROOK, QUEEN) ? kf : 0)) & ~pos.pieces();
     b |= shift<Up>(b & TRank3BB) & ~pos.pieces();
 
     // Keep only the squares which are relatively safe
