@@ -489,6 +489,8 @@ namespace {
 
     Bitboard b, weak, defended, nonPawnEnemies, stronglyProtected, safe;
     Score score = SCORE_ZERO;
+    const Square ksq = pos.square<KING>(Us);
+    const Bitboard kSpan = passed_pawn_span(Us, ksq);
 
     // Non-pawn enemies
     nonPawnEnemies = pos.pieces(Them) & ~pos.pieces(PAWN);
@@ -536,7 +538,8 @@ namespace {
     // Bonus for attacking enemy pieces with our relatively safe pawns
     b = pos.pieces(Us, PAWN) & safe;
     b = pawn_attacks_bb<Us>(b) & nonPawnEnemies;
-    score += ThreatBySafePawn * popcount(b);
+    score +=  (ThreatBySafePawn * popcount(b & ~kSpan))
+            + (ThreatBySafePawn * popcount(b &  kSpan)) / 2;
 
     // Find squares where our pawns can push on the next move
     b  = shift<Up>(pos.pieces(Us, PAWN)) & ~pos.pieces();
@@ -547,7 +550,8 @@ namespace {
 
     // Bonus for safe pawn threats on the next move
     b = pawn_attacks_bb<Us>(b) & nonPawnEnemies;
-    score += ThreatByPawnPush * popcount(b);
+    score +=  (ThreatByPawnPush * popcount(b & ~kSpan))
+            + (ThreatByPawnPush * popcount(b &  kSpan)) / 2;
 
     // Bonus for threats on the next moves against enemy queen
     if (pos.count<QUEEN>(Them) == 1)
