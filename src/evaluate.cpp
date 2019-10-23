@@ -646,7 +646,9 @@ namespace {
             || (pos.pieces(PAWN) & (s + Up)))
             bonus = bonus / 2;
 
-        score += bonus - PassedFile * map_to_queenside(f);
+        bonus -= PassedFile * map_to_queenside(f);
+        bonus = make_score( std::max(0, (int) mg_value(bonus)), std::max(0, (int) eg_value(bonus)) );
+        score += bonus;
     }
 
     if (T)
