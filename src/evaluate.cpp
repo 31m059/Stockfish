@@ -647,7 +647,7 @@ namespace {
             bonus = bonus / 2;
 
         bonus -= PassedFile * map_to_queenside(f);
-        bonus = make_score( std::max(mg_value(bonus), mg_value(bonus)/2), eg_value(bonus));
+        bonus = make_score( std::max(mg_value(bonus), mg_value(bonus)/2), std::max(eg_value(bonus), eg_value(bonus)/2));
         score += bonus;
     }
 
