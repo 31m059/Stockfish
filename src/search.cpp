@@ -1107,7 +1107,9 @@ moves_loop: // When in check, search starts from here
           if (singularLMR)
               r -= 2;
 
-          if (!captureOrPromotion)
+          if (captureOrPromotion)
+              r -= 1;
+          else
           {
               // Increase reduction if ttMove is a capture (~0 Elo)
               if (ttCapture)
