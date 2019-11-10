@@ -385,7 +385,7 @@ namespace {
 
     // Attacked squares defended at most once by our queen or king
     weak =  attackedBy[Them][ALL_PIECES]
-          & (~attackedBy2[Us] | (attackedBy[Us][KING] & attackedBy[Us][QUEEN]))
+          & ~attackedBy2[Us]
           & (~attackedBy[Us][ALL_PIECES] | attackedBy[Us][KING] | attackedBy[Us][QUEEN]);
 
     // Analyse the safe enemy's checks which are possible on next move
@@ -440,6 +440,10 @@ namespace {
     b2 = b1 & attackedBy2[Them];
 
     int kingFlankAttacks = popcount(b1) + popcount(b2);
+
+    weak =  attackedBy[Them][ALL_PIECES]
+          & (~attackedBy2[Us] | (attackedBy[Us][KING] & attackedBy[Us][QUEEN]))
+          & (~attackedBy[Us][ALL_PIECES] | attackedBy[Us][KING] | attackedBy[Us][QUEEN]);
 
     kingDanger +=        kingAttackersCount[Them] * kingAttackersWeight[Them]
                  + 185 * popcount(kingRing[Us] & weak)
