@@ -385,7 +385,7 @@ namespace {
 
     // Attacked squares defended at most once by our queen or king
     weak =  attackedBy[Them][ALL_PIECES]
-          & ~attackedBy2[Us]
+          & (~attackedBy2[Us] | (attackedBy[Us][KING] & attackedBy[Us][QUEEN]))
           & (~attackedBy[Us][ALL_PIECES] | attackedBy[Us][KING] | attackedBy[Us][QUEEN]);
 
     // Analyse the safe enemy's checks which are possible on next move
