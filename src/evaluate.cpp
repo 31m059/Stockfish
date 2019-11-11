@@ -239,9 +239,9 @@ namespace {
                            clamp(rank_of(ksq), RANK_2, RANK_7));
     kingRing[Us] = s | PseudoAttacks[KING][s];
     if (relative_square(Us, s) == SQ_G2)
-        kingRing[Us] |= (Us == WHITE ? SQ_H4 : SQ_H5);
+        kingRing[Us] |= relative_square(Us, SQ_H4) & ~attackedBy[Us][PAWN];
     else if (relative_square(Us, s) == SQ_B2)
-        kingRing[Us] |= (Us == WHITE ? SQ_A4 : SQ_A5);
+        kingRing[Us] |= relative_square(Us, SQ_H4) & ~attackedBy[Us][PAWN];
 
     kingAttackersCount[Them] = popcount(kingRing[Us] & pe->pawn_attacks(Them));
     kingAttacksCount[Them] = kingAttackersWeight[Them] = 0;
