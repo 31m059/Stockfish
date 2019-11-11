@@ -1117,6 +1117,13 @@ moves_loop: // When in check, search starts from here
                        && !pos.see_ge(reverse_move(move)))
                   r -= 2;
 
+              Square ksq = pos.square<KING>(us);
+              if (   type_of(movedPiece) == PAWN
+                  && !(givesCheck || inCheck)
+                  && pos.non_pawn_material() > 2 * QueenValueMg + 4 * RookValueMg
+                  && pos.attacks_from<KING>(ksq) & from_sq(move))
+                  r += 1;
+
               ss->statScore =  thisThread->mainHistory[us][from_to(move)]
                              + (*contHist[0])[movedPiece][to_sq(move)]
                              + (*contHist[1])[movedPiece][to_sq(move)]
