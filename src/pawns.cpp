@@ -86,6 +86,10 @@ namespace {
     e->passedPawns[Us] = 0;
     e->kingSquares[Us] = SQ_NONE;
     e->pawnAttacks[Us] = e->pawnAttacksSpan[Us] = pawn_attacks_bb<Us>(ourPawns);
+    
+    e->filesWithPawns[Us] = 0;
+    for (File f = FILE_A; f <= FILE_H; ++f)
+        e->filesWithPawns[Us] += bool(ourPawns & file_bb(f));
 
     // Loop through all pawns of the current color and score each pawn
     while ((s = *pl++) != SQ_NONE)
