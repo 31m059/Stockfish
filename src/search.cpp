@@ -1119,7 +1119,7 @@ moves_loop: // When in check, search starts from here
 
               if (   type_of(movedPiece) == PAWN
                   && !(givesCheck || inCheck)
-                  && pos.non_pawn_material() > 2 * QueenValueMg + 4 * RookValueMg
+                  && pos.non_pawn_material(~us) > QueenValueMg + 2 * RookValueMg + 2 * KnightValueMg
                   && !pos.castling_rights(us)
                   && pos.attacks_from<KING>(pos.square<KING>(us)) & from_sq(move))
                   r += 1;
