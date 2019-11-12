@@ -241,7 +241,7 @@ namespace {
     if (relative_square(Us, s) == SQ_G2)
         kingRing[Us] |= relative_square(Us, SQ_H4) & ~attackedBy[Us][PAWN];
     else if (relative_square(Us, s) == SQ_B2)
-        kingRing[Us] |= relative_square(Us, SQ_H4) & ~attackedBy[Us][PAWN];
+        kingRing[Us] |= relative_square(Us, SQ_A4) & ~attackedBy[Us][PAWN];
 
     kingAttackersCount[Them] = popcount(kingRing[Us] & pe->pawn_attacks(Them));
     kingAttacksCount[Them] = kingAttackersWeight[Them] = 0;
