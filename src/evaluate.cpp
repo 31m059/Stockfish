@@ -188,6 +188,9 @@ namespace {
     // very near squares, depending on king position.
     Bitboard kingRing[COLOR_NB];
 
+    // doublePawnAttacks[COLOR_NB] are the squares attacked by two pawns of the given color.
+    Bitboard doublePawnAttacks[COLOR_NB];
+
     // kingAttackersCount[color] is the number of pieces of the given color
     // which attack a square in the kingRing of the enemy king.
     int kingAttackersCount[COLOR_NB];
@@ -219,7 +222,7 @@ namespace {
 
     const Square ksq = pos.square<KING>(Us);
 
-    Bitboard dblAttackByPawn = pawn_double_attacks_bb<Us>(pos.pieces(Us, PAWN));
+    doublePawnAttacks[Us] = pawn_double_attacks_bb<Us>(pos.pieces(Us, PAWN));
 
     // Find our pawns that are blocked or on the first two ranks
     Bitboard b = pos.pieces(Us, PAWN) & (shift<Down>(pos.pieces()) | LowRanks);
@@ -232,7 +235,7 @@ namespace {
     attackedBy[Us][KING] = pos.attacks_from<KING>(ksq);
     attackedBy[Us][PAWN] = pe->pawn_attacks(Us);
     attackedBy[Us][ALL_PIECES] = attackedBy[Us][KING] | attackedBy[Us][PAWN];
-    attackedBy2[Us] = dblAttackByPawn | (attackedBy[Us][KING] & attackedBy[Us][PAWN]);
+    attackedBy2[Us] = doublePawnAttacks[Us] | (attackedBy[Us][KING] & attackedBy[Us][PAWN]);
 
     // Init our king safety tables
     Square s = make_square(clamp(file_of(ksq), FILE_B, FILE_G),
@@ -243,7 +246,7 @@ namespace {
     kingAttacksCount[Them] = kingAttackersWeight[Them] = 0;
 
     // Remove from kingRing[] the squares defended by two pawns
-    kingRing[Us] &= ~dblAttackByPawn;
+    kingRing[Us] &= ~doublePawnAttacks[Us];
   }
 
 
@@ -261,9 +264,6 @@ namespace {
     Score score = SCORE_ZERO;
 
     attackedBy[Us][Pt] = 0;
-
-    Bitboard dblAttack =  pawn_double_attacks_bb<Them>(pos.pieces(Them, PAWN))
-                        | (attackedBy[Them][PAWN] & attackedBy[Them][KING]);
 
     for (Square s = *pl; s != SQ_NONE; s = *++pl)
     {
@@ -283,7 +283,7 @@ namespace {
         {
             kingAttackersCount[Us]++;
             kingAttackersWeight[Us] += KingAttackWeights[Pt];
-            kingAttacksCount[Us] += popcount(b & attackedBy[Them][KING] & ~dblAttack);
+            kingAttacksCount[Us] += popcount(b & attackedBy[Them][KING] & ~doublePawnAttacks[Them]);
         }
 
         int mob = popcount(b & mobilityArea[Us]);
@@ -448,7 +448,7 @@ namespace {
                  + 185 * popcount(kingRing[Us] & weak)
                  + 148 * popcount(unsafeChecks)
                  +  98 * popcount(pos.blockers_for_king(Us))
-                 +  69 * kingAttacksCount[Them]
+                 +  75 * kingAttacksCount[Them]
                  +   3 * kingFlankAttacks * kingFlankAttacks / 8
                  +       mg_value(mobility[Them] - mobility[Us])
                  - 873 * !pos.count<QUEEN>(Them)
