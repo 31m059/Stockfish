@@ -262,6 +262,8 @@ namespace {
 
     attackedBy[Us][Pt] = 0;
 
+    Bitboard dblAttackByPawn = pawn_double_attacks_bb<Them>(pos.pieces(Them, PAWN));
+
     for (Square s = *pl; s != SQ_NONE; s = *++pl)
     {
         // Find attacked squares, including x-ray attacks for bishops and rooks
@@ -276,11 +278,11 @@ namespace {
         attackedBy[Us][Pt] |= b;
         attackedBy[Us][ALL_PIECES] |= b;
 
-        if (b & kingRing[Them])
+        if (b & kingRing[Them] & ~dblAttackByPawn)
         {
             kingAttackersCount[Us]++;
             kingAttackersWeight[Us] += KingAttackWeights[Pt];
-            kingAttacksCount[Us] += popcount(b & attackedBy[Them][KING]);
+            kingAttacksCount[Us] += popcount(b & attackedBy[Them][KING] & ~dblAttackByPawn);
         }
 
         int mob = popcount(b & mobilityArea[Us]);
