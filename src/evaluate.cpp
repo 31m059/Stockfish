@@ -262,7 +262,8 @@ namespace {
 
     attackedBy[Us][Pt] = 0;
 
-    Bitboard dblAttackByPawn = pawn_double_attacks_bb<Them>(pos.pieces(Them, PAWN));
+    Bitboard dblAttack =  pawn_double_attacks_bb<Them>(pos.pieces(Them, PAWN))
+                        | (attackedBy[Them][PAWN] & attackedBy[Them][KING]);
 
     for (Square s = *pl; s != SQ_NONE; s = *++pl)
     {
@@ -278,11 +279,11 @@ namespace {
         attackedBy[Us][Pt] |= b;
         attackedBy[Us][ALL_PIECES] |= b;
 
-        if (b & kingRing[Them] & ~dblAttackByPawn)
+        if (b & kingRing[Them])
         {
             kingAttackersCount[Us]++;
             kingAttackersWeight[Us] += KingAttackWeights[Pt];
-            kingAttacksCount[Us] += popcount(b & attackedBy[Them][KING] & ~dblAttackByPawn);
+            kingAttacksCount[Us] += popcount(b & attackedBy[Them][KING] & ~dblAttack);
         }
 
         int mob = popcount(b & mobilityArea[Us]);
