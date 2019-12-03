@@ -1053,7 +1053,7 @@ moves_loop: // When in check, search starts from here
       else if (   PvNode
                && PieceValue[EG][pos.captured_piece()] > PawnValueEg
                && pos.non_pawn_material() <= 2 * RookValueMg
-               && type_of(movedPiece) != PAWN)
+               && type_of(movedPiece) != KING)
           extension = 1;
 
       // Castling extension
