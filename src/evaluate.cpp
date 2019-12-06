@@ -176,6 +176,12 @@ namespace {
     Bitboard mobilityArea[COLOR_NB];
     Score mobility[COLOR_NB] = { SCORE_ZERO, SCORE_ZERO };
 
+    // attacks[s] maps a Square to a Bitboard, representing attacks by the piece on that square.
+    Bitboard attacks[SQUARE_NB];
+
+    // mobilities[s] maps a Square to an int, the mobility of the piece on that square.
+    int mobilities[SQUARE_NB];
+
     // attackedBy[color][piece type] is a bitboard representing all squares
     // attacked by a given color and piece type. Special "piece types" which
     // is also calculated is ALL_PIECES.
@@ -229,12 +235,6 @@ namespace {
     // enemy pawns are excluded from the mobility area.
     mobilityArea[Us] = ~(b | pos.pieces(Us, KING, QUEEN) | pe->pawn_attacks(Them));
 
-    // Initialize attackedBy[] for king and pawns
-    attackedBy[Us][KING] = pos.attacks_from<KING>(ksq);
-    attackedBy[Us][PAWN] = pe->pawn_attacks(Us);
-    attackedBy[Us][ALL_PIECES] = attackedBy[Us][KING] | attackedBy[Us][PAWN];
-    attackedBy2[Us] = dblAttackByPawn | (attackedBy[Us][KING] & attackedBy[Us][PAWN]);
-
     // Init our king safety tables
     Square s = make_square(clamp(file_of(ksq), FILE_B, FILE_G),
                            clamp(rank_of(ksq), RANK_2, RANK_7));
@@ -245,6 +245,40 @@ namespace {
 
     // Remove from kingRing[] the squares defended by two pawns
     kingRing[Us] &= ~dblAttackByPawn;
+
+    // Initialize attackedBy[] for king and pawns
+    attackedBy[Us][KING] = pos.attacks_from<KING>(ksq);
+    attackedBy[Us][PAWN] = pe->pawn_attacks(Us);
+    attackedBy[Us][ALL_PIECES] = attackedBy[Us][KING] | attackedBy[Us][PAWN];
+    attackedBy2[Us] = dblAttackByPawn | (attackedBy[Us][KING] & attackedBy[Us][PAWN]);
+
+    // Initialize attackedBy tables for other pieces
+    for (PieceType Pt : {KNIGHT, BISHOP, ROOK, QUEEN}) {
+
+        Bitboard bb = pos.pieces(Us, Pt);
+        attackedBy[Us][Pt] = 0;
+
+        while (bb)
+        {
+            s = pop_lsb(&bb);
+            // Find attacked squares, including x-ray attacks for bishops and rooks
+            b = Pt == BISHOP ? attacks_bb<BISHOP>(s, pos.pieces() ^ pos.pieces(QUEEN))
+              : Pt ==   ROOK ? attacks_bb<  ROOK>(s, pos.pieces() ^ pos.pieces(QUEEN) ^ pos.pieces(Us, ROOK))
+              : Pt == KNIGHT ? pos.attacks_from<KNIGHT>(s)
+              : Pt == QUEEN  ? pos.attacks_from< QUEEN>(s)
+              : 0;
+
+            if (pos.blockers_for_king(Us) & s)
+                b &= LineBB[pos.square<KING>(Us)][s];
+
+            attacks[s]  = b;
+            mobilities[s] = popcount(b & mobilityArea[Us]);
+
+            attackedBy2[Us] |= attackedBy[Us][ALL_PIECES] & b;
+            attackedBy[Us][Pt] |= b;
+            attackedBy[Us][ALL_PIECES] |= b;
+        }
+    }
   }
 
 
@@ -261,21 +295,10 @@ namespace {
     Bitboard b, bb;
     Score score = SCORE_ZERO;
 
-    attackedBy[Us][Pt] = 0;
-
     for (Square s = *pl; s != SQ_NONE; s = *++pl)
     {
-        // Find attacked squares, including x-ray attacks for bishops and rooks
-        b = Pt == BISHOP ? attacks_bb<BISHOP>(s, pos.pieces() ^ pos.pieces(QUEEN))
-          : Pt ==   ROOK ? attacks_bb<  ROOK>(s, pos.pieces() ^ pos.pieces(QUEEN) ^ pos.pieces(Us, ROOK))
-                         : pos.attacks_from<Pt>(s);
-
-        if (pos.blockers_for_king(Us) & s)
-            b &= LineBB[pos.square<KING>(Us)][s];
-
-        attackedBy2[Us] |= attackedBy[Us][ALL_PIECES] & b;
-        attackedBy[Us][Pt] |= b;
-        attackedBy[Us][ALL_PIECES] |= b;
+        b = attacks[s];
+        int mob = mobilities[s];
 
         if (b & kingRing[Them])
         {
@@ -283,8 +306,6 @@ namespace {
             kingAttackersWeight[Us] += KingAttackWeights[Pt];
             kingAttacksCount[Us] += popcount(b & attackedBy[Them][KING]);
         }
-
-        int mob = popcount(b & mobilityArea[Us]);
 
         mobility[Us] += MobilityBonus[Pt - 2][mob];
 
