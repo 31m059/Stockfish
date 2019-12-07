@@ -162,6 +162,7 @@ namespace {
 
   private:
     template<Color Us> void initialize();
+    template<Color Us, PieceType Pt> void initialize_pieces();
     template<Color Us, PieceType Pt> Score pieces();
     template<Color Us> Score king() const;
     template<Color Us> Score threats() const;
@@ -251,36 +252,34 @@ namespace {
     attackedBy[Us][PAWN] = pe->pawn_attacks(Us);
     attackedBy[Us][ALL_PIECES] = attackedBy[Us][KING] | attackedBy[Us][PAWN];
     attackedBy2[Us] = dblAttackByPawn | (attackedBy[Us][KING] & attackedBy[Us][PAWN]);
-
-    // Initialize attackedBy tables for other pieces
-    for (PieceType Pt : {KNIGHT, BISHOP, ROOK, QUEEN}) {
-
-        Bitboard bb = pos.pieces(Us, Pt);
-        attackedBy[Us][Pt] = 0;
-
-        while (bb)
-        {
-            s = pop_lsb(&bb);
-            // Find attacked squares, including x-ray attacks for bishops and rooks
-            b = Pt == BISHOP ? attacks_bb<BISHOP>(s, pos.pieces() ^ pos.pieces(QUEEN))
-              : Pt ==   ROOK ? attacks_bb<  ROOK>(s, pos.pieces() ^ pos.pieces(QUEEN) ^ pos.pieces(Us, ROOK))
-              : Pt == KNIGHT ? pos.attacks_from<KNIGHT>(s)
-              : Pt == QUEEN  ? pos.attacks_from< QUEEN>(s)
-              : 0;
-
-            if (pos.blockers_for_king(Us) & s)
-                b &= LineBB[pos.square<KING>(Us)][s];
-
-            attacks[s]  = b;
-            mobilities[s] = popcount(b & mobilityArea[Us]);
-
-            attackedBy2[Us] |= attackedBy[Us][ALL_PIECES] & b;
-            attackedBy[Us][Pt] |= b;
-            attackedBy[Us][ALL_PIECES] |= b;
-        }
-    }
   }
 
+  // Evaluation::initalize_pieces() initializes pieces of a given color and type
+  template<Tracing T> template<Color Us, PieceType Pt>
+  void Evaluation<T>::initialize_pieces() {
+
+    const Square* pl = pos.squares<Pt>(Us);
+    attackedBy[Us][Pt] = 0;
+
+    Bitboard b;
+    for (Square s = *pl; s != SQ_NONE; s = *++pl)
+    {
+        // Find attacked squares, including x-ray attacks for bishops and rooks
+        b = Pt == BISHOP ? attacks_bb<BISHOP>(s, pos.pieces() ^ pos.pieces(QUEEN))
+          : Pt ==   ROOK ? attacks_bb<  ROOK>(s, pos.pieces() ^ pos.pieces(QUEEN) ^ pos.pieces(Us, ROOK))
+          : pos.attacks_from<Pt>(s);
+
+        if (pos.blockers_for_king(Us) & s)
+            b &= LineBB[pos.square<KING>(Us)][s];
+
+        attacks[s]  = b;
+        mobilities[s] = popcount(b & mobilityArea[Us]);
+
+        attackedBy2[Us] |= attackedBy[Us][ALL_PIECES] & b;
+        attackedBy[Us][Pt] |= b;
+        attackedBy[Us][ALL_PIECES] |= b;
+    }
+  }
 
   // Evaluation::pieces() scores pieces of a given color and type
   template<Tracing T> template<Color Us, PieceType Pt>
@@ -814,6 +813,11 @@ namespace {
 
     initialize<WHITE>();
     initialize<BLACK>();
+
+    initialize_pieces<WHITE, KNIGHT>(); initialize_pieces<BLACK, KNIGHT>();
+    initialize_pieces<WHITE, BISHOP>(); initialize_pieces<BLACK, BISHOP>();
+    initialize_pieces<WHITE, ROOK  >(); initialize_pieces<BLACK, ROOK  >();
+    initialize_pieces<WHITE, QUEEN >(); initialize_pieces<BLACK, QUEEN >();
 
     // Pieces should be evaluated first (populate attack tables)
     score +=  pieces<WHITE, KNIGHT>() - pieces<BLACK, KNIGHT>()
