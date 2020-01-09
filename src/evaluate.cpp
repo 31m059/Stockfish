@@ -456,11 +456,11 @@ namespace {
                  -   6 * mg_value(score) / 8
                  -   4 * kingFlankDefense
                  +  37;
-    int kingDangerMg = kingDanger + kingAttacksCount[Them] * kingAttackersWeight[Them] / 64;
+    int kingDangerMg = kingDanger + kingAttacksCount[Them] * kingAttackersWeight[Them] / 32;
 
     // Transform the kingDanger units into a Score, and subtract it from the evaluation
     if (kingDanger > 100)
-        score -= make_score(kingDanger * kingDangerMg / 4096, kingDanger / 16);
+        score -= make_score(kingDangerMg * kingDangerMg / 4096, kingDanger / 16);
 
     // Penalty when our king is on a pawnless flank
     if (!(pos.pieces(PAWN) & KingFlank[file_of(ksq)]))
