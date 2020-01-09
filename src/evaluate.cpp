@@ -456,7 +456,7 @@ namespace {
                  -   6 * mg_value(score) / 8
                  -   4 * kingFlankDefense
                  +  37;
-    int kingDangerMg = kingDanger + kingAttacksCount[Them] * kingAttackersWeight[Them] / 32;
+    int kingDangerMg = kingDanger + kingAttacksCount[Them] * kingAttackersWeight[Them] / 16;
 
     // Transform the kingDanger units into a Score, and subtract it from the evaluation
     if (kingDanger > 100)
