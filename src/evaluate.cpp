@@ -714,7 +714,6 @@ namespace {
                            &&  outflanking < 0
                            && !pawnsOnBothFlanks;
     
-    bool winning = abs(eg) > PawnValueEg;
     Color strongSide = eg >= 0 ? WHITE : BLACK;
 
     // Compute the initiative bonus for the attacking side
@@ -725,7 +724,7 @@ namespace {
                     + 21 * pawnsOnBothFlanks
                     + 51 * !pos.non_pawn_material()
                     - 43 * almostUnwinnable
-                    +  9 * (winning && pe->pawn_islands(~strongSide) > 2)
+                    +  9 * (pe->pawn_islands(~strongSide) > 2)
                     - 100 ;
 
     // Now apply the bonus: note that we find the attacking side by extracting the

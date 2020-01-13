@@ -86,6 +86,19 @@ namespace {
     e->passedPawns[Us] = e->pawnIslands[Us] = 0;
     e->kingSquares[Us] = SQ_NONE;
     e->pawnAttacks[Us] = e->pawnAttacksSpan[Us] = pawn_attacks_bb<Us>(ourPawns);
+    
+    bool onIsland = false;
+    for (File f = FILE_A; f <= FILE_H; ++f)
+    {
+        if (ourPawns & file_bb(f)) 
+        {
+            e->pawnIslands[Us] += !onIsland;
+            onIsland = true;
+        }
+        else
+            onIsland = false;
+            
+    }
 
     // Loop through all pawns of the current color and score each pawn
     while ((s = *pl++) != SQ_NONE)
@@ -104,10 +117,6 @@ namespace {
         neighbours = ourPawns   & adjacent_files_bb(s);
         phalanx    = neighbours & rank_bb(s);
         support    = neighbours & rank_bb(s - Up);
-
-        if (   !more_than_one(neighbours)
-            && !(pawn_attack_span(Them, s) & ourPawns))
-            e->pawnIslands[Us]++;
 
         // A pawn is backward when it is behind all pawns of the same color on
         // the adjacent files and cannot safely advance.
