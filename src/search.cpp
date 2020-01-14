@@ -1085,6 +1085,12 @@ moves_loop: // When in check, search starts from here
                && pos.non_pawn_material() <= 2 * RookValueMg)
           extension = 1;
 
+      // King moves extension
+      else if (   type_of(movedPiece) == KING
+               && pos.castling_rights(us)
+               && move != countermove)
+          extension = 1;
+
       // Castling extension
       if (type_of(move) == CASTLING)
           extension = 1;
