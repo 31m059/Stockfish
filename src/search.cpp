@@ -1088,7 +1088,7 @@ moves_loop: // When in check, search starts from here
       // King moves extension
       else if (   type_of(movedPiece) == KING
                && pos.castling_rights(us)
-               && move == countermove)
+               && moveCount < 2)
           extension = 1;
 
       // Castling extension
