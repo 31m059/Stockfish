@@ -713,8 +713,7 @@ namespace {
     bool almostUnwinnable =   !pe->passed_count()
                            &&  outflanking < 0
                            && !pawnsOnBothFlanks;
-    
-    bool winning = abs(eg) > PawnValueEg;
+
     Color strongSide = eg >= 0 ? WHITE : BLACK;
 
     // Compute the initiative bonus for the attacking side
@@ -725,8 +724,8 @@ namespace {
                     + 21 * pawnsOnBothFlanks
                     + 51 * !pos.non_pawn_material()
                     - 43 * almostUnwinnable
-                    +  9 * (winning && pe->pawn_islands(~strongSide) > 2)
-                    - 100 ;
+                    +  9 * (pe->pawn_islands(~strongSide) > 2)
+                    - 102 ;
 
     // Now apply the bonus: note that we find the attacking side by extracting the
     // sign of the midgame or endgame values, and that we carefully cap the bonus
