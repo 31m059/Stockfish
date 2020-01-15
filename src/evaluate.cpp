@@ -714,6 +714,12 @@ namespace {
                            &&  outflanking < 0
                            && !pawnsOnBothFlanks;
 
+    Color strongSide = eg >= 0 ? WHITE : BLACK;
+
+    // Does the weak side have at least as many pawns and a better structure?
+    bool weakSolid =    pos.count<PAWN>(strongSide) <= pos.count<PAWN>(~strongSide)
+                     && pe->pawn_islands(~strongSide) < pe->pawn_islands(strongSide);
+
     // Compute the initiative bonus for the attacking side
     int complexity =   9 * pe->passed_count()
                     + 11 * pos.count<PAWN>()
@@ -722,6 +728,7 @@ namespace {
                     + 21 * pawnsOnBothFlanks
                     + 51 * !pos.non_pawn_material()
                     - 43 * almostUnwinnable
+                    -  9 * weakSolid
                     - 100 ;
 
     // Now apply the bonus: note that we find the attacking side by extracting the
