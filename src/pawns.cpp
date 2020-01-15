@@ -134,7 +134,7 @@ namespace {
         if (support | phalanx)
         {
             int v =  Connected[r] * (2 + bool(phalanx) - bool(opposed))
-                   + 21 * popcount(support + (f == FILE_A || f == FILE_H));
+                   + 21 * popcount(support) * (f == FILE_A || f == FILE_H ? 2 : 1);
 
             score += make_score(v, v * (r - 2) / 4);
         }
