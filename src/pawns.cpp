@@ -36,6 +36,7 @@ namespace {
   constexpr Score BlockedStorm  = S(82, 82);
   constexpr Score Doubled       = S(11, 56);
   constexpr Score Isolated      = S( 5, 15);
+  constexpr Score LongChain     = S(15, 15);
   constexpr Score WeakLever     = S( 0, 56);
   constexpr Score WeakUnopposed = S(13, 27);
 
@@ -86,6 +87,15 @@ namespace {
     e->passedPawns[Us] = 0;
     e->kingSquares[Us] = SQ_NONE;
     e->pawnAttacks[Us] = e->pawnAttacksSpan[Us] = pawn_attacks_bb<Us>(ourPawns);
+
+    // Count the length of our longest pawn chain
+    int chainLength = 0;
+    Bitboard b = AllSquares;
+    while ((b = pawn_attacks_bb<Us>(b) & ourPawns))
+        chainLength++;
+
+    if (chainLength > 2)
+        score += LongChain;
 
     // Loop through all pawns of the current color and score each pawn
     while ((s = *pl++) != SQ_NONE)
