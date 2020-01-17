@@ -1137,8 +1137,8 @@ moves_loop: // When in check, search starts from here
           if (ttPv)
               r -= 2;
 
-          // Decrease reduction if opponent's move count is high (~5 Elo)
-          if ((ss-1)->moveCount > 14)
+          // Decrease reduction if recent move counts were high
+          if ((ss-1)->moveCount > 14 || (ss-2)->moveCount > 14)
               r--;
 
           // Decrease reduction if ttMove has been singularly extended (~3 Elo)
