@@ -1138,8 +1138,8 @@ moves_loop: // When in check, search starts from here
               r -= 2;
 
           // Decrease reduction if recent move counts were high
-          if ((ss-1)->moveCount > 14 || (ss-3)->moveCount > 14)
-              r --;
+          if ((ss-1)->moveCount > 14)
+              r -= ((ss-2)->moveCount > 14 || (ss-3)->moveCount > 14 ? 2 : 1);
 
           // Decrease reduction if ttMove has been singularly extended (~3 Elo)
           if (singularLMR)
