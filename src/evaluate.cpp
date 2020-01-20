@@ -457,7 +457,7 @@ namespace {
                  - 100 * bool(attackedBy[Us][KNIGHT] & attackedBy[Us][KING])
                  -   6 * mg_value(score) / 8
                  -   4 * kingFlankDefense
-                 +  50 * bool(b4) * adjLength * adjLength
+                 +   5 * bool(b4) * adjLength * adjLength
                  +  37;
 
     // Transform the kingDanger units into a Score, and subtract it from the evaluation
