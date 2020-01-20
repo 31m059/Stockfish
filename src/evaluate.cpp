@@ -441,7 +441,7 @@ namespace {
     b3 = attackedBy[Us][ALL_PIECES] & KingFlank[file_of(ksq)] & Camp;
     
     b4 = pe->pawn_chain_fronts(Them) & KingFlank[file_of(ksq)] & Camp;
-    int adjLength = std::max(pe->pawn_chain_length(Them) - 2, 0);
+    int adjLength = std::max(pe->pawn_chain_length(Them) - 1, 0);
 
     int kingFlankAttack = popcount(b1) + popcount(b2);
     int kingFlankDefense = popcount(b3);
