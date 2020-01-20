@@ -38,6 +38,7 @@ struct Entry {
   Bitboard passed_pawns(Color c) const { return passedPawns[c]; }
   Bitboard pawn_attacks_span(Color c) const { return pawnAttacksSpan[c]; }
   Bitboard pawn_chain_fronts(Color c) const { return pawnChainFronts[c]; }
+  int pawn_chain_length(Color c) const { return pawnChainLength[c]; }
   int passed_count() const { return popcount(passedPawns[WHITE] | passedPawns[BLACK]); }
 
   template<Color Us>
@@ -61,6 +62,7 @@ struct Entry {
   Square kingSquares[COLOR_NB];
   Score kingSafety[COLOR_NB];
   int castlingRights[COLOR_NB];
+  int pawnChainLength[COLOR_NB];
 };
 
 typedef HashTable<Entry, 131072> Table;

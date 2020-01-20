@@ -87,10 +87,16 @@ namespace {
     e->kingSquares[Us] = SQ_NONE;
     e->pawnAttacks[Us] = e->pawnAttacksSpan[Us] = pawn_attacks_bb<Us>(ourPawns);
     
-    // Find the frontmost pawns of any chain three pawns or longer.
-    Bitboard b = ourPawns;
-    b = pawn_attacks_bb<Us>(b) & ourPawns;
-    e->pawnChainFronts[Us] = pawn_attacks_bb<Us>(b) & ourPawns;
+    // Find the frontmost pawn of the longest chain(s), and count the length
+    Bitboard b = ourPawns, bprevious;
+    e->pawnChainLength[Us] = 0;
+    while (b) 
+    {
+        bprevious = b;
+        b = pawn_attacks_bb<Us>(b) & ourPawns;
+        e->pawnChainLength[Us]++;
+    }
+    e->pawnChainFronts[Us] = bprevious;
 
     // Loop through all pawns of the current color and score each pawn
     while ((s = *pl++) != SQ_NONE)
