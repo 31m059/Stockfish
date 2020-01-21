@@ -442,7 +442,7 @@ namespace {
 
     int kingFlankAttack = popcount(b1) + popcount(b2);
     int kingFlankDefense = popcount(b3);
-    
+
     Bitboard KFPieces =  (pos.pieces() ^ pos.pieces(KING, PAWN))
                        & KingFlank[file_of(ksq)] & Camp;
     int pieceDiff =   popcount(KFPieces & pos.pieces(Them))
@@ -460,7 +460,7 @@ namespace {
                  -   6 * mg_value(score) / 8
                  -   4 * kingFlankDefense
                  +  10 * pieceDiff
-                 +  43;
+                 +  49;
 
     // Transform the kingDanger units into a Score, and subtract it from the evaluation
     if (kingDanger > 100)
