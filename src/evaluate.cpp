@@ -744,6 +744,8 @@ namespace {
 
     Color strongSide = eg > VALUE_DRAW ? WHITE : BLACK;
     int sf = me->scale_factor(pos, strongSide);
+    Bitboard strongPawns = pos.pieces(strongSide, PAWN);
+    const Bitboard Edges = FileABB | FileHBB;
 
     // If scale is not already specific, scale down the endgame via general heuristics
     if (sf == SCALE_FACTOR_NORMAL)
@@ -752,7 +754,8 @@ namespace {
             && pos.non_pawn_material() == 2 * BishopValueMg)
             sf = 22 ;
         else
-            sf = std::min(sf, 38 + (pos.opposite_bishops() ? 2 : 7) * popcount(pos.pieces(strongSide, PAWN) & ~(FileABB | FileHBB)));
+            sf = std::min(sf, 37 + (pos.opposite_bishops() ? 2 : 7) 
+                                 * (popcount(strongPawns & ~Edges) + bool(strongPawns & Edges)));
 
         sf = std::max(0, sf - (pos.rule50_count() - 12) / 4);
     }
