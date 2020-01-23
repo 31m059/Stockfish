@@ -1193,7 +1193,7 @@ moves_loop: // When in check, search starts from here
                   r++;
 
               if (!ttCapture)
-                  r--;
+                  r++;
           }
 
           Depth d = clamp(newDepth - r, 1, newDepth);
