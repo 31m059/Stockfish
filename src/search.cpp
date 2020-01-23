@@ -1145,9 +1145,9 @@ moves_loop: // When in check, search starts from here
           if (singularLMR)
               r -= 2;
 
-          // Decrease reduction if not an expected PvNode, but TT move was PV
-          if (!PvNode && ttHit && tte->is_pv())
-              r--;
+          // Reduction if an expected PvNode, but TT move was not PV
+          if (PvNode && !(ttHit && tte->is_pv()))
+              r++;
 
           if (!captureOrPromotion)
           {
