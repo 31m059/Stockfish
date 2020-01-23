@@ -1147,7 +1147,7 @@ moves_loop: // When in check, search starts from here
 
           // Reduction if an expected PvNode, but TT move was not PV
           if (PvNode && !(ttHit && tte->is_pv()))
-              r++;
+              r--;
 
           if (!captureOrPromotion)
           {
