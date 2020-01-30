@@ -625,7 +625,7 @@ namespace {
     Move ttMove, move, excludedMove, bestMove;
     Depth extension, newDepth;
     Value bestValue, value, ttValue, eval, maxValue;
-    bool ttHit, ttPv, inCheck, givesCheck, improving, didLMR, priorCapture;
+    bool ttHit, ttPv, inCheck, givesCheck, canCastle, improving, didLMR, priorCapture;
     bool captureOrPromotion, doFullDepthSearch, moveCountPruning, ttCapture, singularLMR;
     Piece movedPiece;
     int moveCount, captureCount, quietCount;
@@ -989,6 +989,7 @@ moves_loop: // When in check, search starts from here
       captureOrPromotion = pos.capture_or_promotion(move);
       movedPiece = pos.moved_piece(move);
       givesCheck = pos.gives_check(move);
+      canCastle  = pos.castling_rights(us);
 
       // Calculate new depth for this move
       newDepth = depth - 1;
@@ -1165,6 +1166,9 @@ moves_loop: // When in check, search starts from here
               else if (    type_of(move) == NORMAL
                        && !pos.see_ge(reverse_move(move)))
                   r -= 2 + ttPv;
+
+              if (canCastle && type_of(movedPiece) == KING)
+                  r++;
 
               ss->statScore =  thisThread->mainHistory[us][from_to(move)]
                              + (*contHist[0])[movedPiece][to_sq(move)]
