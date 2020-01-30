@@ -1167,7 +1167,9 @@ moves_loop: // When in check, search starts from here
                        && !pos.see_ge(reverse_move(move)))
                   r -= 2 + ttPv;
 
-              if (canCastle && type_of(movedPiece) == KING)
+              if (   canCastle
+                  && type_of(movedPiece) == KING
+                  && moveCount > 6)
                   r++;
 
               ss->statScore =  thisThread->mainHistory[us][from_to(move)]
