@@ -843,6 +843,7 @@ namespace {
         &&  eval >= ss->staticEval
         &&  ss->staticEval >= beta - 32 * depth - 30 * improving + 120 * ttPv + 292
         && !excludedMove
+        && !(ss-1)->captureOrPromotion
         &&  pos.non_pawn_material(us)
         && (ss->ply >= thisThread->nmpMinPly || us != thisThread->nmpColor))
     {
@@ -903,7 +904,7 @@ namespace {
                 assert(pos.capture_or_promotion(move));
                 assert(depth >= 5);
 
-                captureOrPromotion = true;
+                captureOrPromotion = ss->captureOrPromotion = true;
                 probCutCount++;
 
                 ss->currentMove = move;
@@ -1108,6 +1109,7 @@ moves_loop: // When in check, search starts from here
 
       // Update the current move (this must be done after singular extension search)
       ss->currentMove = move;
+      ss->captureOrPromotion = captureOrPromotion;
       ss->continuationHistory = &thisThread->continuationHistory[inCheck]
                                                                 [captureOrPromotion]
                                                                 [movedPiece]
@@ -1516,6 +1518,7 @@ moves_loop: // When in check, search starts from here
       }
 
       ss->currentMove = move;
+      ss->captureOrPromotion = captureOrPromotion;
       ss->continuationHistory = &thisThread->continuationHistory[inCheck]
                                                                 [captureOrPromotion]
                                                                 [pos.moved_piece(move)]
