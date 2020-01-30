@@ -1160,7 +1160,9 @@ moves_loop: // When in check, search starts from here
               if (cutNode)
                   r += 2;
 
-              if (canCastle && type_of(movedPiece) == KING)
+              if (   canCastle
+                  && type_of(movedPiece) == KING
+                  && moveCount > 6)
                   r++;
 
               // Decrease reduction for moves that escape a capture. Filter out
