@@ -840,7 +840,7 @@ namespace {
         && (ss-1)->currentMove != MOVE_NULL
         &&  eval >= beta
         &&  eval >= ss->staticEval
-        &&  ss->staticEval >= beta - 32 * depth - 30 * improving + 120 * ttPv + 500 * ((ss-1)->statScore >= 23397) + 292
+        &&  ss->staticEval >= beta - 32 * depth - 30 * improving + 120 * ttPv + 100 * ((ss-1)->statScore >= 23397) + 292
         && !excludedMove
         &&  pos.non_pawn_material(us)
         && (ss->ply >= thisThread->nmpMinPly || us != thisThread->nmpColor))
