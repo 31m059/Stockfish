@@ -1152,7 +1152,7 @@ moves_loop: // When in check, search starts from here
                   r++;
 
               // Increase reduction for cut nodes (~10 Elo)
-              if (cutNode)
+              if (cutNode && !ttPv)
                   r += 2;
 
               // Decrease reduction for moves that escape a capture. Filter out
