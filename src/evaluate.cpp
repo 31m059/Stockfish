@@ -158,7 +158,7 @@ namespace {
     Evaluation() = delete;
     explicit Evaluation(const Position& p) : pos(p) {}
     Evaluation& operator=(const Evaluation&) = delete;
-    Value value();
+    Value value(bool lazyPossible);
 
   private:
     template<Color Us> void initialize();
@@ -765,7 +765,7 @@ namespace {
   // of view of the side to move.
 
   template<Tracing T>
-  Value Evaluation<T>::value() {
+  Value Evaluation<T>::value(bool lazyPossible) {
 
     assert(!pos.checkers());
 
@@ -788,7 +788,7 @@ namespace {
 
     // Early exit if score is high
     Value v = (mg_value(score) + eg_value(score)) / 2;
-    if (abs(v) > LazyThreshold + pos.non_pawn_material() / 64)
+    if (lazyPossible && abs(v) > LazyThreshold + pos.non_pawn_material() / 64)
        return pos.side_to_move() == WHITE ? v : -v;
 
     // Main evaluation begins here
@@ -838,8 +838,8 @@ namespace {
 /// evaluate() is the evaluator for the outer world. It returns a static
 /// evaluation of the position from the point of view of the side to move.
 
-Value Eval::evaluate(const Position& pos) {
-  return Evaluation<NO_TRACE>(pos).value();
+Value Eval::evaluate(const Position& pos, bool lazyPossible) {
+  return Evaluation<NO_TRACE>(pos).value(lazyPossible);
 }
 
 
@@ -856,7 +856,7 @@ std::string Eval::trace(const Position& pos) {
 
   pos.this_thread()->contempt = SCORE_ZERO; // Reset any dynamic contempt
 
-  Value v = Evaluation<TRACE>(pos).value();
+  Value v = Evaluation<TRACE>(pos).value(true);
 
   v = pos.side_to_move() == WHITE ? v : -v; // Trace scores are from white's point of view
 
