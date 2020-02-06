@@ -889,7 +889,7 @@ namespace {
     // If we have a good enough capture and a reduced search returns a value
     // much above beta, we can (almost) safely prune the previous move.
     if (   !PvNode
-        &&  depth >= 5 + pos.non_pawn_material() / (2 * (KnightValueMg + BishopValueMg + RookValueMg) + QueenValueMg)
+        &&  depth >= 5 + pos.non_pawn_material() * 2 / (2 * (KnightValueMg + BishopValueMg + RookValueMg) + QueenValueMg)
         &&  abs(beta) < VALUE_MATE_IN_MAX_PLY)
     {
         Value raisedBeta = std::min(beta + 189 - 45 * improving, VALUE_INFINITE);
