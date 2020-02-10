@@ -843,7 +843,7 @@ namespace {
         &&  eval >= ss->staticEval
         &&  ss->staticEval >= beta - 32 * depth - 30 * improving + 120 * ttPv + 292
         && !excludedMove
-        && (pos.non_pawn_material(us) || type_of(move) == PROMOTION)
+        && (pos.non_pawn_material(us) || (ttHit && type_of(ttMove) == PROMOTION))
         && (ss->ply >= thisThread->nmpMinPly || us != thisThread->nmpColor))
     {
         assert(eval - beta >= 0);
