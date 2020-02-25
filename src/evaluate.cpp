@@ -270,10 +270,7 @@ namespace {
                          : pos.attacks_from<Pt>(s);
                          
         if (b & kingRing[Them])
-        {
-            kingAttackersWeight[Us] += KingAttackWeights[Pt] / 2;
-            //kingAttacksCount[Us] += popcount(b & attackedBy[Them][KING]) / 2;
-        }
+            kingAttacksCount[Us] += popcount(b & attackedBy[Them][KING]) / 2;
 
         if (pos.blockers_for_king(Us) & s)
             b &= LineBB[pos.square<KING>(Us)][s];
@@ -285,7 +282,7 @@ namespace {
         if (b & kingRing[Them])
         {
             kingAttackersCount[Us]++;
-            kingAttackersWeight[Us] += KingAttackWeights[Pt] / 2;
+            kingAttackersWeight[Us] += KingAttackWeights[Pt];
             kingAttacksCount[Us] += popcount(b & attackedBy[Them][KING]) / 2;
         }
 
