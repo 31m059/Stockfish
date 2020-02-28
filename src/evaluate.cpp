@@ -289,13 +289,6 @@ namespace {
 
         if (Pt == BISHOP || Pt == KNIGHT)
         {
-            // Bonus if piece is on an outpost square or can reach one
-            bb = OutpostRanks & attackedBy[Us][PAWN] & ~pe->pawn_attacks_span(Them);
-            if (bb & s)
-                score += Outpost * (Pt == KNIGHT ? 2 : 1);
-
-            else if (Pt == KNIGHT && bb & b & ~pos.pieces(Us))
-                score += Outpost;
 
             // Knight and Bishop bonus for being right behind a pawn
             if (shift<Down>(pos.pieces(PAWN)) & s)
@@ -329,6 +322,16 @@ namespace {
                                 : pos.piece_on(s + d + d) == make_piece(Us, PAWN) ? CorneredBishop * 2
                                                                                   : CorneredBishop;
                 }
+            }
+            else // Pt == KNIGHT
+            {
+                // Bonus if piece is on an outpost square or can reach one
+                bb = OutpostRanks & attackedBy[Us][PAWN] & ~pe->pawn_attacks_span(Them);
+                if (bb & s)
+                    score += Outpost * 2;
+
+                else if (bb & b & ~pos.pieces(Us))
+                    score += Outpost;
             }
         }
 
