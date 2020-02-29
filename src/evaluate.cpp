@@ -673,7 +673,8 @@ namespace {
 
     // Find the available squares for our pieces inside the area defined by SpaceMask
     Bitboard safe =   SpaceMask
-                   & ~(pos.pieces(Us, PAWN) ^ attackedBy[Them][PAWN]);
+                   & ~(pos.pieces(Us, PAWN) ^ attackedBy[Them][PAWN])
+                   & ~pawn_double_attacks_bb<Them>(pos.pieces(Them, PAWN));
 
     // Find all squares which are at most three squares behind some friendly pawn
     Bitboard behind = pos.pieces(Us, PAWN);
