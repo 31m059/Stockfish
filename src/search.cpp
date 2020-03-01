@@ -342,6 +342,7 @@ void Thread::search() {
       (ss-i)->continuationHistory = &this->continuationHistory[0][0][NO_PIECE][0]; // Use as a sentinel
 
   ss->pv = pv;
+  ss->maneuverLength = 0;
 
   bestValue = delta = alpha = -VALUE_INFINITE;
   beta = VALUE_INFINITE;
@@ -1115,6 +1116,8 @@ moves_loop: // When in check, search starts from here
                                                                 [captureOrPromotion]
                                                                 [movedPiece]
                                                                 [to_sq(move)];
+      if (to_sq((ss-2)->currentMove) == from_sq(move))
+          ss->maneuverLength = (ss-2)->maneuverLength + 1;
 
       // Step 15. Make the move
       pos.do_move(move, st, givesCheck);
@@ -1151,6 +1154,11 @@ moves_loop: // When in check, search starts from here
           // Decrease reduction if ttMove has been singularly extended (~3 Elo)
           if (singularLMR)
               r -= 2;
+
+          // Decrease reduction for long maneuvers of the same piece
+          if (   ss->maneuverLength > 2
+              && moveCount < 4)
+              r--;
 
           if (!captureOrPromotion)
           {
