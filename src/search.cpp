@@ -1119,6 +1119,9 @@ moves_loop: // When in check, search starts from here
       // Step 15. Make the move
       pos.do_move(move, st, givesCheck);
 
+      bool repeating =   to_sq((ss-2)->currentMove)   == from_sq(move)
+                      && from_sq((ss-2)->currentMove) == to_sq(move);
+
       // Step 16. Reduced depth search (LMR, ~200 Elo). If the move fails high it will be
       // re-searched at full depth.
       if (    depth >= 3
@@ -1128,6 +1131,7 @@ moves_loop: // When in check, search starts from here
               || moveCountPruning
               || ss->staticEval + PieceValue[EG][pos.captured_piece()] <= alpha
               || cutNode
+              || repeating
               || thisThread->ttHitAverage < 375 * ttHitAverageResolution * ttHitAverageWindow / 1024))
       {
           Depth r = reduction(improving, depth, moveCount);
@@ -1161,11 +1165,6 @@ moves_loop: // When in check, search starts from here
               // Increase reduction for cut nodes (~10 Elo)
               if (cutNode)
                   r += 2;
-
-              if (   to_sq((ss-2)->currentMove)   == from_sq(move)
-                  && from_sq((ss-2)->currentMove) == to_sq(move)
-                  && !ttPv)
-                  r++;
 
               // Decrease reduction for moves that escape a capture. Filter out
               // castling moves, because they are coded as "king captures rook" and
