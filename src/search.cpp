@@ -1164,7 +1164,7 @@ moves_loop: // When in check, search starts from here
 
               if (   to_sq((ss-2)->currentMove)   == from_sq(move)
                   && from_sq((ss-2)->currentMove) == to_sq(move)
-                  && moveCount > 4)
+                  && !ttPv)
                   r++;
 
               // Decrease reduction for moves that escape a capture. Filter out
