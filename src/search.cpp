@@ -1158,7 +1158,7 @@ moves_loop: // When in check, search starts from here
           // Decrease reduction for long maneuvers of the same piece
           if (   ss->maneuverLength > 2
               && moveCount < 4)
-              r--;
+              r++;
 
           if (!captureOrPromotion)
           {
