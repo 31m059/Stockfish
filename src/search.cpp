@@ -1150,7 +1150,7 @@ moves_loop: // When in check, search starts from here
 
           // Decrease reduction if ttMove has been singularly extended (~3 Elo)
           if (singularLMR)
-              r -= 2;
+              r--;
 
           if (!captureOrPromotion)
           {
@@ -1183,7 +1183,7 @@ moves_loop: // When in check, search starts from here
                   r++;
 
               // Decrease/increase reduction for moves with a good/bad history (~30 Elo)
-              r -= ss->statScore / 16384;
+              r -= ss->statScore / 16060;
           }
 
           // Increase reduction for captures/promotions if late move and at low depth
