@@ -138,6 +138,7 @@ namespace {
   constexpr Score Outpost             = S( 30, 21);
   constexpr Score PassedFile          = S( 11,  8);
   constexpr Score PawnlessFlank       = S( 17, 95);
+  constexpr Score PawnOpposedKnight   = S( 15, 15);
   constexpr Score RestrictedPiece     = S(  7,  7);
   constexpr Score RookOnQueenFile     = S(  7,  6);
   constexpr Score SliderOnQueen       = S( 59, 18);
@@ -332,6 +333,11 @@ namespace {
                                                                                   : CorneredBishop;
                 }
             }
+            // Pt == KNIGHT
+            else if (   relative_rank(Us, s) == RANK_3
+                     && (FileBBB | FileGBB) & s
+                     && file_bb(s) & (Us == WHITE ? Rank6BB : Rank3BB) & pos.pieces(Them, PAWN))
+                     score -= PawnOpposedKnight;
         }
 
         if (Pt == ROOK)
