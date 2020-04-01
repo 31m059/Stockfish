@@ -1142,9 +1142,9 @@ moves_loop: // When in check, search starts from here
 
           // Decrease reduction if position is or has been on the PV (~10 Elo)
           if (ttPv)
-              r -= 2;
+              r -= 2 + formerPv;
 
-          if (moveCountPruning && !formerPv)
+          if (moveCountPruning)
               r++;
 
           // Decrease reduction if opponent's move count is high (~5 Elo)
@@ -1153,7 +1153,7 @@ moves_loop: // When in check, search starts from here
 
           // Decrease reduction if ttMove has been singularly extended (~3 Elo)
           if (singularLMR)
-              r -= 1 + formerPv;
+              r--;
 
           if (!captureOrPromotion)
           {
