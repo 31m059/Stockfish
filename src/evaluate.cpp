@@ -205,6 +205,10 @@ namespace {
     // a white knight on g5 and black's king is on g8, this white knight adds 2
     // to kingAttacksCount[WHITE].
     int kingAttacksCount[COLOR_NB];
+
+    // extraTrappedRook[color] is an intermediate calculation used to boost
+    // the trapped rook penalty when already losing.
+    bool extraTrappedRook[COLOR_NB];
   };
 
 
@@ -245,6 +249,8 @@ namespace {
 
     // Remove from kingRing[] the squares defended by two pawns
     kingRing[Us] &= ~dblAttackByPawn;
+
+    extraTrappedRook[Us] = false;
   }
 
 
@@ -349,7 +355,10 @@ namespace {
             {
                 File kf = file_of(pos.square<KING>(Us));
                 if ((kf < FILE_E) == (file_of(s) < kf))
+                {
                     score -= TrappedRook * (1 + !pos.castling_rights(Us));
+                    extraTrappedRook[Us] |= file_of(s) == FILE_F;
+                }
             }
         }
 
@@ -813,6 +822,12 @@ namespace {
             + space<  WHITE>() - space<  BLACK>();
 
     score += initiative(score);
+
+    // Trapped rook on the f-file is especially bad if already losing
+    if (mg_value(score) < 0 && extraTrappedRook[WHITE])
+        score -= TrappedRook;
+    else if (mg_value(score) > 0 && extraTrappedRook[BLACK])
+        score += TrappedRook;
 
     // Interpolate between a middlegame and a (scaled by 'sf') endgame score
     ScaleFactor sf = scale_factor(eg_value(score));
