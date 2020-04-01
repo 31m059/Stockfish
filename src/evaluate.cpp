@@ -357,7 +357,7 @@ namespace {
                 if ((kf < FILE_E) == (file_of(s) < kf))
                 {
                     score -= TrappedRook * (1 + !pos.castling_rights(Us));
-                    extraTrappedRook[Us] |= file_of(s) == FILE_F;
+                    extraTrappedRook[Us] = true;
                 }
             }
         }
@@ -824,9 +824,9 @@ namespace {
     score += initiative(score);
 
     // Trapped rook on the f-file is especially bad if already losing
-    if (mg_value(score) < PawnValueMg && extraTrappedRook[WHITE])
+    if (mg_value(score) < 0 && extraTrappedRook[WHITE])
         score -= TrappedRook;
-    else if (mg_value(score) > -1 * PawnValueMg && extraTrappedRook[BLACK])
+    else if (mg_value(score) > 0 && extraTrappedRook[BLACK])
         score += TrappedRook;
 
     // Interpolate between a middlegame and a (scaled by 'sf') endgame score
