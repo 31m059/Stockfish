@@ -357,7 +357,7 @@ namespace {
                 if ((kf < FILE_E) == (file_of(s) < kf))
                 {
                     score -= TrappedRook * (1 + !pos.castling_rights(Us));
-                    extraTrappedRook[Us] = true;
+                    extraTrappedRook[Us] |= file_of(s) == FILE_F;
                 }
             }
         }
@@ -825,9 +825,9 @@ namespace {
 
     // Trapped rook on the f-file is especially bad if already losing
     if (mg_value(score) < 0 && extraTrappedRook[WHITE])
-        score -= TrappedRook;
+        score -= TrappedRook * (1 + !pos.castling_rights(WHITE));
     else if (mg_value(score) > 0 && extraTrappedRook[BLACK])
-        score += TrappedRook;
+        score += TrappedRook * (1 + !pos.castling_rights(BLACK));
 
     // Interpolate between a middlegame and a (scaled by 'sf') endgame score
     ScaleFactor sf = scale_factor(eg_value(score));
