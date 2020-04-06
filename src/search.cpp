@@ -1195,8 +1195,9 @@ moves_loop: // When in check, search starts from here
             if (depth < 8 && moveCount > 2)
                 r++;
 
-            // Unless giving check, this capture is likely bad
+            // Unless giving check or promoting, this capture is likely bad
             if (   !givesCheck
+                && type_of(move) != PROMOTION
                 && ss->staticEval + PieceValue[EG][pos.captured_piece()] + 200 * depth <= alpha)
                 r++;
           }
