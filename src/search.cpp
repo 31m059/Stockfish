@@ -1197,8 +1197,7 @@ moves_loop: // When in check, search starts from here
 
             // Unless giving check, this capture is likely bad
             if (   !givesCheck
-                && !ttPv
-                && ss->staticEval + PieceValue[EG][pos.captured_piece()] + 200 * depth <= alpha)
+                && ss->staticEval + PieceValue[EG][pos.captured_piece()] + 200 * depth - 100 * PvNode + 100 * formerPv <= alpha)
                 r++;
           }
 
