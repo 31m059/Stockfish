@@ -144,6 +144,7 @@ namespace {
   constexpr Score ThreatByKing        = S( 24, 89);
   constexpr Score ThreatByPawnPush    = S( 48, 39);
   constexpr Score ThreatBySafePawn    = S(173, 94);
+  constexpr Score ThreatOnQueenPinner = S( 20, 20);
   constexpr Score TrappedRook         = S( 52, 10);
   constexpr Score WeakQueen           = S( 49, 15);
   constexpr Score WeakQueenProtection = S( 14,  0);
@@ -188,6 +189,10 @@ namespace {
     // kingRing[color] are the squares adjacent to the king plus some other
     // very near squares, depending on king position.
     Bitboard kingRing[COLOR_NB];
+
+    // queenPinners[color] contains bishops/rooks of the given color
+    // that pin pieces to, or have discovered checks against, queens of the opposite color.
+    Bitboard queenPinners[COLOR_NB];
 
     // kingAttackersCount[color] is the number of pieces of the given color
     // which attack a square in the kingRing of the enemy king.
@@ -245,6 +250,8 @@ namespace {
 
     // Remove from kingRing[] the squares defended by two pawns
     kingRing[Us] &= ~dblAttackByPawn;
+
+    queenPinners[Us] = 0;
   }
 
 
@@ -356,9 +363,10 @@ namespace {
         if (Pt == QUEEN)
         {
             // Penalty if any relative pin or discovered attack against the queen
-            Bitboard queenPinners;
-            if (pos.slider_blockers(pos.pieces(Them, ROOK, BISHOP), s, queenPinners))
+            Bitboard pinners;
+            if (pos.slider_blockers(pos.pieces(Them, ROOK, BISHOP), s, pinners))
                 score -= WeakQueen;
+            queenPinners[Them] |= pinners;
         }
     }
     if (T)
@@ -505,10 +513,14 @@ namespace {
     if (defended | weak)
     {
         b = (defended | weak) & (attackedBy[Us][KNIGHT] | attackedBy[Us][BISHOP]);
+        if (b & queenPinners[Them])
+            score += ThreatOnQueenPinner;
         while (b)
             score += ThreatByMinor[type_of(pos.piece_on(pop_lsb(&b)))];
 
         b = weak & attackedBy[Us][ROOK];
+        if (b & queenPinners[Them])
+            score += ThreatOnQueenPinner;
         while (b)
             score += ThreatByRook[type_of(pos.piece_on(pop_lsb(&b)))];
 
