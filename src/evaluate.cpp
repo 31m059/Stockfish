@@ -359,8 +359,8 @@ namespace {
             // Penalty if any relative pin or discovered attack against the queen
             Bitboard queenPinners;
             Bitboard blockers = pos.slider_blockers(pos.pieces(Them, ROOK, BISHOP), s, queenPinners);
-            if (blockers & ~(pos.pieces(Them, PAWN) & shift<Up>(pos.pieces()) & pawn_attacks_bb<Us>(pos.pieces(Us))))
-                score -= WeakQueen;
+            if (blockers)
+                score -= WeakQueen / (blockers & (pos.pieces(Them, PAWN) & shift<Up>(pos.pieces()) & pawn_attacks_bb<Us>(pos.pieces(Us))) ? 2 : 1);
         }
     }
     if (T)
