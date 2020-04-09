@@ -1104,7 +1104,7 @@ moves_loop: // When in check, search starts from here
           extension = 1;
 
       // Former PV extension
-      else if (formerPv && depth < 2)
+      else if (formerPv && depth < 4)
           extension = 1;
 
       // Castling extension
