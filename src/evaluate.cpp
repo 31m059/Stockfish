@@ -376,7 +376,7 @@ namespace {
     constexpr Bitboard Camp = (Us == WHITE ? AllSquares ^ Rank6BB ^ Rank7BB ^ Rank8BB
                                            : AllSquares ^ Rank1BB ^ Rank2BB ^ Rank3BB);
 
-    Bitboard weak, b1, b2, b3, safe, unsafeChecks = 0;
+    Bitboard weak, b1, b2, b3, qc, safe, unsafeChecks = 0;
     Bitboard rookChecks, queenChecks, bishopChecks, knightChecks;
     int kingDanger = 0;
     const Square ksq = pos.square<KING>(Us);
@@ -411,10 +411,14 @@ namespace {
                  & safe
                  & ~attackedBy[Us][QUEEN]
                  & ~rookChecks;
-
-    if (queenChecks)
-        kingDanger += QueenSafeCheck;
-
+    qc = queenChecks;
+    if (qc)
+    {
+        int minDist = 8;
+        while (qc)
+            minDist = std::min(minDist, distance<Square>(pop_lsb(&qc), ksq));
+        kingDanger += QueenSafeCheck - 2 * minDist * minDist;
+    }
     // Enemy bishops checks: we count them only if they are from squares from
     // which we can't give a queen check, because queen checks are more valuable.
     bishopChecks =  b2
