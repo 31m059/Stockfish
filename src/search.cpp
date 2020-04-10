@@ -1139,7 +1139,11 @@ moves_loop: // When in check, search starts from here
               || moveCountPruning
               || ss->staticEval + PieceValue[EG][pos.captured_piece()] <= alpha
               || cutNode
-              || thisThread->ttHitAverage < 375 * ttHitAverageResolution * ttHitAverageWindow / 1024))
+              || thisThread->ttHitAverage < 375 * ttHitAverageResolution * ttHitAverageWindow / 1024)
+              || (    type_of(movedPiece) == QUEEN
+                  && (us == WHITE ? pawn_attacks_bb<BLACK>(pos.pieces(BLACK, PAWN)) : 
+                                    pawn_attacks_bb<WHITE>(pos.pieces(WHITE, PAWN)) & to_sq(move)))
+          )                      
       {
           Depth r = reduction(improving, depth, moveCount);
 
