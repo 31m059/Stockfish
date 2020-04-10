@@ -417,7 +417,7 @@ namespace {
         int minDist = 8;
         while (qc)
             minDist = std::min(minDist, distance<Square>(pop_lsb(&qc), ksq));
-        kingDanger += QueenSafeCheck + 35 - 4 * minDist * minDist;
+        kingDanger += QueenSafeCheck + 17 - 2 * minDist * minDist;
     }
     // Enemy bishops checks: we count them only if they are from squares from
     // which we can't give a queen check, because queen checks are more valuable.
