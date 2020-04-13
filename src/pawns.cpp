@@ -83,7 +83,7 @@ namespace {
 
     Bitboard doubleAttackThem = pawn_double_attacks_bb<Them>(theirPawns);
 
-    e->passedPawns[Us] = 0;
+    e->passedPawns[Us] = e->paralyzedPawns[Us] = 0;
     e->kingSquares[Us] = SQ_NONE;
     e->pawnAttacks[Us] = e->pawnAttacksSpan[Us] = pawn_attacks_bb<Us>(ourPawns);
     e->blockedCount[Us] = 0;
@@ -107,6 +107,8 @@ namespace {
         support    = neighbours & rank_bb(s - Up);
 
         e->blockedCount[Us] += bool(blocked);
+        if (blocked && !lever)
+            e->paralyzedPawns[Us] |= s;
 
         // A pawn is backward when it is behind all pawns of the same color on
         // the adjacent files and cannot safely advance.
