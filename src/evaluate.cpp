@@ -189,6 +189,10 @@ namespace {
     // very near squares, depending on king position.
     Bitboard kingRing[COLOR_NB];
 
+    // rookDirectAttack[color] is similar to attackedBy[color][ROOK],
+    // but does not go through queens.
+    Bitboard rookDirectAttack[COLOR_NB];
+
     // kingAttackersCount[color] is the number of pieces of the given color
     // which attack a square in the kingRing of the enemy king.
     int kingAttackersCount[COLOR_NB];
@@ -245,6 +249,8 @@ namespace {
 
     // Remove from kingRing[] the squares defended by two pawns
     kingRing[Us] &= ~dblAttackByPawn;
+
+    rookDirectAttack[Us] = 0;
   }
 
 
@@ -269,6 +275,9 @@ namespace {
         b = Pt == BISHOP ? attacks_bb<BISHOP>(s, pos.pieces() ^ pos.pieces(QUEEN))
           : Pt ==   ROOK ? attacks_bb<  ROOK>(s, pos.pieces() ^ pos.pieces(QUEEN) ^ pos.pieces(Us, ROOK))
                          : pos.attacks_from<Pt>(s);
+                         
+        if (Pt == ROOK && pos.count<QUEEN>(Them))
+            rookDirectAttack[Us] |=  attacks_bb<ROOK>(s, pos.pieces() ^ pos.pieces(Us, ROOK));
 
         if (pos.blockers_for_king(Us) & s)
             b &= LineBB[pos.square<KING>(Us)][s];
@@ -559,7 +568,7 @@ namespace {
         score += KnightOnQueen * popcount(b & safe);
 
         b =  (attackedBy[Us][BISHOP] & pos.attacks_from<BISHOP>(s))
-           | (attackedBy[Us][ROOK  ] & pos.attacks_from<ROOK  >(s));
+           | (rookDirectAttack[Us]  & pos.attacks_from<ROOK  >(s));
 
         score += SliderOnQueen * popcount(b & safe & attackedBy2[Us]);
     }
