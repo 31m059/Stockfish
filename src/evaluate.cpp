@@ -192,6 +192,10 @@ namespace {
     // rookDirectAttack[color] is similar to attackedBy[color][ROOK],
     // but does not go through queens.
     Bitboard rookDirectAttack[COLOR_NB];
+    
+    // bishopDirectAttack[color] is similar to attackedBy[color][BISHOP],
+    // but does not go through queens.
+    Bitboard bishopDirectAttack[COLOR_NB];
 
     // kingAttackersCount[color] is the number of pieces of the given color
     // which attack a square in the kingRing of the enemy king.
@@ -250,7 +254,7 @@ namespace {
     // Remove from kingRing[] the squares defended by two pawns
     kingRing[Us] &= ~dblAttackByPawn;
 
-    rookDirectAttack[Us] = 0;
+    rookDirectAttack[Us] = bishopDirectAttack[Us] = 0;
   }
 
 
@@ -275,7 +279,9 @@ namespace {
         b = Pt == BISHOP ? attacks_bb<BISHOP>(s, pos.pieces() ^ pos.pieces(QUEEN))
           : Pt ==   ROOK ? attacks_bb<  ROOK>(s, pos.pieces() ^ pos.pieces(QUEEN) ^ pos.pieces(Us, ROOK))
                          : pos.attacks_from<Pt>(s);
-                         
+
+        if (Pt == BISHOP && pos.count<QUEEN>(Them))
+            bishopDirectAttack[Us] |= attacks_bb<BISHOP>(s, pos.pieces());                 
         if (Pt == ROOK && pos.count<QUEEN>(Them))
             rookDirectAttack[Us] |=  attacks_bb<ROOK>(s, pos.pieces() ^ pos.pieces(Us, ROOK));
 
@@ -567,7 +573,7 @@ namespace {
 
         score += KnightOnQueen * popcount(b & safe);
 
-        b =  (attackedBy[Us][BISHOP] & pos.attacks_from<BISHOP>(s))
+        b =  (bishopDirectAttack[Us] & pos.attacks_from<BISHOP>(s))
            | (rookDirectAttack[Us]  & pos.attacks_from<ROOK  >(s));
 
         score += SliderOnQueen * popcount(b & safe & attackedBy2[Us]);
