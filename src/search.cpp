@@ -1105,6 +1105,13 @@ moves_loop: // When in check, search starts from here
       else if (   PieceValue[EG][pos.captured_piece()] > PawnValueEg
                && pos.non_pawn_material() <= 2 * RookValueMg)
           extension = 1;
+          
+      // Extension if immediately retreating a piece
+      else if (   move == ttMove
+               && type_of(movedPiece) != KING
+               && to_sq((ss-2)->currentMove) == from_sq(move)
+               && relative_rank(us, to_sq(move)) < relative_rank(us, from_sq(move)))
+          extension = 1;
 
       // Castling extension
       if (type_of(move) == CASTLING)
