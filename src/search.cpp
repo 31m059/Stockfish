@@ -1107,11 +1107,11 @@ moves_loop: // When in check, search starts from here
           extension = 1;
           
       // Extension if immediately retreating a piece
-      else if (   move == ttMove
-               && type_of(movedPiece) != KING
-               && to_sq((ss-2)->currentMove) == from_sq(move)
-               && relative_rank(us, to_sq(move)) < relative_rank(us, from_sq(move))
-               && relative_rank(us, to_sq((ss-2)->currentMove)) > relative_rank(us, from_sq((ss-2)->currentMove)))
+      if (   move == ttMove
+          && type_of(movedPiece) != KING
+          && to_sq((ss-2)->currentMove) == from_sq(move)
+          && relative_rank(us, to_sq(move)) < relative_rank(us, from_sq(move))
+          && relative_rank(us, to_sq((ss-2)->currentMove)) > relative_rank(us, from_sq((ss-2)->currentMove)))
           extension = 1;
 
       // Castling extension
