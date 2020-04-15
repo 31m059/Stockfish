@@ -359,6 +359,10 @@ namespace {
             Bitboard queenPinners;
             if (pos.slider_blockers(pos.pieces(Them, ROOK, BISHOP), s, queenPinners))
                 score -= WeakQueen;
+
+            // Bonus for queen on a long diagonal which can "see" both center squares
+            if (more_than_one(attacks_bb<BISHOP>(s, pos.pieces(PAWN)) & Center))
+                score += LongDiagonalBishop;
         }
     }
     if (T)
