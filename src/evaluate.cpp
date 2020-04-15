@@ -362,7 +362,7 @@ namespace {
 
             // Bonus for queen on a long diagonal which can "see" both center squares
             if (more_than_one(attacks_bb<BISHOP>(s, pos.pieces(PAWN)) & Center))
-                score += LongDiagonalBishop / 2;
+                score += LongDiagonalBishop / 4;
         }
     }
     if (T)
