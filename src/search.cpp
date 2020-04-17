@@ -1177,6 +1177,11 @@ moves_loop: // When in check, search starts from here
           // Decrease reduction if ttMove has been singularly extended (~3 Elo)
           if (singularLMR)
               r -= 1 + formerPv;
+          
+          // Unless giving check, this move/capture is likely bad
+          if (   !givesCheck
+              && ss->staticEval + (pos.capture(move) ? PieceValue[EG][pos.captured_piece()] : PawnValueEg) + 200 * depth <= alpha)
+              r++;
 
           if (!captureOrPromotion)
           {
@@ -1215,11 +1220,6 @@ moves_loop: // When in check, search starts from here
           {
             // Increase reduction for captures/promotions if late move and at low depth
             if (depth < 8 && moveCount > 2)
-                r++;
-
-            // Unless giving check, this capture is likely bad
-            if (   !givesCheck
-                && ss->staticEval + PieceValue[EG][pos.captured_piece()] + 200 * depth <= alpha)
                 r++;
           }
 
