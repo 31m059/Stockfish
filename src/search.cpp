@@ -1180,7 +1180,7 @@ moves_loop: // When in check, search starts from here
           
           // Unless giving check, this move/capture is likely bad
           if (   !givesCheck
-              && ss->staticEval + (pos.capture(move) ? PieceValue[EG][pos.captured_piece()] : PawnValueEg) + 200 * depth <= alpha)
+              && ss->staticEval + (pos.capture(move) ? PieceValue[EG][pos.captured_piece()] : BishopValueEg) + 200 * depth <= alpha)
               r++;
 
           if (!captureOrPromotion)
