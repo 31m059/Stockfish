@@ -1196,6 +1196,8 @@ moves_loop: // When in check, search starts from here
               // Increase reduction if ttMove is a capture (~5 Elo)
               if (ttCapture)
                   r++;
+              else if (ttQuiet)
+                  r--;
 
               // Increase reduction for cut nodes (~10 Elo)
               if (cutNode)
@@ -1226,9 +1228,6 @@ moves_loop: // When in check, search starts from here
           }
           else
           {
-            if (ttQuiet)
-                r--;
-
             // Increase reduction for captures/promotions if late move and at low depth
             if (depth < 8 && moveCount > 2)
                 r++;
