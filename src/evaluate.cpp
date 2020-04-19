@@ -319,8 +319,7 @@ namespace {
                 if (more_than_one(attacks_bb<BISHOP>(s, pos.pieces(PAWN)) & Center))
                 {
                     Bitboard diagonal = (LineBB[SQ_A1][SQ_H8] & s ? LineBB[SQ_A1][SQ_H8] : LineBB[SQ_H1][SQ_A8]);
-                    if (popcount(pos.pieces(Them, PAWN) & diagonal) < 3)
-                        score += LongDiagonalBishop;
+                    score += LongDiagonalBishop / (popcount(pos.pieces(Them, PAWN) & diagonal) < 3 ? 1 : 2);
                 }
 
                 // An important Chess960 pattern: a cornered bishop blocked by a friendly
