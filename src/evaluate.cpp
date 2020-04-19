@@ -162,6 +162,7 @@ namespace {
 
   private:
     template<Color Us> void initialize();
+    template<Color Us, PieceType Pt> void initialize_pieces();
     template<Color Us, PieceType Pt> Score pieces();
     template<Color Us> Score king() const;
     template<Color Us> Score threats() const;
@@ -205,6 +206,14 @@ namespace {
     // a white knight on g5 and black's king is on g8, this white knight adds 2
     // to kingAttacksCount[WHITE].
     int kingAttacksCount[COLOR_NB];
+    
+    // attacks[square] contains a Bitboard of attacks by the piece on the given
+    // square, undefined if there is empty, a pawn, or king.
+    volatile Bitboard attacks[SQUARE_NB];
+    
+    // mobs[square] contains an int of the mobility by the piece on the given
+    // square, undefined if there is empty, a pawn, or king.
+    volatile int mobs[SQUARE_NB];
   };
 
 
@@ -247,22 +256,16 @@ namespace {
     kingRing[Us] &= ~dblAttackByPawn;
   }
 
-
-  // Evaluation::pieces() scores pieces of a given color and type
+  // Evaluation::initialize_pieces() initializes pieces of a given color and type
   template<Tracing T> template<Color Us, PieceType Pt>
-  Score Evaluation<T>::pieces() {
-
-    constexpr Color     Them = ~Us;
-    constexpr Direction Down = -pawn_push(Us);
-    constexpr Bitboard OutpostRanks = (Us == WHITE ? Rank4BB | Rank5BB | Rank6BB
-                                                   : Rank5BB | Rank4BB | Rank3BB);
+  void Evaluation<T>::initialize_pieces() {
+      
+    constexpr Color Them = ~Us;
     const Square* pl = pos.squares<Pt>(Us);
-
-    Bitboard b, bb;
-    Score score = SCORE_ZERO;
-
+    Bitboard b;
+    
     attackedBy[Us][Pt] = 0;
-
+    
     for (Square s = *pl; s != SQ_NONE; s = *++pl)
     {
         // Find attacked squares, including x-ray attacks for bishops and rooks
@@ -285,6 +288,31 @@ namespace {
         }
 
         int mob = popcount(b & mobilityArea[Us]);
+        
+        attacks[s] = b;
+        mobs[s] = mob;
+    }
+    
+  }
+
+  // Evaluation::pieces() scores pieces of a given color and type
+  template<Tracing T> template<Color Us, PieceType Pt>
+  Score Evaluation<T>::pieces() {
+
+    constexpr Color     Them = ~Us;
+    constexpr Direction Down = -pawn_push(Us);
+    constexpr Bitboard OutpostRanks = (Us == WHITE ? Rank4BB | Rank5BB | Rank6BB
+                                                   : Rank5BB | Rank4BB | Rank3BB);
+    const Square* pl = pos.squares<Pt>(Us);
+
+    Bitboard b, bb;
+    int mob;
+    Score score = SCORE_ZERO;
+
+    for (Square s = *pl; s != SQ_NONE; s = *++pl)
+    {
+        b = attacks[s];
+        mob = mobs[s];
 
         mobility[Us] += MobilityBonus[Pt - 2][mob];
 
@@ -814,6 +842,15 @@ namespace {
 
     initialize<WHITE>();
     initialize<BLACK>();
+    
+    initialize_pieces<WHITE, KNIGHT>();
+    initialize_pieces<BLACK, KNIGHT>();
+    initialize_pieces<WHITE, BISHOP>();
+    initialize_pieces<BLACK, BISHOP>();
+    initialize_pieces<WHITE, ROOK  >();
+    initialize_pieces<BLACK, ROOK  >();
+    initialize_pieces<WHITE, QUEEN >();
+    initialize_pieces<BLACK, QUEEN >();
 
     // Pieces should be evaluated first (populate attack tables)
     score +=  pieces<WHITE, KNIGHT>() - pieces<BLACK, KNIGHT>()
