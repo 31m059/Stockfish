@@ -628,8 +628,8 @@ namespace {
             if (r != RANK_7)
                 bonus -= make_score(0, king_proximity(Us, blockSq + Up) * w);
 
-            // If the pawn is free to advance, then increase the bonus
-            if (pos.empty(blockSq))
+            // If the pawn is free to advance or capture, then increase the bonus
+            if (pos.empty(blockSq) || PawnAttacks[Us][s] & pos.pieces(Them, PAWN))
             {
                 squaresToQueen = forward_file_bb(Us, s);
                 unsafeSquares = passed_pawn_span(Us, s);
