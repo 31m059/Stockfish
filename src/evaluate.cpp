@@ -631,27 +631,36 @@ namespace {
             // If the pawn is free to advance, then increase the bonus
             if (pos.empty(blockSq))
             {
-                squaresToQueen = forward_file_bb(Us, s);
-                unsafeSquares = passed_pawn_span(Us, s);
+                Bitboard advance = (PawnAttacks[Us][s] & pos.pieces(Them)) | blockSq;
+                int bestK = 0;
+                while (advance)
+                {
+                    Square sq = pop_lsb(&advance) + Down;
 
-                bb = forward_file_bb(Them, s) & pos.pieces(ROOK, QUEEN);
+                    squaresToQueen = forward_file_bb(Us, sq);
+                    unsafeSquares = passed_pawn_span(Us, sq);
 
-                if (!(pos.pieces(Them) & bb))
-                    unsafeSquares &= attackedBy[Them][ALL_PIECES];
+                    bb = forward_file_bb(Them, sq) & pos.pieces(ROOK, QUEEN);
 
-                // If there are no enemy attacks on passed pawn span, assign a big bonus.
-                // Otherwise assign a smaller bonus if the path to queen is not attacked
-                // and even smaller bonus if it is attacked but block square is not.
-                int k = !unsafeSquares                    ? 35 :
-                        !(unsafeSquares & squaresToQueen) ? 20 :
-                        !(unsafeSquares & blockSq)        ?  9 :
-                                                             0 ;
+                    if (!(pos.pieces(Them) & bb))
+                        unsafeSquares &= attackedBy[Them][ALL_PIECES];
 
-                // Assign a larger bonus if the block square is defended
-                if ((pos.pieces(Us) & bb) || (attackedBy[Us][ALL_PIECES] & blockSq))
-                    k += 5;
+                    // If there are no enemy attacks on passed pawn span, assign a big bonus.
+                    // Otherwise assign a smaller bonus if the path to queen is not attacked
+                    // and even smaller bonus if it is attacked but block square is not.
+                    int k = !unsafeSquares                    ? 35 :
+                            !(unsafeSquares & squaresToQueen) ? 20 :
+                            !(unsafeSquares & blockSq)        ?  9 :
+                                                                 0 ;
 
-                bonus += make_score(k * w, k * w);
+                    // Assign a larger bonus if the block square is defended
+                    if ((pos.pieces(Us) & bb) || (attackedBy[Us][ALL_PIECES] & blockSq))
+                        k += 5;
+                    
+                    bestK = std::max(k, bestK);
+                }
+
+                bonus += make_score(bestK * w, bestK * w);
             }
         } // r > RANK_3
 
