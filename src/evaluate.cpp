@@ -385,7 +385,7 @@ namespace {
                     {
                         Square block = pop_lsb(&trappers);
                         if (mobs[block] == 0)
-                            score -= TrappedRook / 2;
+                            score -= TrappedRook;
                     }
                 }
                 
