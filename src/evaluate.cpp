@@ -376,8 +376,19 @@ namespace {
             else if (mob <= 3)
             {
                 File kf = file_of(pos.square<KING>(Us));
+                Bitboard trappers = b & pos.pieces(Us, KNIGHT, BISHOP);
                 if ((kf < FILE_E) == (file_of(s) < kf))
                     score -= TrappedRook * (1 + !pos.castling_rights(Us));
+                else
+                {
+                    while (trappers)
+                    {
+                        Square block = pop_lsb(&trappers);
+                        if (mobs[block] == 0)
+                            score -= TrappedRook / 2;
+                    }
+                }
+                
             }
         }
 
