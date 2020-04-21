@@ -563,8 +563,8 @@ namespace {
         if (b & safe)
         {
             score += KnightOnQueen * popcount(b & safe);
-            if (queenMob[Them] < 3)
-                score += KnightOnQueen / 2;
+            //if (queenMob[Them] < 3)
+            //    score += KnightOnQueen / 2;
         }
 
         b =  (attackedBy[Us][BISHOP] & pos.attacks_from<BISHOP>(s))
