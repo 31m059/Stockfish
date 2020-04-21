@@ -315,6 +315,17 @@ namespace {
         mob = mobs[s];
 
         mobility[Us] += MobilityBonus[Pt - 2][mob];
+        
+        Bitboard blockers = b & (pos.pieces(Us, BISHOP, KNIGHT) | pos.pieces(Us, ROOK, QUEEN));
+        if (mob < 3)
+        {
+            while (blockers)
+            {
+                Square s2 = pop_lsb(&blockers);
+                if (mobs[s2] < 3)
+                    score -= make_score(5, 5);
+            }
+        }
 
         if (Pt == BISHOP || Pt == KNIGHT)
         {
