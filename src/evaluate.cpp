@@ -570,7 +570,12 @@ namespace {
         b =  (attackedBy[Us][BISHOP] & pos.attacks_from<BISHOP>(s))
            | (attackedBy[Us][ROOK  ] & pos.attacks_from<ROOK  >(s));
 
-        score += SliderOnQueen * popcount(b & safe & attackedBy2[Us]);
+        if (b & safe & attackedBy2[Us])
+        {
+            score += SliderOnQueen * popcount(b & safe & attackedBy2[Us]);
+            if (queenMob[Them] < 3)
+                score += SliderOnQueen / 2;
+        }
     }
 
     if (T)
