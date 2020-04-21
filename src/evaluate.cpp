@@ -381,12 +381,11 @@ namespace {
                     score -= TrappedRook * (1 + !pos.castling_rights(Us));
                 else
                 {
+                    volatile int minBlockMob = 1;
                     while (trappers)
-                    {
-                        Square block = pop_lsb(&trappers);
-                        if (mobs[block] == 0)
-                            score -= TrappedRook;
-                    }
+                        minBlockMob = std::min(minBlockMob, mobs[pop_lsb(&trappers)]);
+                    if (minBlockMob == 0)
+                        score -= TrappedRook;
                 }
                 
             }
