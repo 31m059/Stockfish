@@ -560,12 +560,17 @@ namespace {
 
         b = attackedBy[Us][KNIGHT] & pos.attacks_from<KNIGHT>(s);
 
-        score += KnightOnQueen * (popcount(b & safe) + queenMob[Them] < 3);
+        if (b & safe)
+        {
+            score += KnightOnQueen * popcount(b & safe);
+            if (queenMob[Them] < 3)
+                score += KnightOnQueen / 2;
+        }
 
         b =  (attackedBy[Us][BISHOP] & pos.attacks_from<BISHOP>(s))
            | (attackedBy[Us][ROOK  ] & pos.attacks_from<ROOK  >(s));
 
-        score += SliderOnQueen * (popcount(b & safe & attackedBy2[Us]) + queenMob[Them] < 3);
+        score += SliderOnQueen * popcount(b & safe & attackedBy2[Us]);
     }
 
     if (T)
