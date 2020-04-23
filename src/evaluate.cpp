@@ -323,7 +323,7 @@ namespace {
             {
                 Square s2 = pop_lsb(&blockers);
                 if (mobs[s2] < 3)
-                    score -= make_score(2, 2);
+                    score -= make_score(2, 0);
             }
         }
 
