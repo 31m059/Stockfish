@@ -90,7 +90,7 @@ namespace {
   // Add a small random component to draw evaluations to avoid 3fold-blindness
   Value value_draw(Position& pos) {
     return VALUE_DRAW + Value( (2 * (pos.this_thread()->nodes & 1) - 1) 
-                                  * (pos.non_pawn_material() <= 4 * RookValueMg ? 2 : 1)
+                                  * (pos.non_pawn_material() <= 2 * RookValueMg ? 2 : 1)
                                   );
   }
 
